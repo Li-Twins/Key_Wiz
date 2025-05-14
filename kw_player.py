@@ -14,9 +14,9 @@ class Player:
             self.level = self.player_data[self.name][0]
             self.answered = self.player_data[self.name][1]
             try:
-                self.removed = json.load(open(f'kw_{self.name}_questions.json', 'r'))[0]
-                self.nogainqa = json.load(open(f'kw_{self.name}_questions.json', 'r'))[1]
-                self.answering = json.load(open(f'kw_{self.name}_questions.json', 'r'))[2]
+                self.removed = json.load(open(f'kw_players.json', 'r'))[0]
+                self.nogainqa = json.load(open(f'kw_players.json', 'r'))[1]
+                self.answering = json.load(open(f'kw_players.json', 'r'))[2]
             except:
                 json.dump([[], [], {}], open(f'kw_{self.name}_questions.json', 'w'))
                 self.removed = []
