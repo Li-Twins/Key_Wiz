@@ -89,8 +89,8 @@ class Quiz:
         # show each question, answer and player input to be self marked, calculate correct answered and points earned, save all the report
         print(f'\n#### Please verify your answers ####')
         for i in range(10):
-            self_mark = input(f"{self.questions[i]}, your answer: {answer_list[i]}, Y if correct: ")
-            self.player.report.append([self.questions[i], answer_list[i]])
+            self_mark = input(f"{self.questions[i][1]}, your answer: {answer_list[i]}, Y if correct: ")
+            self.player.report.append([self.questions[i][0], self.questions[i][1], answer_list[i]])
             if self_mark.lower() == "y":
                 self.player.points += 2
                 if not answer_list[i] in self.player.nogainqa:
@@ -115,8 +115,3 @@ if __name__ == "__main__":
         else:
             break
     sys.exit()
-
-import random
-a = ['a', 'b', 'c']
-b = 'a'
-print(random.choice(list(x for x in a if x != b)))

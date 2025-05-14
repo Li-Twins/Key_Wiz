@@ -11,26 +11,19 @@ class Player:
         # load existing player 
         if self.name in list(self.player_data.keys()):
             print('Welcome back, ', self.name)
-            self.level = self.player_data[self.name][0]
-            self.answered = self.player_data[self.name][1]
-            try:
-                self.removed = json.load(open(f'kw_players.json', 'r'))[0]
-                self.nogainqa = json.load(open(f'kw_players.json', 'r'))[1]
-                self.answering = json.load(open(f'kw_players.json', 'r'))[2]
-            except:
-                json.dump([[], [], {}], open(f'kw_{self.name}_questions.json', 'w'))
-                self.removed = []
-                self.nogainqa = []
-                self.answering = {}
+            self.level = self.player_data[self.name]['level']
+            self.answered = self.player_data[self.name]['answered']
+            self.removed = json.load(open(f'kw_players.json', 'r'))[self.name]['removed']
+            self.nogainqa = json.load(open(f'kw_players.json', 'r'))[self.name]['nogainqa']
+            self.answering = json.load(open(f'kw_players.json', 'r'))[self.name]['answering']
 
         # create new player with default values, save to list of players    
         else:
             print(f'Welcome to Key-wiz, {self.name},  your Key to become a Wiz!')
             self.level = 1
             self.answered = 0
-            self.player_data[self.name] = [self.level, self.answered]
+            self.player_data[self.name] = {'level':1, 'answered':0, 'removed':[], 'nogainqa':[], 'answering':{}}
             json.dump(self.player_data, open('kw_players.json', 'w'))
-            json.dump([[], [], {}], open(f'kw_{self.name}_questions', 'w'))
             self.removed = []
             self.nogainqa = []
             self.answering = {}
@@ -46,16 +39,18 @@ class Player:
             self.answered = 0
             self.level += 1
             print(f'Level up! You are now level {self.level}! Congrats!')
-        
+
         # save all relevant info for the player/current session
         self.player_data[self.name] = [self.level, self.answered]
         json.dump(self.player_data, open('kw_players.json', 'w'))
         try:
-            json.dump(json.load(open(f'kw_{self.name}_report.json', 'r')).append(self.report.append(time)), open('kw_reports', 'w'))
+            contents = json.load(open(f'kw_reports.json', 'r'))
+            contents[f'report{contents['counter']}'] = self.report
+            contents[f'report{contents['counter']}']['time'] = time
+            json.dump(contents, open('kw_reports.json', 'w'))
         except:
-            json.dump([], open(f'kw_{self.name}_report.json', 'w'))
-        json.dump([self.removed, self.nogainqa, self.answering], open(f'kw_{self.name}_questions.json', 'w'))
-        self.start = datetime.datetime.now()
+            json.dump({'counter':1}, open(f'kw_{self.name}_report.json', 'w'))
+        json.dump(json.load(open(f'kw_players.json', 'r')), open(f'kw_players.json', 'w'))
 
 
     def nogain(self, question):
