@@ -1,0 +1,122 @@
+[
+    [
+        "Expand and simplify (3x+2)(x-5)",
+        "3x^2-13x-10"
+    ],
+    [
+        "solve for x: 5x-7=3x+11",
+        "x=9"
+    ],
+    [
+        "Factorize x^2-9x+20",
+        "(x-4)(x-5)"
+    ],
+    [
+        "solve the equation: x^2+6x+5=0",
+        "x=-1 or x=-5"
+    ],
+    [
+        "simplify: (4x^2-9)/(2x^2+3x)",
+        "(2x-3)/x"
+    ],
+    [
+        "find the area of a triangle with base of 12cm and height 8cm",
+        "48cm^2"
+    ],
+    [
+        "Calculate the hypotenuse of a right angled triangle with sides of 5cm and 12cm",
+        "13cm"
+    ],
+    [
+        "A circle has a radius of 7cm, find circumference",
+        "14picm"
+    ],
+    [
+        "Find the volume of a cylinder with radius 4cm and height 10cm",
+        "160picm^3"
+    ],
+    [
+        "What is the probability of rolling a number greater than 4 on a die?",
+        "1/3"
+    ],
+    [
+        "The mean of five numbers is 12, four are 10, 15, 11, 14, fifth?",
+        "10"
+    ],
+    [
+        "A bag contains 5 red, 4 blue and 3 green marbles, whats the probability that one marble is not red?",
+        "7/12"
+    ],
+    [
+        "Find the median of the set: 7, 3, 9, 5, 2, 8, 6",
+        "6"
+    ],
+    [
+        "Calculate the range of the set: 14, 22, 17, 19, 20",
+        "8"
+    ],
+    [
+        "solve x, y, given 2x+y=7, 3x-y=8",
+        "x=3, y=1"
+    ],
+    [
+        "Solve for x: 3/x = 5/10",
+        "x=6"
+    ],
+    [
+        "Simplify: SQR50+SQR18",
+        "8SQR2"
+    ],
+    [
+        "Solve the inequality: 4x-3<13",
+        "x<4"
+    ],
+    [
+        "find the gradient of y-intercept of 2y=6x+4",
+        "Gradient=3, y-intercept=2"
+    ],
+    [
+        "Solve for x: 4(2x-5)=3x+10",
+        "x=6"
+    ],
+    [
+        "Factorize: 6x^2-24",
+        "6(x-2)(x+2)"
+    ],
+    [
+        "Simplify (5x^2y^3)/(10xy^2)",
+        "xy/2"
+    ],
+    [
+        "Solve inequality: -3x+7>1",
+        "x<2"
+    ],
+    [
+        "Find the area of a trapezium with parallel sides 6cm and 10cm, height 4cm",
+        "32cm^2"
+    ],
+    [
+        "Calculate the length of the missing side in this right angled triangle with 9cm and 12cm",
+        "15cm"
+    ],
+    [
+        "A sector of a circle of a radius of 5cm and a central angle of 72, calculate its arc length",
+        "2picm "
+    ],
+    [
+        "a rectangular prism has dimensions 4cmx5cmx6cm, find its surface area",
+        "148cm^2"
+    ],
+    [
+        "Two dice are rolled, what is the probability of a sum of 7?",
+        "1/6"
+    ],
+    [
+        "The mean of 6 numbers is 15. One number is removed and the mean becomes 14, what is that removed number?",
+        "20"
+    ],
+    [
+        "Simplify using index laws: (2a^2b^3)^4",
+        "16a^8b^12"
+    ]
+]
