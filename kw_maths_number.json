@@ -1,122 +1,122 @@
 [
     [
-        "Expand and simplify (3x+2)(x-5)",
-        "3x^2-13x-10"
+        "Evaluate: -8+12/(-3)",
+        "-12"
     ],
     [
-        "solve for x: 5x-7=3x+11",
-        "x=9"
+        "Simplify: 3/4 + 2/5",
+        "23/20"
     ],
     [
-        "Factorize x^2-9x+20",
-        "(x-4)(x-5)"
+        "Calculate: 7/8 - 1/2",
+        "3/8"
     ],
     [
-        "solve the equation: x^2+6x+5=0",
-        "x=-1 or x=-5"
+        "Multiplfy: 5/6 x 9/10",
+        "3/4"
     ],
     [
-        "simplify: (4x^2-9)/(2x^2+3x)",
-        "(2x-3)/x"
+        "Divide: 4/5 / 2/3",
+        "6/5"
     ],
     [
-        "find the area of a triangle with base of 12cm and height 8cm",
-        "48cm^2"
+        "1.5x0.4",
+        "0.6"
     ],
     [
-        "Calculate the hypotenuse of a right angled triangle with sides of 5cm and 12cm",
-        "13cm"
+        "4.8/0.2",
+        "24"
     ],
     [
-        "A circle has a radius of 7cm, find circumference",
-        "14picm"
+        "5.6-2.39",
+        "3.21"
     ],
     [
-        "Find the volume of a cylinder with radius 4cm and height 10cm",
-        "160picm^3"
+        "increase 80 by 15%",
+        "92"
     ],
     [
-        "What is the probability of rolling a number greater than 4 on a die?",
-        "1/3"
+        "decrease 200 by 30%",
+        "140"
     ],
     [
-        "The mean of five numbers is 12, four are 10, 15, 11, 14, fifth?",
+        "A shirt costs $45 gets discounted by 20%, new price?",
+        "$36"
+    ],
+    [
+        "2^3 x 2^4",
+        "128"
+    ],
+    [
+        "5^0 + 3^2",
         "10"
     ],
     [
-        "A bag contains 5 red, 4 blue and 3 green marbles, whats the probability that one marble is not red?",
-        "7/12"
+        "10^5 / 10^2",
+        "1000"
     ],
     [
-        "Find the median of the set: 7, 3, 9, 5, 2, 8, 6",
-        "6"
+        "(3^2)^3",
+        "729"
     ],
     [
-        "Calculate the range of the set: 14, 22, 17, 19, 20",
-        "8"
+        "simplify SQR50",
+        "5SQR2"
     ],
     [
-        "solve x, y, given 2x+y=7, 3x-y=8",
-        "x=3, y=1"
+        "Compute: SQR18 + SQR8",
+        "5SQR2"
     ],
     [
-        "Solve for x: 3/x = 5/10",
-        "x=6"
+        "SQR3 x SQR12",
+        "SQR36 / 6"
     ],
     [
-        "Simplify: SQR50+SQR18",
-        "8SQR2"
+        "Rationalise: 1/SQR5",
+        "SQR5/5"
     ],
     [
-        "Solve the inequality: 4x-3<13",
-        "x<4"
+        "Calculate 3/4 x 0.8",
+        "0.6"
     ],
     [
-        "find the gradient of y-intercept of 2y=6x+4",
-        "Gradient=3, y-intercept=2"
+        "Solve: 2.5 x (4-1.2)",
+        "7"
     ],
     [
-        "Solve for x: 4(2x-5)=3x+10",
-        "x=6"
+        "Find 25% of 4/5",
+        "1/5"
     ],
     [
-        "Factorize: 6x^2-24",
-        "6(x-2)(x+2)"
+        "2^3 + SQR16 - 1/2",
+        "11.5"
     ],
     [
-        "Simplify (5x^2y^3)/(10xy^2)",
-        "xy/2"
+        "if a car travels 240km using 20L of petrol, what is its fuel efficiency (km/L)?",
+        "12km/L"
     ],
     [
-        "Solve inequality: -3x+7>1",
-        "x<2"
+        "A phone's price increased from $500 to $575, what was the percentage incease?",
+        "15%"
     ],
     [
-        "Find the area of a trapezium with parallel sides 6cm and 10cm, height 4cm",
-        "32cm^2"
+        "if 30% of a number is 45, what is the number?",
+        "150"
     ],
     [
-        "Calculate the length of the missing side in this right angled triangle with 9cm and 12cm",
-        "15cm"
+        "(-3)^2 - (-2)^3",
+        "17"
     ],
     [
-        "A sector of a circle of a radius of 5cm and a central angle of 72, calculate its arc length",
-        "2picm "
+        "what is 12.5% of 80?",
+        "10"
     ],
     [
-        "a rectangular prism has dimensions 4cmx5cmx6cm, find its surface area",
-        "148cm^2"
+        "Simplify: (2^3 x 3^2)/6",
+        "12"
     ],
     [
-        "Two dice are rolled, what is the probability of a sum of 7?",
-        "1/6"
-    ],
-    [
-        "The mean of 6 numbers is 15. One number is removed and the mean becomes 14, what is that removed number?",
-        "20"
-    ],
-    [
-        "Simplify using index laws: (2a^2b^3)^4",
-        "16a^8b^12"
+        "the cost of an Xbox jumped 10% from $400, then dropped 20%, what is the current price of an Xbox?",
+        "$352"
     ]
 ]
