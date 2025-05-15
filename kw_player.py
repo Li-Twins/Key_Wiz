@@ -44,13 +44,12 @@ class Player:
         self.player_data[self.name] = {'level':self.level, 'answered':self.answered, 'removed':self.removed, 'nogainqa':self.nogainqa, 'answering':self.answering}
         json.dump(self.player_data, open('kw_players.json', 'w'))
         try:
-            contents = json.load(open(f'kw_reports.json', 'r'))
-            contents[f'report{contents['counter']}'] = self.report
-            contents[f'report{contents['counter']}']['time'] = time
-            json.dump(contents, open('kw_reports.json', 'w'))
+            contents = json.load(open(f'kw_{self.name}_report.json', 'r'))
+            contents[str(time)] = self.report
+            json.dump(contents, open(f'kw_{self.name}_report.json', 'w'))
         except:
-            json.dump({'counter':1}, open(f'kw_{self.name}_report.json', 'w'))
-        json.dump(json.load(open(f'kw_players.json', 'r')), open(f'kw_players.json', 'w'))
+            json.dump({str(time):self.report}, open(f'kw_{self.name}_report.json', 'w'))
+        self.report = []
 
 
     def nogain(self, question):

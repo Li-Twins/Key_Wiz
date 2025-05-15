@@ -111,7 +111,6 @@ if __name__ == "__main__":
         if game_on == True:
             thequiz.question_selection() 
             thequiz.answer_quiz()
-            thequiz.player.report = []
         else:
             break
     sys.exit()

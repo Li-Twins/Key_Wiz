@@ -1,5 +1,1 @@
-<<<<<<< HEAD
-{"Khole": {"level": 1, "answered": 0}}
-=======
-{"Khole": [1, 8]}
->>>>>>> 4bdbd48 (a)
+{"Khole": {"level": 1, "answered": 10, "removed": [], "nogainqa": ["At what age can one apply for Learner's permit?", "When is tax return lodged?", "What is the commonly accept minimum lease length for rental property?", "What is the minimum wage in Australia?", "At what age does one become legally responsible for crimes?", "When can a child start working legally?", "Who should vote?", "How much do you have to earn before you start paying income tax?", "At what age can one apply for Provisional license?", "Can grandparents become legal custodian of their grandchildren?"], "answering": {"At what age can one apply for Learner's permit?": 1, "When is tax return lodged?": 1, "What is the commonly accept minimum lease length for rental property?": 1, "What is the minimum wage in Australia?": 1, "At what age does one become legally responsible for crimes?": 1, "When can a child start working legally?": 1, "Who should vote?": 1, "How much do you have to earn before you start paying income tax?": 1, "At what age can one apply for Provisional license?": 1, "Can grandparents become legal custodian of their grandchildren?": 1}}}
