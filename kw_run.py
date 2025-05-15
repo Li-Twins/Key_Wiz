@@ -117,8 +117,8 @@ if __name__ == "__main__":
         thequiz.topic_selection() # modifies game_on if not enough points
         if game_on == True:
             thequiz.question_selection() 
-
-            thequiz.answer_quiz()
+            if exception == False:
+                thequiz.answer_quiz()
         else:
             break
     sys.exit()
