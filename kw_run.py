@@ -3,7 +3,8 @@ from kw_player import Player
 
 global game_on
 game_on = True
-
+global exception
+exception = False
 
 class Quiz: # TESTING DAD
     def __init__(self):
@@ -65,16 +66,23 @@ class Quiz: # TESTING DAD
 
     def question_selection(self):
         # retrieve 10 random questions from topic file, and display them
-        self.questions = random.sample(self.questions, k=10)
-        for question in enumerate(self.questions, 1):
-            print(f'Q{question[0]}: {question[1][0]}')
+        global exception
+        try:
+            self.questions = random.sample(self.questions, k=10)
+            for question in enumerate(self.questions, 1):
+                print(f'Q{question[0]}: {question[1][0]}')
 
-        # offer chance to randomize the list of questions, if so repeat the whole process
-        if self.player.points >= 5:
-            if input(f'\nRandomize questions for 5/{self.player.points} points, Y/N?: ').lower() == 'y':
-                self.player.points -= 5
-                self.questions = []
-                self.question_selection() 
+            # offer chance to randomize the list of questions, if so repeat the whole process
+            if self.player.points >= 5:
+                if input(f'\nRandomize questions for 5/{self.player.points} points, Y/N?: ').lower() == 'y':
+                    self.player.points -= 5
+                    self.questions = []
+                    self.question_selection() 
+        except:
+            print(f'You have finished {self.topic}.')
+            self.player.points += 15
+            exception = True
+
 
     
     def answer_quiz(self):
@@ -103,13 +111,13 @@ class Quiz: # TESTING DAD
         total_time = datetime.datetime.now()-start_time
         self.player.update_stat(total_time)
 
-
 if __name__ == "__main__":
     thequiz = Quiz()
     while True:
         thequiz.topic_selection() # modifies game_on if not enough points
         if game_on == True:
             thequiz.question_selection() 
+
             thequiz.answer_quiz()
         else:
             break
