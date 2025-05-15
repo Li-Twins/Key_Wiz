@@ -5,7 +5,7 @@ global game_on
 game_on = True
 
 
-class Quiz:
+class Quiz: # TESTING DAD
     def __init__(self):
         self.player = Player()
         # select four existing topics for each player level, or all exisiting topics if less than 5 
