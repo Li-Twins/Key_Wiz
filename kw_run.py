@@ -31,7 +31,7 @@ class Quiz: # TESTING DAD
             while True:
                 try:
                     # ensures the same topic will be repeated in next reroll
-                    self.topic = random.choice(list(x for x in self.topics if x != self.topic))
+                    self.topic = random.choice[x for x in self.topics if x != self.topic]
                 # exit run when no topic exists that has not been marked as complete (ie at least 10 questions not completed)
                 except:
                     print('No unfinished topic at this moment.')
