@@ -20,7 +20,6 @@ class Quiz: # TESTING DAD
 
     def topic_selection(self):
         global game_on
-
         # prompt if no topic exists
         if not self.topics:
             print('No topic exists yet.')
@@ -29,11 +28,10 @@ class Quiz: # TESTING DAD
         # check if enough points to run quiz, with option to change to new topic
         elif self.player.points >= 15:
             self.player.points -= 15
-            self.player.gamble()
             while True:
                 try:
                     # ensures the same topic will be repeated in next reroll
-                    self.topic = random.choice([x for x in self.topics if x != self.topic])
+                    self.topic = random.choice(list(x for x in self.topics if x != self.topic))
                 # exit run when no topic exists that has not been marked as complete (ie at least 10 questions not completed)
                 except:
                     print('No unfinished topic at this moment.')
@@ -103,18 +101,15 @@ class Quiz: # TESTING DAD
             self.player.report.append([self.questions[i][0], self.questions[i][1], answer_list[i]])
             if self_mark.lower() == "y":
                 self.player.points += 2
-                self.player.current_correct += 1
                 if not answer_list[i] in self.player.nogainqa:
                     self.player.answered += 1
                 self.player.remove_check(self.questions[i], True)
                 self.player.nogain(self.questions[i][0])
             else:
                 self.player.remove_check(self.questions[i], False)
-        print(f"\nYour current points: {self.player.points+(self.player.gamble_amount*2 if self.player.current_correct > 5 else 0)}")
-        self.player.gamble_check()
+        print(f"\nYour current points: {self.player.points}")
         total_time = datetime.datetime.now()-start_time
         self.player.update_stat(total_time)
-        self.player.current_correct = 0
 
 if __name__ == "__main__":
     thequiz = Quiz()

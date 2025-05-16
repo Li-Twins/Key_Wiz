@@ -7,7 +7,9 @@ class Player:
         self.player_data = json.load(open('kw_players.json', 'r'))
         self.name = input('Player name: ')
         self.start = datetime.datetime.now()
-
+        self.current_correct = 0
+        self.gamble_amount = 0
+        self.gambling = False
         # load existing player 
         if self.name in list(self.player_data.keys()):
             print('Welcome back, ', self.name)
@@ -32,6 +34,28 @@ class Player:
         self.points = 20
         self.report = []
     
+    def gamble(self):
+        self.gambling = input('Gamble y/n? ').lower() == 'y'
+        if self.gambling:
+            while True:
+                try:
+                    self.gamble_amount = int(input(f'How much({self.points})? '))
+                    if self.gamble_amount <= self.points:
+                        self.points -= self.gamble_amount
+                        break
+                    else:
+                        print("You don't have that many points.")
+                except:
+                    print('Number please.')
+
+    def gamble_check(self):
+        if self.gambling:
+            if self.current_correct > 5:
+                print(f'You won {self.gamble_amount} points!')
+                self.points += self.gamble_amount*2
+            else:
+                print(f'You lost {self.gamble_amount} points.')
+            self.gamble_amount = 0
 
     def update_stat(self, time):
         # this is called after a round of quiz is completed, to check level update
