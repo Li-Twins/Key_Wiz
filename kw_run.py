@@ -5,7 +5,7 @@ global game_on
 game_on = True
 global exception
 exception = False
-
+#does this truly work?
 class Quiz: # TESTING DAD
     def __init__(self):
         self.player = Player()
