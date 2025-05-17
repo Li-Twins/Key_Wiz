@@ -1,11 +1,6 @@
 from pathlib import Path
 import json
 
-'''topic_list = ['math1', 'gaming1', 'basic1']
-out_file = open("kw_topics.json", 'w')
-json.dump(topic_list, out_file)
-out_file.close()'''
-
 
 def building_quiz():
     # load up topic lists
@@ -49,7 +44,9 @@ def building_quiz():
                 break
             elif save_exit.lower() == 's':
                 q_a.append([a, b])
+        # this step is reached when new topic is chosen, which safely dumps to json and close the file before reopening
         json.dump(q_a, f)
         f.close()
 
 building_quiz()
+
