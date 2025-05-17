@@ -1,1 +1,122 @@
-[]
+[
+    [
+        "Solve: 2(x-4)=10",
+        "x=9"
+    ],
+    [
+        "Solve: 4x-3 < 9",
+        "x<3"
+    ],
+    [
+        "solve for x, y: 2x+y=8, x-y=1",
+        "x=3, y=2"
+    ],
+    [
+        "The sum of two numbers is 15, difference 3, find x, y",
+        "9 and 6"
+    ],
+    [
+        "solve: x/4 + 3 = 7",
+        "x=16"
+    ],
+    [
+        "solve: 3(2x-1) = 4x+5",
+        "x=4"
+    ],
+    [
+        "solve: -2x+7 > 3",
+        "x<2"
+    ],
+    [
+        "Expand: (x+3)(x-2)",
+        "x^2+x-6"
+    ],
+    [
+        "Factorise: x^2-9",
+        "(x+3)(x-3)"
+    ],
+    [
+        "Factorise: x^2 + 6x + 9",
+        "(x+3)^2"
+    ],
+    [
+        "Solve: x^2+4x-5=0",
+        "x=1, -5"
+    ],
+    [
+        "Simplify: x^2 + 8x + 10",
+        "(x+4)^2 - 6"
+    ],
+    [
+        "Solve: 2x^2-8=0",
+        "x=2, -2"
+    ],
+    [
+        "Factorise: 3x^2-12x",
+        "3x(x-4)"
+    ],
+    [
+        "Expand: (2x-5)^2",
+        "4x^2-20x+25"
+    ],
+    [
+        "Simplify: 7^5 / 7^3",
+        "7^2, 49"
+    ],
+    [
+        "Evaluate: 8^(2/3)",
+        "4"
+    ],
+    [
+        "Solve: 2^(x+1)=16",
+        "x=3"
+    ],
+    [
+        "Write SQR50 in simplest surd form",
+        "5SQR2"
+    ],
+    [
+        "Simplify: 1/(4^-2)",
+        "16"
+    ],
+    [
+        "Simplify: (3^2)^3",
+        "3^6"
+    ],
+    [
+        "Solve: x/3 = 5/x",
+        "x = +-SQR15"
+    ],
+    [
+        "Solve: 1/x + 1/2x=3",
+        "x=1/2"
+    ],
+    [
+        "Simplify: (2x^2-8)/(x-2)",
+        "2x+4 (for x != 2)"
+    ],
+    [
+        "Solve graphically: y=2x-1 and y=x+3",
+        "x=4, y=7"
+    ],
+    [
+        "What is the equation of a line with gradient -2 and y-intercept 4?",
+        "y = -2x + 4"
+    ],
+    [
+        "Find the gradient of the line passing through (1,2) and (3,8)",
+        "3 (2/6)"
+    ],
+    [
+        "Solve |2x-3| = 7",
+        "x=5, -2"
+    ],
+    [
+        "Factorise: x^2+2xy+y^2",
+        "(x+y)^2"
+    ],
+    [
+        "If 5 less than twice a number is 17, find the number?",
+        "11"
+    ]
+]
