@@ -1,1 +1,122 @@
-[]
+[
+    [
+        "What is RAM?",
+        "Random Access Memory, temporay storage for active program"
+    ],
+    [
+        "What is a motherboard?",
+        "The main circuit board that connects all hardware components"
+    ],
+    [
+        "What is a GPU?",
+        "Graphics Processing Unit, specialized for rendering images/video, doubles as AI processing unit these days"
+    ],
+    [
+        "What is the difference between HDD and SSD?",
+        "normal hard drive (HDD) are slower but cheaper than Solid-State Drive, which does the same thing, storage device for long-term data"
+    ],
+    [
+        "What is a scanner?",
+        "a device that converts physical documents into digital images"
+    ],
+    [
+        "List three input devices",
+        "Keyboard, mouse, microphone"
+    ],
+    [
+        "List three output devices",
+        "Monitor, webcam, speakers"
+    ],
+    [
+        "What is cache?",
+        "Fast, small memory near CPU for quick data access"
+    ],
+    [
+        "What is an optical drive?",
+        "A device that reads/writes CD, DVD, etc"
+    ],
+    [
+        "What is cloud storage?",
+        "The online equivalent of HDD, remote data storage"
+    ],
+    [
+        "What does HDMI stand for?",
+        "High Definition Multimedia Interface (transfer both video/audio)"
+    ],
+    [
+        "What is the term to call computer accessories?",
+        "peripherals"
+    ],
+    [
+        "What is USB/micro USB/Type C etc?",
+        "different standards for connecting peripherals"
+    ],
+    [
+        "What is Bluetooth?",
+        "Wireless tech for short-range device communication"
+    ],
+    [
+        "What is Thunderbolt?",
+        "Apple's high-speed port that transfers data, video, power, i.e. typc C"
+    ],
+    [
+        "What is a modem?",
+        "device that connects to the ISP for internet access"
+    ],
+    [
+        "What is a NUC?",
+        "Next Unit of Computing, a mini desktop"
+    ],
+    [
+        "What is the difference between desktop and a laptop?",
+        "desktop: need peripherals, customizable, not portable. laptop the opposite"
+    ],
+    [
+        "What is a blue screen of death?",
+        "Critical system error that can not be self fixed"
+    ],
+    [
+        "What is a driver?",
+        "A piece of file to install that determines how a particular hardware functions"
+    ],
+    [
+        "How is resolution defined?",
+        "By the number of pixels, Width x Height (e.g., 1920x1080 = Full HD)"
+    ],
+    [
+        "What is refresh rate?",
+        "How many times the screen updates per second, 60HZ etc"
+    ],
+    [
+        "What is HDR?",
+        "High Dynamic Range, brighter highlights and deeper shadows for better contrast"
+    ],
+    [
+        "What is a Chromebook?",
+        "A laptop running ChromeOS, instead of Windows. (usually cheaper, and cloud-focused)"
+    ],
+    [
+        "What is the biggest advantage a touchpad has over mouse?",
+        "Touchpad supports the use of gestures like pinch-to-zoom"
+    ],
+    [
+        "What is the use of a wireless adapter?",
+        "Adds wifi/bluetooth to device lacking built-in support"
+    ],
+    [
+        "What is a card reader?",
+        "Reads SD/micro SD cards"
+    ],
+    [
+        "What is the main difference between using SD card, USB stick, or portable HDD for storage?",
+        "SD: small, expensive, portable / USB: average in all three / HDD: large, cheap, bulky"
+    ],
+    [
+        "Which is cheaper for the same specs, laptop or desktop, by how much roughly?",
+        "For the same specs, desktop is roughly half of the price of a laptop"
+    ],
+    [
+        "What is the typical lifespan of a PC, before feeling outdated?",
+        "around 5 years"
+    ]
+]
