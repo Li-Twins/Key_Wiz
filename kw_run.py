@@ -5,8 +5,8 @@ global game_on
 game_on = True
 global exception
 exception = False
-#does this truly work?
-class Quiz: # TESTING DAD
+
+class Quiz:
     def __init__(self):
         self.player = Player()
         # select four existing topics for each player level, or all exisiting topics if less than 5 
@@ -29,6 +29,7 @@ class Quiz: # TESTING DAD
         # check if enough points to run quiz, with option to change to new topic
         elif self.player.points >= 15:
             self.player.points -= 15
+            # first gamble action occurs here
             self.player.gamble()
             while True:
                 try:
@@ -55,6 +56,7 @@ class Quiz: # TESTING DAD
                         self.questions = available_questions
                         break
                 else:
+                    # topics with less than 10 incompleted quesions are removed for the run, this behaviour needs to be reworked
                     print(f'You have finished {self.topic}.')
                     del self.topics[self.topics.index(self.topic)]
 
@@ -81,6 +83,7 @@ class Quiz: # TESTING DAD
                     self.questions = []
                     self.question_selection() 
         except:
+            # what exception do you anticipate here, and what does changing exception value do actually? Why add 15 points?
             print(f'You have finished {self.topic}.')
             self.player.points += 15
             exception = True
@@ -95,25 +98,30 @@ class Quiz: # TESTING DAD
         for i in range(10):
             player_answer = input(f'Q{i+1}: {self.questions[i][0]}: ')
             answer_list.append(player_answer)
-
         # show each question, answer and player input to be self marked, calculate correct answered and points earned, save all the report
         print(f'\n#### Please verify your answers ####')
         for i in range(10):
             self_mark = input(f"{self.questions[i][1]}, your answer: {answer_list[i]}, Y if correct: ")
             self.player.report.append([self.questions[i][0], self.questions[i][1], answer_list[i]])
+            # for each correctly answered question
             if self_mark.lower() == "y":
                 self.player.points += 2
+                # is this attribute necessary?
                 self.player.current_correct += 1
+                # what the hell is this naming? increment correctly answered count by 1 -> what is remove_check, and nogain?
                 if not answer_list[i] in self.player.nogainqa:
                     self.player.answered += 1
                 self.player.remove_check(self.questions[i], True)
                 self.player.nogain(self.questions[i][0])
             else:
+                # if incorrect, don't check if the question should be removed
                 self.player.remove_check(self.questions[i], False)
         print(f"\nYour current points: {self.player.points+(self.player.gamble_amount*2 if self.player.current_correct > 5 else 0)}")
+        # evaluate gamble result at the end of a run
         self.player.gamble_check()
         total_time = datetime.datetime.now()-start_time
         self.player.update_stat(total_time)
+        # still wonder about the purpose of having a current_correct
         self.player.current_correct = 0
 
 if __name__ == "__main__":
@@ -122,7 +130,7 @@ if __name__ == "__main__":
         thequiz.topic_selection() # modifies game_on if not enough points
         if game_on == True:
             thequiz.question_selection() 
-            if exception == False:
+            if exception == False: # need explaination on this check
                 thequiz.answer_quiz()
         else:
             break
