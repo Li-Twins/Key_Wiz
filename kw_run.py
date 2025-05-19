@@ -3,13 +3,11 @@ from kw_player import Player
 
 global game_on
 game_on = True
-global exception
-exception = False
 
 class Quiz:
     def __init__(self):
         self.player = Player()
-        # select four existing topics for each player level, or all exisiting topics if less than 5 
+        # select four existing topics for each player level, or all existing topics if less than 5 
         try:
             self.topics = json.load(open('kw_topics.json', 'r'))[:(self.player.level*4)]
         except IndexError:
@@ -20,12 +18,10 @@ class Quiz:
 
     def topic_selection(self):
         global game_on
-
         # prompt if no topic exists
         if not self.topics:
             print('No topic exists yet.')
             game_on = False
-
         # check if enough points to run quiz, with option to change to new topic
         elif self.player.points >= 15:
             self.player.points -= 15
@@ -59,37 +55,25 @@ class Quiz:
                     # topics with less than 10 incompleted quesions are removed for the run, this behaviour needs to be reworked
                     print(f'You have finished {self.topic}.')
                     del self.topics[self.topics.index(self.topic)]
-
-
         # ends game when topics exist yet not enough points        
         else:
             print(f"Sorry, but you don't have enough points to continue on.")
             game_on = False
-
-        
+            
 
     def question_selection(self):
         # retrieve 10 random questions from topic file, and display them
-        global exception
-        try:
-            self.questions = random.sample(self.questions, k=10)
-            for question in enumerate(self.questions, 1):
-                print(f'Q{question[0]}: {question[1][0]}')
-
-            # offer chance to randomize the list of questions, if so repeat the whole process
-            if self.player.points >= 5:
-                if input(f'\nRandomize questions for 5/{self.player.points} points, Y/N?: ').lower() == 'y':
-                    self.player.points -= 5
-                    self.questions = []
-                    self.question_selection() 
-        except:
-            # what exception do you anticipate here, and what does changing exception value do actually? Why add 15 points?
-            print(f'You have finished {self.topic}.')
-            self.player.points += 15
-            exception = True
+        self.questions = random.sample(self.questions, k=10) # does sample exceed size traceback still occur?
+        for question in enumerate(self.questions, 1):
+            print(f'Q{question[0]}: {question[1][0]}')
+        # offer chance to randomize the list of questions, if so repeat the whole process
+        if self.player.points >= 5:
+            if input(f'\nRandomize questions for 5/{self.player.points} points, Y/N?: ').lower() == 'y':
+                self.player.points -= 5
+                self.questions = []
+                self.question_selection() 
 
 
-    
     def answer_quiz(self):
         # display each question and save player response 
         start_time = datetime.datetime.now()
@@ -106,22 +90,21 @@ class Quiz:
             # for each correctly answered question
             if self_mark.lower() == "y":
                 self.player.points += 2
-                # is this attribute necessary?
+                # update gramble counter
                 self.player.current_correct += 1
-                # what the hell is this naming? increment correctly answered count by 1 -> what is remove_check, and nogain?
-                if not answer_list[i] in self.player.nogainqa:
-                    self.player.answered += 1
+                # nogainqa > already_answered, answered > xp
+                if not answer_list[i] in self.player.already_answered:
+                    self.player.xp += 1
                 self.player.remove_check(self.questions[i], True)
-                self.player.nogain(self.questions[i][0])
+                self.player.already_answered(self.questions[i][0])
             else:
-                # if incorrect, don't check if the question should be removed
+                # if incorrect, deduct one for the question
                 self.player.remove_check(self.questions[i], False)
         print(f"\nYour current points: {self.player.points+(self.player.gamble_amount*2 if self.player.current_correct > 5 else 0)}")
         # evaluate gamble result at the end of a run
         self.player.gamble_check()
         total_time = datetime.datetime.now()-start_time
         self.player.update_stat(total_time)
-        # still wonder about the purpose of having a current_correct
         self.player.current_correct = 0
 
 if __name__ == "__main__":
@@ -130,8 +113,7 @@ if __name__ == "__main__":
         thequiz.topic_selection() # modifies game_on if not enough points
         if game_on == True:
             thequiz.question_selection() 
-            if exception == False: # need explaination on this check
-                thequiz.answer_quiz()
+            thequiz.answer_quiz()
         else:
             break
     sys.exit()
