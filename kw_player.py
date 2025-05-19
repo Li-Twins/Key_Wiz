@@ -18,13 +18,16 @@ class Player:
             self.removed = json.load(open(f'kw_players.json', 'r'))[self.name]['removed']
             self.nogainqa = json.load(open(f'kw_players.json', 'r'))[self.name]['nogainqa']
             self.answering = json.load(open(f'kw_players.json', 'r'))[self.name]['answering']
+            self.last_quiz_time = json.load(open(f'kw_players.json', 'r'))[self.name]['last_quiz_time']
+            if datetime.datetime.now()-self.last_quiz_time < datetime.time(8, 0, 0):
+                print(f'Still {int(datetime.datetime.now()-self.last_quiz_time)} left till your next session.')
 
         # create new player with default values, save to list of players    
         else:
             print(f'Welcome to Key-wiz, {self.name},  your Key to become a Wiz!')
             self.level = 1
             self.answered = 0
-            self.player_data[self.name] = {'level':1, 'answered':0, 'removed':[], 'nogainqa':[], 'answering':{}}
+            self.player_data[self.name] = {'level':1, 'answered':0, 'removed':[], 'nogainqa':[], 'answering':{}, 'last_quiz_time':None}
             json.dump(self.player_data, open('kw_players.json', 'w'))
             self.removed = []
             self.nogainqa = []
@@ -59,8 +62,8 @@ class Player:
 
     def update_stat(self, time):
         # this is called after a round of quiz is completed, to check level update
-        if self.answered >= 100:
-            self.answered = 0
+        if self.answered >= 60:
+            self.answered -= 60
             self.level += 1
             print(f'Level up! You are now level {self.level}! Congrats!')
 
