@@ -32,6 +32,7 @@ class Player:
             self.removed = []
             self.nogainqa = []
             self.answering = {}
+            self.last_quiz_time = datetime.datetime.now()
 
         # all players get assigned points and fresh new report    
         self.points = 20
