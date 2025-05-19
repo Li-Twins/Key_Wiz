@@ -69,7 +69,7 @@ class Player:
             print(f'Level up! You are now level {self.level}! Congrats!')
 
         # save all relevant info for the player/current session
-        self.player_data[self.name] = {'level':self.level, 'answered':self.answered, 'removed':self.removed, 'nogainqa':self.nogainqa, 'answering':self.answering}
+        self.player_data[self.name] = {'level':self.level, 'answered':self.answered, 'removed':self.removed, 'nogainqa':self.nogainqa, 'answering':self.answering, 'last_quiz_time':self.last_quiz_time}
         json.dump(self.player_data, open('kw_players.json', 'w'))
         try:
             contents = json.load(open(f'kw_{self.name}_report.json', 'r'))
