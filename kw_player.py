@@ -20,7 +20,11 @@ class Player:
             self.answering = json.load(open(f'kw_players.json', 'r'))[self.name]['answering']
             self.last_quiz_time = json.load(open(f'kw_players.json', 'r'))[self.name]['last_quiz_time']
             if datetime.datetime.now()-self.last_quiz_time < datetime.time(8, 0, 0):
-                print(f'Still {int(datetime.datetime.now()-self.last_quiz_time)} left till your next session.')
+                print(f'Still {int((datetime.datetime.now()-self.last_quiz_time).hours())} left till your next session.')
+            else:
+                self.points = (int((datetime.datetime.now()-self.last_quiz_time).hours())/8)*15
+                if self.points > 50:
+                    self.points = 50
 
         # create new player with default values, save to list of players    
         else:
