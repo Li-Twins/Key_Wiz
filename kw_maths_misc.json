@@ -1,0 +1,122 @@
+[
+    [
+        "Solve log4 64",
+        "3 (4^3=64)"
+    ],
+    [
+        "Solve log10 0.01",
+        "-2 (10^-2)"
+    ],
+    [
+        "Evaluate log10 1",
+        "0 (10^0 = 1)"
+    ],
+    [
+        "If logx 81 = 4, what is x?",
+        "3 (3^4=81)"
+    ],
+    [
+        "If log3 x = 4, what is x?",
+        "81 (3^4=81)"
+    ],
+    [
+        "Simplify surds: SQR18 + SQR8",
+        "3SQR2+2SQR2=5SQR2"
+    ],
+    [
+        "Evaluate (SQR7)^2",
+        "7"
+    ],
+    [
+        "Simplify SQR12xSQR3",
+        "SQR36, 6"
+    ],
+    [
+        "Rationalise 5/SRQ2",
+        "5SQR2/2"
+    ],
+    [
+        "Simplify SQR20/SQR5",
+        "SQR4, 2"
+    ],
+    [
+        "Simplify SQR72",
+        "6SQR2"
+    ],
+    [
+        "Evaluate (SQR10)^5",
+        "10^3, 1000"
+    ],
+    [
+        "find equivalent ratio: 3:1/8",
+        "24:1"
+    ],
+    [
+        "find equivalent ratio: 3.45:4.45",
+        "69:89"
+    ],
+    [
+        "350g in ton: ",
+        "0.00035"
+    ],
+    [
+        "1ha in sqm",
+        "10000"
+    ],
+    [
+        "cubic is to volume as litre is to?",
+        "capacity"
+    ],
+    [
+        "How many cubes with side length of 3cm can fit into a rectangular box with dimentions of 18x20x30cm?",
+        "400"
+    ],
+    [
+        "What percentage is 42 seconds out of 2 minutes?",
+        "35%"
+    ],
+    [
+        "Name two types of sample taking",
+        "categorical, numerical"
+    ],
+    [
+        "Name two types of statistics",
+        "census, sample"
+    ],
+    [
+        "Name three ways of choosing sample",
+        "random, systematic, stratified"
+    ],
+    [
+        "The coordinates of point of intercept of lines x=3, y=-5 are:",
+        "(3, -5)"
+    ],
+    [
+        "Which line passes through (0,0), y=-2x or y=5x-4",
+        "y=-2x"
+    ],
+    [
+        "if (-3, -6) is on ax-4y-9=0, what is a?",
+        "5"
+    ],
+    [
+        "y=-2x+3, find x, y intercept",
+        "3/2, 3"
+    ],
+    [
+        "A highspeed train's speed increases from 30km/h to 300km/h in three mins, what is its acceleration in seconds?",
+        "25m/sec (270x1000)/3x60x60"
+    ],
+    [
+        "A company's profit rises from 5000 to 6500 in a year, what is the percentage increase?",
+        "30%"
+    ],
+    [
+        "A plane ascends at a 30\u00b0 angle. If it travels 500 m along its flight path, how high is it?",
+        "250 m (since sin(30\u00b0) = 0.5)"
+    ],
+    [
+        "What is the total amount after investing $10,000 for 3 years at a 10% annual compound interest rate?",
+        "$13310"
+    ]
+]
