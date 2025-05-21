@@ -1,1 +1,122 @@
-[]
+[
+    [
+        "What is an operating system, give two examples?",
+        "Software that manages hardware and runs other programs (Windows / Linux / macOC / Android / IOS / Harmony OS)"
+    ],
+    [
+        "What does 'GUI\" stand for?",
+        "Graphic User Interface (using buttons/icons to interact)"
+    ],
+    [
+        "What is a web browser, give three examples?",
+        "Software to access the internet (Chrome / Internet Explorer / Firefox / Opera)"
+    ],
+    [
+        "What does word processor do, and give two examples",
+        "To edit text documents (Microsoft Word / Google Docs / NOT notepad)"
+    ],
+    [
+        "What is open-source software, and are they the norm?",
+        "Software with code anyone can view and modify, they are quite rare."
+    ],
+    [
+        "What is a \"beta version\" of software?",
+        "A test release for feedback before the final launch."
+    ],
+    [
+        "What does \"compatibility\" mean in software?",
+        "Whether a program works with your OS/hardware."
+    ],
+    [
+        "What is a \"license key\"?",
+        "A code to activate paid software, often after free trial runs out."
+    ],
+    [
+        "What does file extension do?",
+        "the suffix after a file name tells your OS/program what to open the file with"
+    ],
+    [
+        "What is the difference between JPG and PNG?",
+        "JPG is the commonly accepted final photo format, with loss from compression. PNG is closer to original quality and allows better editing."
+    ],
+    [
+        "How does PDF differ from DOCs?",
+        "PDF is a file format that preserves layout and offers better presentation than normal word files."
+    ],
+    [
+        "How do we compress file/files?",
+        "Use WinRAR or zip to reduce the size of file/files as well as packaging together"
+    ],
+    [
+        "What is malware?",
+        "Malicious software that harms devices/data."
+    ],
+    [
+        "List 3 types of malware",
+        "spyware / adware / trojans / worms / ransomware"
+    ],
+    [
+        "What is VPN and explain its main use",
+        "Virtual Private Network, hides your IP / access geo-restricted content / bypass censorship / protect from hacking"
+    ],
+    [
+        "How do you force-quit a frozen program?",
+        "Use Task Manager (Windows)"
+    ],
+    [
+        "What is the first step to fix a software issue?",
+        "Reboot the program/device"
+    ],
+    [
+        "What is \"lag\"?",
+        "A delay in response either from local hardware issue or slow internet speed"
+    ],
+    [
+        "What is the difference between wi-fi and mobile data?",
+        "Wifi uses a router, capable of faster speed and more bandwidth / mobile data uses cellular networks"
+    ],
+    [
+        "What is bandwidth?",
+        "Maximum amount of data that can move through the pipe, which differs from the actual speed reached"
+    ],
+    [
+        "Identify the average size of a JPG, MP3, MP4, TXT, as close as possible",
+        "JPG (image, 200k to 3m), MP3 (music, 3 to 6m), MP4 (movie, 700m to 4G), txt (word, 1k to 50k)"
+    ],
+    [
+        "What is streaming?",
+        "Playing online media WITHOUT downloading it locally"
+    ],
+    [
+        "What is a \"cookie\" in browers?",
+        "A small file that stores website preferences/login info, can cause security concerns sometimes"
+    ],
+    [
+        "What is an algorithm?",
+        "A step by step procedure to solve a problem."
+    ],
+    [
+        "What is an \"API\"?",
+        "Application Programming Interface, a way for programs to communicate"
+    ],
+    [
+        "What is a spreadsheet used for?",
+        "Organizing data in rows/columns, often for reporting purpose. (Excel, Google Sheets)"
+    ],
+    [
+        "What program is commonly used to make presentation?",
+        "Powerpoint, Google Slides"
+    ],
+    [
+        "What does \"plug and play\" mean?",
+        "Devices would work immediately when connected, no setup required"
+    ],
+    [
+        "How are AI chatbots programmed?",
+        "By combining Machine Learning models with Natural Language Processing NLP to gather data then respond with correct interpretation of user input"
+    ],
+    [
+        "Name three main types of IT jobs",
+        "Systems analyst / web developer / data scientist / database admin / IT technician / computer programmer / software engineer / network engineer"
+    ]
+]
