@@ -3,12 +3,10 @@ from kw_player import Player
 
 global game_on
 game_on = True
-global game_mode
-game_mode = "normal" if input('(N)ormal or (P)ractise?: ').lower() == 'n' else "dev"
 class Quiz:
     def __init__(self):
         global game_mode
-        self.player = Player(mode=game_mode)
+        self.player = Player()
         
         # Load topics with error handling
         self.topics = json.load(open('kw_topics.json', 'r'))
@@ -78,7 +76,7 @@ class Quiz:
                     print(f'You have finished {self.topic}.')
                     for i in available_questions:
                         if not i[0] in list(self.player.answering.keys()):
-                            self.player.boss_q_a.append(i)
+                            self.player.boss_questions.append(i)
                     self.done_topics.append(self.topic)
         # ends game when topics exist yet not enough points        
         else:
@@ -87,7 +85,7 @@ class Quiz:
     
     def boss(self):
         if self.player.level == 10:
-            self.boss_qa(self.player.boss_q_a, True)
+            self.boss_qa(self.player.boss_questions, True)
         else:
             self.answer_quiz(self.questions)
 
@@ -137,45 +135,42 @@ class Quiz:
 
     def answer_quiz(self, qa):
         # display each question and save player response 
-        start_time = datetime.datetime.now()
-        print(f'\n#### Quiz has started at {start_time} ####')
         answer_list = []
         if self.player.mode == 'normal':
-            for i in range(10): player_answer = input(f'Q{i+1}: {qa[i][0]}: ') ; answer_list.append(player_answer) # inputting
-        # show each question, answer and player input to be self marked, calculate correct xp and points earned, save all the report
-            print(f'\n#### Please verify your answers ####')
-            for i in range(10):
+            start_time = datetime.datetime.now()
+            print(f'\n#### Quiz has started at {start_time} ####')
+            for i in range(10): 
+                player_answer = input(f'Q{i+1}: {qa[i][0]}: ') 
+                answer_list.append(player_answer) # inputting
                 self_mark = input(f"{qa[i][1]}, your answer: {answer_list[i]}, Y if correct: ")
-                self.player.report.append([qa[i][0], qa[i][1], answer_list[i]])
+
+
+        # show each question, answer and player input to be self marked, calculate correct xp and points earned, save all the report
+            for i in range(10):
+                self.player.report.append([qa[i][0], answer_list[i]])
                 # for each correctly xp question
                 if self_mark.lower() == "y":
                     self.player.points += 2
                     # update gamble counter
                     self.player.current_correct += 1
                     # already_answered > already_answered, xp > xp
-                    if not answer_list[i] in self.player.already_answered:
+                    if not qa[i][0] in self.player.already_answered:
                         self.player.xp += 1
-                    self.player.removed.append(qa[i])
+                    self.player.remove_check(qa[i], True)
                     self.player.answering[qa[i][0]] = 'removed'
-                    self.player.already_answered.append(qa[i][0])
-
-                        
+                    self.player.already_answered.append(qa[i][0]) 
                 else:
                     # if incorrect, deduct one for the question
                     self.player.remove_check(qa[i], False)
-            print(f"\nYour current points: {self.player.points+(self.player.gamble_amount*2 if self.player.current_correct > 5 else 0)}")
         else:
             for i in enumerate(qa, 1): 
-                answer_list.append(input(f'Q{i[0]}: {i[1][0]}: ')) # inputting
-            print(f'\n#### Please verify your answers ####')    
-            for i in enumerate(qa, 1): 
-                if input(f"{i[0]}: {i[1][0]}, your answer: {answer_list[(i[0])-1]}, Y if correct: ").lower() == 'y': 
-                    self.player.points += 2 ; self.player.current_correct += 1 ; self.player.already_answered.append(i[1][0])
+                input(f'Q{i[0]}: {i[1][0]}: ')
+                print(f'The answer is: {i[1][1]}')
+
         # evaluate gamble result at the end of a run
         self.player.gamble_check()
-        total_time = datetime.datetime.now()-start_time
-        if self.player.mode == 'normal' : self.player.update_stat(total_time)
-        else: print(f"Time taken: {total_time}")
+        print(f"Your points: {self.player.points}")
+        if self.player.mode == 'normal' : self.player.update_stat(datetime.datetime.now()-start_time)
         self.player.current_correct = 0
 
 if __name__ == "__main__":
@@ -186,5 +181,7 @@ if __name__ == "__main__":
             thequiz.question_selection() 
             thequiz.boss()
         else:
+            thequiz = Quiz()
+        if input('Continue y/n? ').lower() == 'n':
+            print('Bye!')
             break
-    sys.exit()
