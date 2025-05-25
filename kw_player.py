@@ -1,6 +1,6 @@
 from pathlib import Path
 import json, datetime, sys
-
+# testing
 class Player:
     def __init__(self, ):
         self.mode = "normal" if input('(N)ormal or (P)ractise?: ').lower() == 'n' else "dev"
