@@ -5,12 +5,10 @@ global game_on
 game_on = True
 class Quiz:
     def __init__(self):
-        global game_mode
-        self.player = Player()
+        self.topics = json.load(open('kw_topics.json', 'r'))
+        self.player = Player(self.topics)
         
         # Load topics with error handling
-        self.topics = json.load(open('kw_topics.json', 'r'))
-        
         # Select topics based on player level
         try:
             self.topics = self.topics[:self.player.level * 4]
@@ -23,7 +21,7 @@ class Quiz:
 
 
     def topic_selection(self):
-        global game_on, game_mode
+        global game_on
         # prompt if no topic exists
         if not self.topics:
             print('No topic exists yet.')
@@ -36,22 +34,8 @@ class Quiz:
             while True:
                 try:
                     # ensures the same topic will be repeated in next reroll
-                    if game_mode == "normal":
-                        self.topic = random.choice([x for x in self.topics if x != self.topic and not x in self.done_topics])
-                    elif game_mode == "dev":
-                        topic = ''
-                        while not topic in self.topics:
-                            topic = input(f'Out of {self.topics}, which topic? ')
-                            if topic in self.topics:
-                                self.topic = topic
-                            else:
-                                print(f'Invalid topic, please select from {self.topics}')
-
-
+                    self.topic = random.choice([x for x in self.topics if x != self.topic and not x in self.done_topics])
                 # exit run when no topic exists that has not been marked as complete (ie at least 10 questions not completed)
-                except KeyboardInterrupt:
-                    print('\nBye!')
-                    sys.exit()
                 except:
                     print('No unfinished topic at this moment.')
                     sys.exit()
@@ -85,11 +69,11 @@ class Quiz:
     
     def boss(self):
         if self.player.level == 10:
-            self.boss_qa(self.player.boss_questions, True)
+            self.boss_qa(self.player.boss_questions)
         else:
             self.answer_quiz(self.questions)
 
-    def boss_qa(self, qa, qatrue):
+    def boss_qa(self, qa):
         if qa:
             print(f'\n#### Boss QA has started ####')
             while input('Continue with boss QA? Y/N: ').lower() == 'y':
@@ -105,72 +89,64 @@ class Quiz:
                 self_mark = input(f"{qa[i][1]}, your answer: {answer_list[i]}, Y if correct: ")
                 self.player.report.append([qa[i][0], qa[i][1], answer_list[i]])
                 # for each correctly xp question
-                if self.player.mode == 'normal':
-                    if self_mark.lower() == "y":
-                        self.player.points += 2
-                        # update gamble counter
-                        self.player.current_correct += 1
-                        self.player.remove_check(qa[i], True)
-                        self.player.already_answered.append(qa[i][0])
-                        self.player.removed.append(qa[i])
-                    else:
-                        self.player.remove_check(qa[i], False)
+                if self_mark.lower() == "y":
+                    self.player.points += 2
+                    # update gamble counter
+                    self.player.current_correct += 1
+                    self.player.remove_check(qa[i], True)
+                    self.player.already_answered.append(qa[i][0])
+                    self.player.removed.append(qa[i])
+                else:
+                    self.player.remove_check(qa[i], False)
 
 
     def question_selection(self):
         # retrieve 10 random questions from topic file, and display them
-        if self.player.mode == 'normal':
-            self.questions = random.sample(self.questions, k=10) # does sample exceed size traceback still occur?
+        self.questions = random.sample(self.questions, k=10) # does sample exceed size traceback still occur?
         for question in enumerate(self.questions, 1):
             print(f'Q{question[0]}: {question[1][0]}')
         # offer chance to randomize the list of questions, if so repeat the whole process
-        if self.player.mode == 'normal':
-            if self.player.points >= 5:
-                if input(f'\nRandomize questions for 5/{self.player.points} points, Y/N?: ').lower() == 'y':
-                    self.player.points -= 5
-                    self.questions = []
-                    self.question_selection() 
+        if self.player.points >= 5:
+            if input(f'\nRandomize questions for 5/{self.player.points} points, Y/N?: ').lower() == 'y':
+                self.player.points -= 5
+                self.questions = []
+                self.question_selection() 
 
 
 
     def answer_quiz(self, qa):
         # display each question and save player response 
         answer_list = []
-        if self.player.mode == 'normal':
-            start_time = datetime.datetime.now()
-            print(f'\n#### Quiz has started at {start_time} ####')
-            for i in range(10): 
-                player_answer = input(f'Q{i+1}: {qa[i][0]}: ') 
-                answer_list.append(player_answer) # inputting
-                self_mark = input(f"{qa[i][1]}, your answer: {answer_list[i]}, Y if correct: ")
+        start_time = datetime.datetime.now()
+        print(f'\n#### Quiz has started at {start_time} ####')
+        for i in range(10): 
+            player_answer = input(f'\nQ{i+1}: {qa[i][0]}: ') 
+            answer_list.append(player_answer) # inputting
+            self_mark = input(f"{qa[i][1]}, your answer: {answer_list[i]}, Y if correct: ")
 
 
         # show each question, answer and player input to be self marked, calculate correct xp and points earned, save all the report
-            for i in range(10):
-                self.player.report.append([qa[i][0], answer_list[i]])
-                # for each correctly xp question
-                if self_mark.lower() == "y":
-                    self.player.points += 2
-                    # update gamble counter
-                    self.player.current_correct += 1
-                    # already_answered > already_answered, xp > xp
-                    if not qa[i][0] in self.player.already_answered:
-                        self.player.xp += 1
-                    self.player.remove_check(qa[i], True)
-                    self.player.answering[qa[i][0]] = 'removed'
-                    self.player.already_answered.append(qa[i][0]) 
-                else:
-                    # if incorrect, deduct one for the question
-                    self.player.remove_check(qa[i], False)
-        else:
-            for i in enumerate(qa, 1): 
-                input(f'Q{i[0]}: {i[1][0]}: ')
-                print(f'The answer is: {i[1][1]}')
-
+        for i in range(10):
+            self.player.report.append([qa[i][0], answer_list[i]])
+            # for each correctly xp question
+            if self_mark.lower() == "y":
+                self.player.points += 2
+                # update gamble counter
+                self.player.current_correct += 1
+                # already_answered > already_answered, xp > xp
+                if not qa[i][0] in self.player.already_answered:
+                    self.player.xp += 1
+                self.player.remove_check(qa[i], True)
+                self.player.answering[qa[i][0]] = 'removed'
+                self.player.already_answered.append(qa[i][0]) 
+            else:
+                # if incorrect, deduct one for the question
+                self.player.remove_check(qa[i], False)
+            
         # evaluate gamble result at the end of a run
         self.player.gamble_check()
         print(f"Your points: {self.player.points}")
-        if self.player.mode == 'normal' : self.player.update_stat(datetime.datetime.now()-start_time)
+        self.player.update_stat(datetime.datetime.now()-start_time)
         self.player.current_correct = 0
 
 if __name__ == "__main__":
@@ -181,7 +157,8 @@ if __name__ == "__main__":
             thequiz.question_selection() 
             thequiz.boss()
         else:
+            if input('Continue y/n? ').lower() == 'n':
+                print('Bye!')
+                break
             thequiz = Quiz()
-        if input('Continue y/n? ').lower() == 'n':
-            print('Bye!')
-            break
+
