@@ -1,72 +1,93 @@
 from pathlib import Path
 import json, datetime, sys
-# testing
+
 class Player:
-    def __init__(self, ):
-        self.mode = "normal" if input('(N)ormal or (P)ractise?: ').lower() == 'n' else "dev"
-        if self.mode == 'normal':
-            while True:
-                self.player_data = json.load(open('kw_players.json', 'r'))
-                self.name = input('Player name: ')
-                self.start = datetime.datetime.now()
-                self.current_correct = 0
-                self.gamble_amount = 0
-                self.gambling = False
-                self.points = 20
-                # load existing player 
-                if self.name in list(self.player_data.keys()):
-                    print('Welcome back, ', self.name)
-                    self.level = self.player_data[self.name]['level']
-                    self.xp = self.player_data[self.name]['xp']
-                    self.removed = self.player_data[self.name]['removed']
-                    self.already_answered = self.player_data[self.name]['already_answered']
-                    self.answering = self.player_data[self.name]['answering']
-                    self.boss_questions = self.player_data[self.name]['boss_questions']
-                    self.last_played = self.player_data[self.name]['last_played']
-                    target = datetime.datetime.strptime(self.last_played, "%Y-%m-%d %H:%M:%S") + datetime.timedelta(hours=8)
-                    if datetime.datetime.now() > target:
-                        current = datetime.datetime.strptime(datetime.datetime.now(), "%Y-%m-%d %H:%M:%S")
-                        extra = round(((datetime.datetime.strptime(current-target, "%Y-%m-%d %H:%M:%S")).hour)%8)
-                        if extra > 1:
-                            extra *= 5
-                            if extra > 50:
-                                extra = 50
-                        self.points += extra
-                    else:
-                        if self.mode == 'normal':
+    def __init__(self, topics):
+        BREAKING = False
+        while True:
+            try:
+                self.mode = "normal" if input('(N)ormal or (P)ractise?: ').lower() == 'n' else "dev"
+            except KeyboardInterrupt:
+                print("Bye!")
+                sys.exit()
+            if self.mode == 'normal':
+                while True:
+                    self.player_data = json.load(open('kw_players.json', 'r'))
+                    self.name = input('Player name: ')
+                    self.start = datetime.datetime.now()
+                    self.current_correct = 0
+                    self.gamble_amount = 0
+                    self.gambling = False
+                    self.points = 20
+                    # load existing player 
+                    if self.name in list(self.player_data.keys()):
+                        print('Welcome back, ', self.name)
+                        self.level = self.player_data[self.name]['level']
+                        self.xp = self.player_data[self.name]['xp']
+                        self.removed = self.player_data[self.name]['removed']
+                        self.already_answered = self.player_data[self.name]['already_answered']
+                        self.answering = self.player_data[self.name]['answering']
+                        self.boss_questions = self.player_data[self.name]['boss_questions']
+                        self.last_played = self.player_data[self.name]['last_played']
+                        target = datetime.datetime.strptime(self.last_played, "%Y-%m-%d %H:%M:%S") + datetime.timedelta(hours=8)
+                        if datetime.datetime.now() > target:
+                            current = datetime.datetime.strptime(datetime.datetime.now(), "%Y-%m-%d %H:%M:%S")
+                            extra = round(((datetime.datetime.strptime(current-target, "%Y-%m-%d %H:%M:%S")).hour)%8)
+                            if extra > 1:
+                                extra *= 5
+                                if extra > 50:
+                                    extra = 50
+                            self.points += extra
+                        else:
                             current = datetime.datetime.now()
                             hours_left = (target - current).total_seconds() / 3600
                             print(f'You have to wait another {round(hours_left)} hours.') # printing remaining hours till replay
+                            continue
+                        BREAKING = True
+                        break
 
-                # create new player with default values, save to list of players    
-                else:
-                    print(f'Welcome to Key-wiz, {self.name},  your Key to become a Wiz!')            
-                    self.player_data[self.name] = {
-                        'level': 1,
-                        'xp': 0,
-                        'removed': [],
-                        'already_answered': [],
-                        'answering': {},
-                        'boss_questions': [],
-                        'last_played': datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d %H:%M:%S")
-                    }
-                    self.level = 1
-                    self.xp = 0
-                    self.removed = []
-                    self.already_answered = []
-                    self.answering = {}
-                    self.boss_questions = []
-                    self.last_played = datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d %H:%M:%S")
-                    # Save to file
-                    with open('kw_players.json', 'w') as f:
-                        json.dump(self.player_data, f)
-                if self.mode == 'dev':
-                    self.points = 99999999999999999999999
-                self.report = []
-                break
-                # all players get assigned points and fresh new report    
+                    # create new player with default values, save to list of players    
+                    else:
+                        print(f'Welcome to Key-wiz, {self.name},  your Key to become a Wiz!')            
+                        self.player_data[self.name] = {
+                            'level': 1,
+                            'xp': 0,
+                            'removed': [],
+                            'already_answered': [],
+                            'answering': {},
+                            'boss_questions': [],
+                            'last_played': datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d %H:%M:%S")
+                        }
+                        self.level = 1
+                        self.xp = 0
+                        self.removed = []
+                        self.already_answered = []
+                        self.answering = {}
+                        self.boss_questions = []
+                        self.last_played = datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d %H:%M:%S")
+                        # Save to file
+                        with open('kw_players.json', 'w') as f:
+                            json.dump(self.player_data, f)
+                        self.report = []
+                        BREAKING = True
+                        break
+                    # all players get assigned points and fresh new report    
+            else:
+                while True:
+                    topic = input(f'Choose topic, q to quit: {topics}: ')
+                    if topic in topics:
+                        qa = json.load(open(f'kw_{topic}.json', 'r'))
+                        for i in enumerate(qa, 1): 
+                            input(f'Q{i[0]}: {i[1][0]}: ')
+                            print(f'The answer is: {i[1][1]}')
+                    elif topic.lower() == 'q':
+                        break
+                    else:
+                        print('Invalid topic.')
+            if BREAKING: break
+            
+                    
 
-    
     def gamble(self):
         self.gambling = input('Gamble y/n? ').lower() == 'y'
         if self.gambling:
