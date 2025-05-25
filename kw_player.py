@@ -3,11 +3,7 @@ import json, datetime, sys
 
 class Player:
     def __init__(self, mode):
-        try:
-            with open('kw_players.json', 'r') as f:
-                self.player_data = json.load(f)
-        except (FileNotFoundError, json.JSONDecodeError):
-            self.player_data = {}
+        self.player_data = json.load(open('kw_players.json', 'r'))
         self.name = input('Player name: ')
         self.start = datetime.datetime.now()
         self.current_correct = 0
@@ -35,10 +31,11 @@ class Player:
                         extra = 50
                 self.points += extra
             else:
-                current = datetime.datetime.now()
-                hours_left = (target - current).total_seconds() / 3600
-                print(f'You have to wait another {round(hours_left)} hours.') # printing remaining hours till replay
-                sys.exit()
+                if self.mode == 'normal':
+                    current = datetime.datetime.now()
+                    hours_left = (target - current).total_seconds() / 3600
+                    print(f'You have to wait another {round(hours_left)} hours.') # printing remaining hours till replay
+                    sys.exit()
 
         # create new player with default values, save to list of players    
         else:
@@ -69,29 +66,27 @@ class Player:
         self.report = []
     
     def gamble(self):
-        if self.mode == 'normal':
-            self.gambling = input('Gamble y/n? ').lower() == 'y'
-            if self.gambling:
-                while True:
-                    try:
-                        self.gamble_amount = int(input(f'How much({self.points})? '))
-                        if self.gamble_amount <= self.points:
-                            self.points -= self.gamble_amount
-                            break
-                        else:
-                            print("You don't have that many points.")
-                    except:
-                        print('Number please.')
+        self.gambling = input('Gamble y/n? ').lower() == 'y'
+        if self.gambling:
+            while True:
+                try:
+                    self.gamble_amount = int(input(f'How much({self.points})? '))
+                    if self.gamble_amount <= self.points:
+                        self.points -= self.gamble_amount
+                        break
+                    else:
+                        print("You don't have that many points.")
+                except:
+                    print('Number please.')
 
     def gamble_check(self):
-        if self.mode == 'normal':
-            if self.gambling:
-                if self.current_correct > 5:
-                    print(f'You won {self.gamble_amount} points!')
-                    self.points += self.gamble_amount*2
-                else:
-                    print(f'You lost {self.gamble_amount} points.')
-                self.gamble_amount = 0
+        if self.gambling:
+            if self.current_correct > 5:
+                print(f'You won {self.gamble_amount} points!')
+                self.points += self.gamble_amount*2
+            else:
+                print(f'You lost {self.gamble_amount} points.')
+            self.gamble_amount = 0
 
     def update_stat(self, time):
         # this is called after a round of quiz is completed, to check level update
@@ -100,8 +95,8 @@ class Player:
                 self.xp -= 60
                 self.level += 1
                 print(f'Level up! You are now level {self.level}! Congrats!')
-                if self.level >= 10:
-                    print('BOSS QA HOMING IN')
+            if self.level >= 10:
+                print('BOSS QA HOMING IN (maybe again)')
 
             # save all relevant info for the player/current session
             self.player_data[self.name] = {'level':self.level, 'xp':self.xp, 'removed':self.removed, 'already_answered':self.already_answered, 'answering':self.answering, 'boss_q_a':self.boss_q_a, 'last_played':datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d %H:%M:%S")}
