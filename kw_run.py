@@ -25,7 +25,7 @@ class Quiz:
         global game_on
         # prompt if no topic exists
         if not self.topics:
-            print('No topic exists yet.')
+            print('\nNo topic exists yet.')
             game_on = False
         # check if enough points to run quiz, with option to change to new topic
         elif self.player.points >= 15:
@@ -36,9 +36,9 @@ class Quiz:
                 try:
                     # ensures the same topic will be repeated in next reroll
                     self.topic = random.choice([x for x in self.topics if x != self.topic and not x in self.done_topics])
-                # exit run when no topic exists that has not been marked as complete (ie at least 10 questions not completed)
                 except:
-                    print('No unfinished topic at this moment.')
+                    # exit run when no topic exists that has not been marked as complete (ie at least 10 questions not completed)
+                    print('\nNo unfinished topic at this moment.')
                     sys.exit()
 
                 # generate available questions from comparing with quesions removed from given topic
@@ -163,5 +163,6 @@ if __name__ == "__main__":
             if input('Another run? Y/N? ').lower() == 'n':
                 print('Bye!')
                 break
+            game_on = True
             thequiz = Quiz()
 
