@@ -3,17 +3,16 @@ import json, datetime, sys, random
 
 class Player:
     def __init__(self, topics):
-        BREAKING = False
         while True:
             try:
                 self.mode = "normal" if input('(N)ormal or (P)ractise?: ').lower() == 'n' else "dev"
             except KeyboardInterrupt:
-                print("Bye!")
+                print("\nBye!")
                 sys.exit()
             if self.mode == 'normal':
                 while True:
                     self.player_data = json.load(open('kw_players.json', 'r'))
-                    self.name = input('Player name: ')
+                    self.name = input('\nPlayer name: ')
                     self.start = datetime.datetime.now()
                     self.current_correct = 0
                     self.gamble_amount = 0
@@ -21,14 +20,6 @@ class Player:
                     self.points = 20
                     # load existing player 
                     if self.name in list(self.player_data.keys()):
-                        print('Welcome back, ', self.name)
-                        self.level = self.player_data[self.name]['level']
-                        self.xp = self.player_data[self.name]['xp']
-                        self.removed = self.player_data[self.name]['removed']
-                        self.already_answered = self.player_data[self.name]['already_answered']
-                        self.answering = self.player_data[self.name]['answering']
-                        self.boss_questions = self.player_data[self.name]['boss_questions']
-                        self.last_played = self.player_data[self.name]['last_played']
                         if self.last_played != 'interrupted':   
                             target = datetime.datetime.strptime(self.last_played, "%Y-%m-%d %H:%M:%S") + datetime.timedelta(hours=8)
                             if datetime.datetime.now() > target:
@@ -44,9 +35,15 @@ class Player:
                                 hours_left = (target - current).total_seconds() / 3600
                                 print(f'You have to wait another {round(hours_left)} hours.') # printing remaining hours till replay
                                 continue
-                        BREAKING = True
+                        print('Welcome back, ', self.name)
+                        self.level = self.player_data[self.name]['level']
+                        self.xp = self.player_data[self.name]['xp']
+                        self.removed = self.player_data[self.name]['removed']
+                        self.already_answered = self.player_data[self.name]['already_answered']
+                        self.answering = self.player_data[self.name]['answering']
+                        self.boss_questions = self.player_data[self.name]['boss_questions']
+                        self.last_played = self.player_data[self.name]['last_played']
                         break
-
                     # create new player with default values, save to list of players    
                     else:
                         print(f'Welcome to Key-wiz, {self.name},  your Key to become a Wiz!')            
@@ -67,30 +64,28 @@ class Player:
                         self.boss_questions = []
                         self.last_played = datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d %H:%M:%S")
                         self.report = []
-                        BREAKING = True
                         break
                     # all players get assigned points and fresh new report    
             else:
                 while True:
-                    topic = input(f'Choose topic, (q)uit: {topics}: ')
+                    topic = input(f'\nChoose topic, (q)uit: {topics}: ')
                     if topic in topics:
                         qa = json.load(open(f'kw_{topic}.json', 'r'))
                         random.shuffle(qa)
                         for i in enumerate(qa, 1): 
-                            input(f'Q{i[0]}, (q)uit: {i[1][0]}: ')
+                            input(f'\nQ{i[0]}, (q)uit: {i[1][0]}: ')
                             print(f'The answer is: {i[1][1]}')
-                            
                     elif topic.lower() == 'q':
                         break
                     else:
                         print('Invalid topic.')
-            if BREAKING: break
+            break
             
             
                     
 
     def gamble(self):
-        self.gambling = input('Gamble y/n? ').lower() == 'y'
+        self.gambling = input('\nGamble y/n? ').lower() == 'y'
         if self.gambling:
             while True:
                 try:
@@ -99,9 +94,9 @@ class Player:
                         self.points -= self.gamble_amount
                         break
                     else:
-                        print("You don't have that many points.")
+                        print("You don't have that many points.\n")
                 except:
-                    print('Number please.')
+                    print('Number please.\n')
 
     def gamble_check(self):
         if self.gambling:
@@ -118,7 +113,7 @@ class Player:
         if self.xp >= 60:
             self.xp -= 60
             self.level += 1
-            print(f'Level up! You are now level {self.level}! Congrats!')
+            print(f'\nLevel up! You are now level {self.level}! Congrats!')
         if self.level >= 10:
             print('BOSS QA HOMING IN (maybe again)')
 
