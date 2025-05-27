@@ -152,11 +152,7 @@ if __name__ == "__main__":
             thequiz.player.update_stat(datetime.datetime(1, 1, 1, 0, 0, 0, 0)+(datetime.datetime.now()-thequiz.start_time), False)
         else:
             thequiz.player.update_stat(datetime.datetime(1, 1, 1, 0, 0, 0, 0)+(datetime.datetime.now()-thequiz.start_time), True)
-            if input('Another run? Y/N? ').lower() == 'y':
-                game_on = True
-                thequiz = Quiz()
-                continue
-            print('Bye!')
-            break
+            game_on = True
+            thequiz = Quiz()
             
 
