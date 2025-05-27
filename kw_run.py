@@ -141,18 +141,31 @@ class Quiz:
         print(f"\nPoints remaining: {self.player.points}")
         self.player.current_correct = 0
 
+def mode():
+    while True:
+        x = input("Choose mode - (N)ormal (D)ev (Q)uit : ")
+        if x.lower() = "d":
+            if input("Enter code: ") == "781023":
+                dev()
+            else:
+                print("code incorrect")
+        if x.lower() = "q":
+            sys.exit()
+        if x.lower() = "n":
+            thequiz = Quiz()
+            thequiz.topic_selection() # modifies game_on if not enough points
+            if game_on == True:
+                thequiz.question_selection() 
+                thequiz.boss()
+                thequiz.player.update_stat(datetime.datetime(1, 1, 1, 0, 0, 0, 0)+(datetime.datetime.now()-thequiz.start_time), False)
+            else:
+                thequiz.player.update_stat(datetime.datetime(1, 1, 1, 0, 0, 0, 0)+(datetime.datetime.now()-thequiz.start_time), True)
+                game_on = True
+
+def dev():
+    pass
         
 if __name__ == "__main__":
-    thequiz = Quiz()
-    while True:
-        thequiz.topic_selection() # modifies game_on if not enough points
-        if game_on == True:
-            thequiz.question_selection() 
-            thequiz.boss()
-            thequiz.player.update_stat(datetime.datetime(1, 1, 1, 0, 0, 0, 0)+(datetime.datetime.now()-thequiz.start_time), False)
-        else:
-            thequiz.player.update_stat(datetime.datetime(1, 1, 1, 0, 0, 0, 0)+(datetime.datetime.now()-thequiz.start_time), True)
-            game_on = True
-            thequiz = Quiz()
+    mode()
             
 
