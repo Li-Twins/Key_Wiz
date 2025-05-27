@@ -77,28 +77,20 @@ class Quiz:
     def boss_qa(self, qa):
         if qa:
             print(f'\n#### Boss QA has started ####')
-            while input('Continue with boss QA? Y/N: ').lower() == 'y':
+            while input('Continue boss QA? Y/N: ').lower() == 'y' and len(self.player.boss_questions) >= 10:
                 self.current_boss_qa = random.sample(qa, k=10)
+                while self.points >= 5:
+                    if input('Randomize questions? Y/N? ').lower() == 'y':
+                        self.points -= 5
+                        self.current_boss_qa = random.sample(qa, k=10)
+                    else:
+                        break
                 for question in enumerate(self.current_boss_qa, 1):
-                    print(f'BQ{question[0]}: {question[1][0]}')
-                answer_list = []
-                for i in range(10):
-                    player_answer = input(f'Q{i+1}: {qa[i][0]}: ')
-                    answer_list.append(player_answer)
-                print(f'\n#### Please verify your answers ####')
-            for i in range(10):
-                self_mark = input(f"Answer: {qa[i][1]}, (C)orrect? ")
-                self.player.report.append([qa[i][0], qa[i][1], answer_list[i]])
-                # for each correctly xp question
-                if self_mark.lower() == "c":
-                    self.player.points += 2
-                    # update gamble counter
-                    self.player.current_correct += 1
-                    self.player.remove_check(qa[i], True)
-                    self.player.already_answered.append(qa[i][0])
-                    self.player.removed.append(qa[i])
-                else:
-                    self.player.remove_check(qa[i], False)
+                    player_answer = input(f'\nQ{question[0]}: {question[1][1]}: ') 
+                    if input(f"Answer:{question[1][1]}, (C)orrect?: ").lower() == 'c':
+                        self.player.points += 2
+                    self.player.report.append([question[1][0], player_answer])
+
 
 
     def question_selection(self):
@@ -123,14 +115,14 @@ class Quiz:
         for i in range(10): 
             player_answer = input(f'\nQ{i+1}: {qa[i][0]}: ') 
             answer_list.append(player_answer) # inputting
-            self_mark = input(f"The answer is {qa[i][1]}, Y if correct: ")
+            self_mark = input(f"Answer:{qa[i][1]}, (C)orrect?: ")
 
 
         # show each question, answer and player input to be self marked, calculate correct xp and points earned, save all the report
         for i in range(10):
             self.player.report.append([qa[i][0], answer_list[i]])
             # for each correctly xp question
-            if self_mark.lower() == "y":
+            if self_mark.lower() == "c":
                 self.player.points += 2
                 # update gamble counter
                 self.player.current_correct += 1
@@ -139,14 +131,14 @@ class Quiz:
                     self.player.xp += 1
                 self.player.remove_check(qa[i], True)
                 self.player.answering[qa[i][0]] = 'removed'
-                self.player.already_answered.append(qa[i][0]) 
+                self.player.already_answered.append(qa[i][0])
             else:
                 # if incorrect, deduct one for the question
                 self.player.remove_check(qa[i], False)
             
         # evaluate gamble result at the end of a run
         self.player.gamble_check()
-        print(f"\nYour points: {self.player.points}")
+        print(f"\nPoints remaining: {self.player.points}")
         self.player.current_correct = 0
 
         
@@ -160,9 +152,11 @@ if __name__ == "__main__":
             thequiz.player.update_stat(datetime.datetime(1, 1, 1, 0, 0, 0, 0)+(datetime.datetime.now()-thequiz.start_time), False)
         else:
             thequiz.player.update_stat(datetime.datetime(1, 1, 1, 0, 0, 0, 0)+(datetime.datetime.now()-thequiz.start_time), True)
-            if input('Another run? Y/N? ').lower() == 'n':
-                print('Bye!')
-                break
-            game_on = True
-            thequiz = Quiz()
+            if input('Another run? Y/N? ').lower() == 'y':
+                game_on = True
+                thequiz = Quiz()
+                continue
+            print('Bye!')
+            break
+            
 

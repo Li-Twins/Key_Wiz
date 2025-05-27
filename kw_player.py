@@ -72,31 +72,33 @@ class Player:
                     if topic in topics:
                         qa = json.load(open(f'kw_{topic}.json', 'r'))
                         random.shuffle(qa)
+                        print('(Q)uit anytime.')
                         for i in enumerate(qa, 1): 
-                            input(f'\nQ{i[0]}, (q)uit: {i[1][0]}: ')
-                            print(f'The answer is: {i[1][1]}')
+                            if input(f'\nQ{i[0]}: {i[1][0]}: ').lower() != 'q':
+                                print(f'Answer: {i[1][1]}')
+                            else:
+                                break
                     elif topic.lower() == 'q':
                         break
                     else:
                         print('Invalid topic.')
+                continue
             break
             
             
                     
 
     def gamble(self):
-        self.gambling = input('\nGamble y/n? ').lower() == 'y'
-        if self.gambling:
-            while True:
-                try:
-                    self.gamble_amount = int(input(f'Amount to bet (total: {self.points}): '))
-                    if self.gamble_amount <= self.points:
-                        self.points -= self.gamble_amount
-                        break
-                    else:
-                        print("You don't have that many points.\n")
-                except:
-                    print('Number please.\n')
+        while True:
+            self.gambling = input(f'\nHow much to gamble (out of {self.points})? ')
+            try:
+                self.gambling = int(self.gambling)
+                if self.gambling <= self.points:
+                    break
+                else:
+                    print('You don\'t have that much.')
+            except: 
+                print('Number please.')
 
     def gamble_check(self):
         if self.gambling:
@@ -130,7 +132,7 @@ class Player:
                 contents = {}
                 json.dump({}, open(f'kw_{self.name}_report.json', 'w'))
             self.report.append({'Start': datetime.datetime.strftime(self.start, "%Y-%m-%d %H:%M:%S")})
-            contents[datetime.datetime.strftime(datetime.datetime.strptime())] = self.report
+            contents[datetime.datetime.strftime(datetime.datetime(1, 1, 1, 0, 0, 0, 0)+(datetime.datetime.now()-self.start), '%Y-%m-%d %H:%M:%S')] = self.report
             json.dump(contents, open(f'kw_{self.name}_report.json', 'w'))
         except:
             json.dump({str(time):self.report}, open(f'kw_{self.name}_report.json', 'w'))
