@@ -5,6 +5,7 @@ global game_on
 game_on = True
 class Quiz:
     def __init__(self):
+        self.start_time = datetime.datetime.now()
         self.topics = json.load(open('kw_topics.json', 'r'))
         self.player = Player(self.topics)
         
@@ -47,7 +48,7 @@ class Quiz:
                         available_questions.append(i)
                 if len(available_questions) >= 10:
                     print(f'\nYour topic is {self.topic}.')
-                    if self.player.points >= 5 and self.player.mode == 'normal':
+                    if self.player.points >= 5:
                         if not input(f'\nRandomize topic for 5/{self.player.points} points, Y/N?: ').lower() == 'y':
                             self.questions = available_questions
                             break
@@ -86,10 +87,10 @@ class Quiz:
                     answer_list.append(player_answer)
                 print(f'\n#### Please verify your answers ####')
             for i in range(10):
-                self_mark = input(f"{qa[i][1]}, your answer: {answer_list[i]}, Y if correct: ")
+                self_mark = input(f"Answer: {qa[i][1]}, (C)orrect? ")
                 self.player.report.append([qa[i][0], qa[i][1], answer_list[i]])
                 # for each correctly xp question
-                if self_mark.lower() == "y":
+                if self_mark.lower() == "c":
                     self.player.points += 2
                     # update gamble counter
                     self.player.current_correct += 1
@@ -117,12 +118,12 @@ class Quiz:
     def answer_quiz(self, qa):
         # display each question and save player response 
         answer_list = []
-        start_time = datetime.datetime.now()
-        print(f'\n#### Quiz has started at {start_time} ####')
+        self.start_time = datetime.datetime.now()
+        print(f'\n#### Quiz has started at {self.start_time} ####')
         for i in range(10): 
             player_answer = input(f'\nQ{i+1}: {qa[i][0]}: ') 
             answer_list.append(player_answer) # inputting
-            self_mark = input(f"{qa[i][1]}, your answer: {answer_list[i]}, Y if correct: ")
+            self_mark = input(f"The answer is {qa[i][1]}, Y if correct: ")
 
 
         # show each question, answer and player input to be self marked, calculate correct xp and points earned, save all the report
@@ -145,10 +146,10 @@ class Quiz:
             
         # evaluate gamble result at the end of a run
         self.player.gamble_check()
-        print(f"Your points: {self.player.points}")
-        self.player.update_stat(datetime.datetime.now()-start_time)
+        print(f"\nYour points: {self.player.points}")
         self.player.current_correct = 0
 
+        
 if __name__ == "__main__":
     thequiz = Quiz()
     while True:
@@ -156,8 +157,10 @@ if __name__ == "__main__":
         if game_on == True:
             thequiz.question_selection() 
             thequiz.boss()
+            thequiz.player.update_stat(datetime.datetime(1, 1, 1, 0, 0, 0, 0)+(datetime.datetime.now()-thequiz.start_time), False)
         else:
-            if input('Continue y/n? ').lower() == 'n':
+            thequiz.player.update_stat(datetime.datetime(1, 1, 1, 0, 0, 0, 0)+(datetime.datetime.now()-thequiz.start_time), True)
+            if input('Another run? Y/N? ').lower() == 'n':
                 print('Bye!')
                 break
             thequiz = Quiz()
