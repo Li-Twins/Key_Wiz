@@ -163,7 +163,23 @@ def mode():
                 game_on = True
 
 def dev():
-    pass
+    topics = json.load(open('kw_topics.json', 'r')
+    while True:
+        topic = input(f'\nChoose topic, (q)uit: {topics}: ')
+            if topic in topics:
+                qa = json.load(open(f'kw_{topic}.json', 'r'))
+                random.shuffle(qa)
+                print('(Q)uit anytime.')
+                for i in enumerate(qa, 1): 
+                    if input(f'\nQ{i[0]}: {i[1][0]}: ').lower() != 'q':
+                        print(f'Answer: {i[1][1]}')
+                    else:
+                        break
+                    elif topic.lower() == 'q':
+                        break
+                    else:
+                        print('Invalid topic.')
+                continue
         
 if __name__ == "__main__":
     mode()
