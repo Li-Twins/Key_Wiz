@@ -144,14 +144,14 @@ class Quiz:
 def mode():
     while True:
         x = input("Choose mode - (N)ormal (D)ev (Q)uit : ")
-        if x.lower() = "d":
+        if x.lower() == "d":
             if input("Enter code: ") == "781023":
                 dev()
             else:
                 print("code incorrect")
-        if x.lower() = "q":
+        if x.lower() == "q":
             sys.exit()
-        if x.lower() = "n":
+        if x.lower() == "n":
             thequiz = Quiz()
             thequiz.topic_selection() # modifies game_on if not enough points
             if game_on == True:
@@ -163,23 +163,23 @@ def mode():
                 game_on = True
 
 def dev():
-    topics = json.load(open('kw_topics.json', 'r')
+    topics = json.load(open('kw_topics.json', 'r'))
     while True:
-        topic = input(f'\nChoose topic, (q)uit: {topics}: ')
-            if topic in topics:
-                qa = json.load(open(f'kw_{topic}.json', 'r'))
-                random.shuffle(qa)
-                print('(Q)uit anytime.')
-                for i in enumerate(qa, 1): 
-                    if input(f'\nQ{i[0]}: {i[1][0]}: ').lower() != 'q':
-                        print(f'Answer: {i[1][1]}')
-                    else:
-                        break
-                    elif topic.lower() == 'q':
-                        break
-                    else:
-                        print('Invalid topic.')
-                continue
+        topic = input(f'\nChoose topic or (q)uit: \n{topics}: ')
+        if topic in topics:
+            qa = json.load(open(f'kw_{topic}.json', 'r'))
+            random.shuffle(qa)
+            print('\n(Q)uit anytime.')
+            for i in enumerate(qa, 1): 
+                if input(f'\nQ{i[0]}: {i[1][0]}: ').lower() != 'q':
+                    print(f'Answer: {i[1][1]}')
+                else:
+                    break
+        elif topic.lower() == 'q':
+            break
+        else:
+            print('Invalid topic.')
+
         
 if __name__ == "__main__":
     mode()
