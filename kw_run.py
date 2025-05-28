@@ -168,7 +168,7 @@ def mode():
                 game_on = True
 
 def dev():
-    # choose topic that displays all questions within
+    # choose topic, displays all questions within
     topics = json.load(open('kw_topics.json', 'r'))
     while True:
         topic = input(f'\nChoose topic or (q)uit: \n{topics}: ')
