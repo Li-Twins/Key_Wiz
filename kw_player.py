@@ -3,7 +3,6 @@ import json, datetime, sys, random
 
 class Player:
     def __init__(self, topics):
-
         while True:
             self.player_data = json.load(open('kw_players.json', 'r'))
             self.name = input('\nPlayer name: ')
@@ -28,7 +27,7 @@ class Player:
                         current = datetime.datetime.now()
                         hours_left = (target - current).total_seconds() / 3600
                         print(f'You have to wait another {round(hours_left)} hours.') # printing remaining hours till replay
-                continue
+                        continue
                 print('Welcome back, ', self.name)
                 self.level = self.player_data[self.name]['level']
                 self.xp = self.player_data[self.name]['xp']
