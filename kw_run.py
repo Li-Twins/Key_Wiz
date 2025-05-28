@@ -142,15 +142,20 @@ class Quiz:
         self.player.current_correct = 0
 
 def mode():
+    # allows the options of Normal (enter player name), Dev (access with code) or Quit program
     while True:
+        # this is the root level where end of normal run returns to
         x = input("Choose mode - (N)ormal (D)ev (Q)uit : ")
+        # dev mode calls dev function if correct code entered
         if x.lower() == "d":
             if input("Enter code: ") == "781023":
                 dev()
             else:
                 print("code incorrect")
+        # quit
         if x.lower() == "q":
             sys.exit()
+        # normal mode, the bulk of the script
         if x.lower() == "n":
             thequiz = Quiz()
             thequiz.topic_selection() # modifies game_on if not enough points
@@ -163,6 +168,7 @@ def mode():
                 game_on = True
 
 def dev():
+    # choose topic that displays all questions within
     topics = json.load(open('kw_topics.json', 'r'))
     while True:
         topic = input(f'\nChoose topic or (q)uit: \n{topics}: ')
