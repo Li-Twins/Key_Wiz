@@ -17,6 +17,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: kwdev-debug-apk
-          path: Key_Wiz/test_app/bin/*-debug.apk  # Matches any APK ending with "-debug.apk"
+          path: test_app/bin/*.apk 
 
 
