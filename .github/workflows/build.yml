@@ -8,10 +8,13 @@ jobs:
     timeout-minutes: 30
 
     steps:
+      - name: Pull Docker Image
+        run: |
+          for i in {1..5}; do
+            docker pull kivy/buildozer:latest && break || sleep 10
+          done
+          
       - uses: actions/checkout@v4
-      
-      - name: Use preconfigured Docker image
-        uses: docker://kivy/buildozer:latest
 
       - name: Set up Python
         uses: actions/setup-python@v4
