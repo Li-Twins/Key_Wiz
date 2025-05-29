@@ -5,31 +5,53 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60  # Increased timeout
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Set up Python 3.8
         uses: actions/setup-python@v4
         with:
           python-version: '3.8'
 
-      - name: Install dependencies
+      - name: Install system dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y \
             git unzip openjdk-17-jdk python3-pip \
             autoconf automake libtool pkg-config \
-            zlib1g-dev libncurses5-dev
-          pip install buildozer cython==0.29.19
+            zlib1g-dev libncurses5-dev libffi-dev \
+            libssl-dev curl
 
-      - name: Accept SDK licenses
+      - name: Install Buildozer with specific versions
+        run: |
+          pip install --upgrade pip wheel setuptools
+          pip install buildozer==1.4.0 cython==0.29.19 virtualenv
+
+      - name: Set up Android SDK/NDK
         run: |
           mkdir -p ~/.android
           touch ~/.android/repositories.cfg
-          yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses || true
+          yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
 
-      - name: Build APK
+      - name: Clean previous builds
         run: |
-          yes | buildozer -v android debug
+          buildozer android clean
+
+      - name: Build with debug output
+        run: |
+          yes | buildozer -v android debug 2>&1 | tee build.log
+        env:
+          BUILDOLDER_NO_CACHE: '1'
+          P4A_RELEASE_KEYSTORE: ${{ secrets.P4A_RELEASE_KEYSTORE }}
+          P4A_RELEASE_KEYALIAS: ${{ secrets.P4A_RELEASE_KEYALIAS }}
+          P4A_RELEASE_KEYSTORE_PASSWD: ${{ secrets.P4A_RELEASE_KEYSTORE_PASSWD }}
+          P4A_RELEASE_KEYALIAS_PASSWD: ${{ secrets.P4A_RELEASE_KEYALIAS_PASSWD }}
+
+      - name: Upload build logs
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-logs
+          path: build.log
