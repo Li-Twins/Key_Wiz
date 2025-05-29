@@ -44,9 +44,16 @@ jobs:
 
       - name: Build APK
         run: |
-          yes | buildozer -v android debug
+          buildozer android clean
+          yes | buildozer -v android debug 2>&1 | tee build.log
         env:
           BUILDOLDER_NO_CACHE: '1'
           ANDROID_SDK_HOME: /usr/lib/android-sdk
           ANDROID_NDK_HOME: /usr/lib/android-ndk
 
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-logs
+          path: build.log
