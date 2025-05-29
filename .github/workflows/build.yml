@@ -15,7 +15,7 @@ jobs:
         with:
           python-version: '3.8'
 
-      - name: Install Buildozer dependencies
+      - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y \
@@ -24,12 +24,12 @@ jobs:
             zlib1g-dev libncurses5-dev
           pip install buildozer cython==0.29.19
 
-      - name: Initialize Buildozer
+      - name: Accept SDK licenses
         run: |
-          buildozer init
-          # Only if you need to modify the spec file
-          sed -i 's/#android.accept_sdk_license = False/android.accept_sdk_license = True/' buildozer.spec
+          mkdir -p ~/.android
+          touch ~/.android/repositories.cfg
+          yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses || true
 
       - name: Build APK
         run: |
-          yes | buildozer -v android debug
+          buildozer -v android debug
