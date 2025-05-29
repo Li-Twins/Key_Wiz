@@ -12,72 +12,11 @@ jobs:
     timeout-minutes: 60
 
     steps:     
-      - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Upload APK (wildcard)
+        uses: actions/upload-artifact@v3
         with:
-          python-version: '3.10.12'
+          name: kwdev-debug-apk
+          path: bin/*-debug.apk  # Matches any APK ending with "-debug.apk"
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-    
-      - name: Verify Java version
-        run: java -version
 
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            git unzip openjdk-17-jdk python3-pip \
-            libtool-bin autoconf automake \
-            pkg-config zlib1g-dev libncurses5-dev \
-            libffi-dev libssl-dev gettext \
-            libltdl7 python3-dev liblzma-dev \
-            uuid-dev libc-dev python3.8-dev \
-            libnss3-dev clang-14 lld-14
-          
-      - name: Set up Buildozer
-        run: |
-          pip install --upgrade pip wheel setuptools
-          pip install buildozer==1.4.0 cython==0.29.36 pyjnius==1.5.0
-
-      - name: Configure environment
-        run: |
-          sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-14 100
-          sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-14 100
-          sudo update-alternatives --install /usr/bin/lld lld /usr/bin/lld-14 100
-
-      - name: Accept SDK licenses
-        run: |
-          mkdir -p ~/.android
-          touch ~/.android/repositories.cfg
-          yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses || true
-
-      - name: Update Autoconf Macros
-        run: |
-          autoupdate || true
-          autoreconf -i || true
-
-      - name: Build APK
-        run: |
-          yes | buildozer -v android debug
-        env:
-          BUILDOLDER_NO_CACHE: '1'
-          ANDROID_SDK_HOME: /usr/lib/android-sdk
-          ANDROID_NDK_HOME: /usr/lib/android-ndk
-          ANDROID_HOME: ${{ runner.temp }}/android-sdk
-          CC: clang-14
-          CXX: clang++-14
-
-      - name: set up for upload
-        run: mkdir -p path/to/artifact
-      
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: my-artifact
-          path: path/to/artifact/kw.apk
