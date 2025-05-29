@@ -1,6 +1,10 @@
 name: Build APK
 
-on: [push]
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
@@ -74,9 +78,9 @@ jobs:
 
       - name: Verify build
         run: ls build/outputs/apk/debug
-        
-      - name: Upload APK
-        uses: actions/upload-artifact@v3
+          
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
         with:
-          name: Karui-APK
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: kw
+          path: ${{ steps.buildozer.outputs.filename }}
