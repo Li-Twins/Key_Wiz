@@ -25,7 +25,7 @@ jobs:
             libffi-dev libssl-dev gettext \
             libltdl7 python3-dev liblzma-dev \
             uuid-dev libc-dev python3.8-dev \
-            libnss3-dev
+            libnss3-dev clang-14 lld-14
           
       - name: Set up Buildozer
         run: |
