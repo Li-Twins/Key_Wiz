@@ -5,17 +5,17 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 60  # Increased timeout
+    timeout-minutes: 30
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python 3.8
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.8'
 
-      - name: Install system dependencies
+      - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y \
@@ -27,18 +27,18 @@ jobs:
       - name: Install Buildozer with specific versions
         run: |
           pip install --upgrade pip wheel setuptools
-          pip install buildozer==1.4.0 cython==0.29.19 virtualenv
+          pip install buildozer==1.4.0 cython==0.29.19 virtualenv       
 
-      - name: Set up Android SDK/NDK
+      - name: Accept SDK licenses
         run: |
           mkdir -p ~/.android
           touch ~/.android/repositories.cfg
-          yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
+          yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses || true
 
       - name: Clean previous builds
         run: |
           buildozer android clean
-
+          
       - name: Build with debug output
         run: |
           yes | buildozer -v android debug 2>&1 | tee build.log
