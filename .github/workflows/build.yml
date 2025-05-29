@@ -7,13 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
-    steps:
-      - name: Pull Docker Image
-        run: |
-          for i in {1..5}; do
-            docker pull kivy/buildozer:latest && break || sleep 10
-          done
-          
+    steps:     
       - uses: actions/checkout@v4
 
       - name: Set up Python
