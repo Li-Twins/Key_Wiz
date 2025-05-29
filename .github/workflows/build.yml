@@ -22,6 +22,17 @@ jobs:
             autoconf automake libtool pkg-config zlib1g-dev libncurses5-dev \
             libffi-dev libssl-dev
 
+      - name: Create configure.ac (if missing)
+        run: |
+          if [ ! -f configure.ac ]; then
+            echo 'AC_PREREQ([2.69])' > configure.ac
+            echo 'AC_INIT([Key_Wiz], [1.0], [support@keywiz.com])' >> configure.ac
+            echo 'AM_INIT_AUTOMAKE([foreign])' >> configure.ac
+            echo 'AC_PROG_CC' >> configure.ac
+            echo 'AC_CONFIG_FILES([Makefile])' >> configure.ac
+            echo 'AC_OUTPUT' >> configure.ac
+          fi
+
       - name: Fix libtool/autoconf
         run: |
           libtoolize --force
