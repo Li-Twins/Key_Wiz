@@ -73,9 +73,13 @@ jobs:
           CC: clang-14
           CXX: clang++-14
 
+      - name: set up for upload
+        run: mkdir -p path/to/artifact
+        
+      - name: set up for upload 2
+        run: echo hello > path/to/artifact/kw.apk
+      
       - name: Upload APK
-      - run: mkdir -p path/to/artifact
-      - run: echo hello > path/to/artifact/kw.apk
       - uses: actions/upload-artifact@v4
         with:
           name: my-artifact
