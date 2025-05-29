@@ -73,9 +73,6 @@ jobs:
           CC: clang-14
           CXX: clang++-14
 
-      - name: Build debug APK
-        run: ./gradlew assembleDebug
-          
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
