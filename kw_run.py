@@ -1,8 +1,6 @@
 import sys, pathlib, random, json, datetime
 from kw_player import Player
 
-global game_on
-game_on = True
 class Quiz:
     def __init__(self):
         self.start_time = datetime.datetime.now()
