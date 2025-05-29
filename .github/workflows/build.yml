@@ -5,7 +5,7 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
 
     steps:     
       - uses: actions/checkout@v4
@@ -38,3 +38,14 @@ jobs:
       - name: Build APK
         run: |
           yes | buildozer -v android debug
+        env:
+          BUILDOLDER_NO_CACHE: '1'
+          ANDROID_SDK_HOME: /usr/lib/android-sdk
+          ANDROID_NDK_HOME: /usr/lib/android-ndk
+
+      - name: Upload build logs
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-logs
+          path: build.log
