@@ -75,9 +75,6 @@ jobs:
 
       - name: set up for upload
         run: mkdir -p path/to/artifact
-        
-      - name: set up for upload 2
-        run: echo hello > path/to/artifact/kw.apk
       
       - name: Upload APK
         uses: actions/upload-artifact@v4
