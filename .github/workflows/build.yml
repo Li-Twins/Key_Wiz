@@ -22,7 +22,8 @@ jobs:
             git unzip openjdk-17-jdk python3-pip \
             libtool-bin autoconf automake \
             pkg-config zlib1g-dev libncurses5-dev \
-            libffi-dev libssl-dev gettext
+            libffi-dev libssl-dev gettext \
+            libltdl7_dev
 
       - name: Install Buildozer with specific versions
         run: |
