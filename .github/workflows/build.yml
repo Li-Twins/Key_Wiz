@@ -35,6 +35,15 @@ jobs:
           touch ~/.android/repositories.cfg
           yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses || true
 
+      - name: Initialize build system
+        run: |
+          export LIBTOOLIZE=libtoolize
+          libtoolize --force --copy
+          aclocal -I m4
+          autoheader
+          automake --add-missing --copy
+          autoconf
+
       - name: Build APK
         run: |
           yes | buildozer -v android debug
