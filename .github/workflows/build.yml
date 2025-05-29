@@ -24,7 +24,7 @@ jobs:
             pkg-config zlib1g-dev libncurses5-dev \
             libffi-dev libssl-dev gettext \
             libltdl7 python3-dev liblzma-dev \
-            uuid-dev libc-dev
+            uuid-dev libc-dev python3.8-dev
 
       - name: Install Buildozer with specific versions
         run: |
