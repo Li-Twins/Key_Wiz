@@ -24,8 +24,14 @@ jobs:
             pkg-config zlib1g-dev libncurses5-dev \
             libffi-dev libssl-dev gettext \
             libltdl7 python3-dev liblzma-dev \
-            uuid-dev libc-dev python3.8-dev
+            uuid-dev libc-dev python3.8-dev \
+            libnss3-dev
 
+      - name: Force rebuild of pyjnius
+        run: |
+          pip uninstall -y pyjnius
+          pip install --no-binary :all: pyjnius==1.4.2
+          
       - name: Install Buildozer with specific versions
         run: |
           pip install --upgrade pip wheel setuptools
