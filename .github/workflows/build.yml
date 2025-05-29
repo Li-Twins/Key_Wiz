@@ -23,7 +23,7 @@ jobs:
             libtool-bin autoconf automake \
             pkg-config zlib1g-dev libncurses5-dev \
             libffi-dev libssl-dev gettext \
-            libltdl7-dev
+            libltdl7
 
       - name: Install Buildozer with specific versions
         run: |
