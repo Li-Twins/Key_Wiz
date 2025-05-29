@@ -79,5 +79,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v2
         with:
-          name: kw
-          path: app/build/outputs/apk/debug/*.apk
+          name: package
+          path: ${{ steps.buildozer.outputs.filename }}
