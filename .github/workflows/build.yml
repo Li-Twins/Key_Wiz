@@ -20,7 +20,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: .buildozer_global
-          key: ${{ runner.os }}-buildozer-global-${{ hashFiles('buildozer.spec') }}
+          key: ${{ runner.os }}-buildozer-global-${{ hashFiles('/main/buildozer.spec') }}
           restore-keys: |
             ${{ runner.os }}-buildozer-global-
 
@@ -28,7 +28,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: .buildozer
-          key: ${{ runner.os }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('buildozer.spec') }}
+          key: ${{ runner.os }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('/main/buildozer.spec') }}
           restore-keys: |
             ${{ runner.os }}-${{ steps.get-date.outputs.date }}-
 
