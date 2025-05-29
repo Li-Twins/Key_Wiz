@@ -43,9 +43,3 @@ jobs:
           ANDROID_SDK_HOME: /usr/lib/android-sdk
           ANDROID_NDK_HOME: /usr/lib/android-ndk
 
-      - name: Upload build logs
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: build-logs
-          path: build.log
