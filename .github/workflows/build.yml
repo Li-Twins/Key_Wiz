@@ -9,6 +9,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      
+      - name: Use preconfigured Docker image
+        uses: docker://kivy/buildozer:latest
 
       - name: Set up Python
         uses: actions/setup-python@v4
