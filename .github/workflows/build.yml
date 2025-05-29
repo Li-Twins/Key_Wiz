@@ -45,7 +45,7 @@ jobs:
       - name: Build APK
         run: |
           buildozer android clean
-          yes | buildozer -v android debug 2>&1 | tee build.log
+          buildozer -v android debug
         env:
           BUILDOLDER_NO_CACHE: '1'
           ANDROID_SDK_HOME: /usr/lib/android-sdk
