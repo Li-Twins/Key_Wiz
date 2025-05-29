@@ -30,6 +30,12 @@ jobs:
           touch ~/.android/repositories.cfg
           yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses || true
 
+      - name: Fix libtool configuration
+        run: |
+          libtoolize --force --copy
+          aclocal -I m4
+          autoreconf -vif
+
       - name: Build APK
         run: |
           yes | buildozer -v android debug
