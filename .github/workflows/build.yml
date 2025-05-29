@@ -10,7 +10,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # used to cache dependencies with a timeout
       - name: Get Date
         id: get-date
         run: |
@@ -21,16 +20,17 @@ jobs:
         uses: actions/cache@v2
         with:
           path: .buildozer_global
-          key: buildozer-global-${{ hashFiles('buildozer.spec') }}
+          key: ${{ runner.os }}-buildozer-global-${{ hashFiles('buildozer.spec') }}
           restore-keys: |
-            buildozer-global-
+            ${{ runner.os }}-buildozer-global-
 
-      - uses: actions/cache@v2
+      - name: Cache Buildozer directory
+        uses: actions/cache@v2
         with:
           path: .buildozer
           key: ${{ runner.os }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('buildozer.spec') }}
           restore-keys: |
-            ${{ runner.os }}-
+            ${{ runner.os }}-${{ steps.get-date.outputs.date }}-
 
       - name: Build with Buildozer
         uses: ArtemSBulgakov/buildozer-action@v1
