@@ -26,16 +26,17 @@ jobs:
             libltdl7 python3-dev liblzma-dev \
             uuid-dev libc-dev python3.8-dev \
             libnss3-dev
-
-      - name: Force rebuild of pyjnius
-        run: |
-          pip uninstall -y pyjnius
-          pip install --no-binary :all: pyjnius==1.4.2
           
-      - name: Install Buildozer with specific versions
+      - name: Set up Buildozer
         run: |
           pip install --upgrade pip wheel setuptools
-          pip install buildozer==1.4.0 cython==0.29.19
+          pip install buildozer==1.4.0 cython==0.29.19 pyjnius==1.4.2
+
+      - name: Configure environment
+        run: |
+          sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-14 100
+          sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-14 100
+          sudo update-alternatives --install /usr/bin/lld lld /usr/bin/lld-14 100
 
       - name: Accept SDK licenses
         run: |
@@ -55,4 +56,6 @@ jobs:
           BUILDOLDER_NO_CACHE: '1'
           ANDROID_SDK_HOME: /usr/lib/android-sdk
           ANDROID_NDK_HOME: /usr/lib/android-ndk
+          CC: clang-14
+          CXX: clang++-14
 
