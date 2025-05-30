@@ -33,60 +33,64 @@ Builder.load_string('''
         orientation: 'vertical'
         padding: [20, 20]
         spacing: 20
-        #size_hint: (0.9, 0.8)
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        halign: 'center'
 
         Label:
             text: 'Key Wiz Dev Mode'
             font_size: 40  # Smaller title
             bold: True
             size_hint: (1, 0.1)
+            pos_hint: {'center_x': 0.5}
             valign: 'top'
             halign: 'center'
-            color: 0.9, 0.9, 0.9, 1
+            color: 0.82, 0.41, 0.12, 1
 
         Spinner:
             id: topic_spinner
             text: 'Topics'
             font_size: 40
-            size_hint: (1, 0.1)
+            size_hint: (0.7, 0.1)
             valign: 'bottom'
             halign: 'center'
+            pos_hint: {'center_x': 0.5}
             background_color: 0, 0, 0, 0
-            color: 1, 1, 1, 1
+            color: 0.82, 0.41, 0.12, 1
             canvas.before:
                 Color:
-                    rgba: 0.2, 0.2, 0.2, 1 # Button fill color
+                    rgba: 0, 0, 0, 0.5 # Button fill color
                 RoundedRectangle:
                     pos: self.pos
                     size: self.size
                     radius: [5]
                 Color:
-                    rgba: 0.5, 0.5, 0.5, 1  # Border color
+                    rgba: 0.82, 0.41, 0.12, 1  # Border color
                 Line:
-                    width: 1.5
+                    width: 1
                     rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
 
         Button:
             text: 'Load Questions'
             font_size: 40
-            size_hint: (1, 0.1)
+            size_hint: (0.7, 0.1)
             valign: 'top'
             halign: 'center'
+            pos_hint: {'center_x': 0.5}
             background_normal: ''
             background_color: 0, 0, 0, 0  # Make transparent
-            color: 1, 1, 1, 1
+            color: 0.82, 0.41, 0.12, 1
             on_press: root.load_questions()
             canvas.before:
                 Color:
-                    rgba: 0.2, 0.2, 0.2, 1  # Button fill color
+                    rgba: 0, 0, 0, 0.5  # Button fill color
                 RoundedRectangle:
                     pos: self.pos
                     size: self.size
                     radius: [5]
                 Color:
-                    rgba: 0.5, 0.5, 0.5, 1  # Border color
+                    rgba: 0.82, 0.41, 0.12, 1 # Border color
                 Line:
-                    width: 1.5
+                    width: 1
                     rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
 
         Label:
@@ -98,7 +102,7 @@ Builder.load_string('''
             text_size: self.width, None
             size_hint: (0.8, 0.2)
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-            color: 0.95, 0.95, 0.95, 1
+            color: 0.91, 0.59, 0.31, 1
 
         Label:
             id: answer_label
@@ -112,9 +116,10 @@ Builder.load_string('''
             color: 0, 0, 0, 0  # initially invisible
 
         BoxLayout:
-            size_hint_y: 0.1
+            size_hint: (0.7, 0.15)
             spacing: 20
             padding: [20, 20]
+            pos_hint: {'center_x': 0.5}
             spacing: 20
 
             Button:
@@ -122,19 +127,19 @@ Builder.load_string('''
                 background_normal: ''
                 font_size: 40
                 background_color: 0, 0, 0, 0
-                color: 1, 1, 1, 1
+                color: 0.82, 0.41, 0.12, 1
                 on_press: root.toggle_answer()
                 canvas.before:
                     Color:
-                        rgba: 0.2, 0.2, 0.2, 1  # Button fill color
+                        rgba: 0, 0, 0, 0.5  # Button fill color
                     RoundedRectangle:
                         pos: self.pos
                         size: self.size
                         radius: [5]
                     Color:
-                        rgba: 0.5, 0.5, 0.5, 1  # Border color
+                        rgba: 0.82, 0.41, 0.12, 1 # Border color
                     Line:
-                        width: 1.5
+                        width: 1
                         rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
 
             Button:
@@ -142,20 +147,20 @@ Builder.load_string('''
                 background_normal: ''
                 font_size: 40
                 background_color: 0, 0, 0, 0
-                color: 1, 1, 1, 1
+                color: 0.82, 0.41, 0.12, 1
                 on_press: root.next_question()
                 canvas.before:
                 canvas.before:
                     Color:
-                        rgba: 0.2, 0.2, 0.2, 1  # Button fill color
+                        rgba: 0, 0, 0, 0.5  # Button fill color
                     RoundedRectangle:
                         pos: self.pos
                         size: self.size
                         radius: [5]
                     Color:
-                        rgba: 0.5, 0.5, 0.5, 1  # Border color
+                        rgba: 0.82, 0.41, 0.12, 1  # Border color
                     Line:
-                        width: 1.5
+                        width: 1
                         rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
 
 ''')
@@ -211,7 +216,7 @@ class DevModeScreen(Screen):
 
     def toggle_answer(self):
         if self.ids.answer_label.color[3] == 0:
-            self.ids.answer_label.color = (1, 1, 1, 1)
+            self.ids.answer_label.color = (0.91, 0.59, 0.31, 1)
         else:
             self.ids.answer_label.color = (0, 0, 0, 0)
 
