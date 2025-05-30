@@ -11,6 +11,7 @@ from kivy.properties import ListProperty
 from kivy.core.window import Window
 from kivy.utils import get_color_from_hex
 from kivy.core.audio import SoundLoader
+Window.fullscreen = True
 
 import json
 import random
@@ -39,8 +40,9 @@ Builder.load_string('''
         Label:
             text: 'Key Wiz Dev Mode'
             font_size: 40  # Smaller title
+            font_name: 'RomanAntique.ttf'
             bold: True
-            size_hint: (1, 0.1)
+            size_hint: (0.8, 0.1)
             pos_hint: {'center_x': 0.5}
             valign: 'top'
             halign: 'center'
@@ -50,7 +52,8 @@ Builder.load_string('''
             id: topic_spinner
             text: 'Topics'
             font_size: 40
-            size_hint: (0.7, 0.1)
+            font_name: 'RomanAntique.ttf'
+            size_hint: (0.8, 0.1)
             valign: 'bottom'
             halign: 'center'
             pos_hint: {'center_x': 0.5}
@@ -72,7 +75,8 @@ Builder.load_string('''
         Button:
             text: 'Load Questions'
             font_size: 40
-            size_hint: (0.7, 0.1)
+            font_name: 'RomanAntique.ttf'
+            size_hint: (0.8, 0.1)
             valign: 'top'
             halign: 'center'
             pos_hint: {'center_x': 0.5}
@@ -96,7 +100,8 @@ Builder.load_string('''
         Label:
             id: question_label
             text: ''
-            font_size: 50
+            font_size: 60
+            font_name: 'RomanAntique.ttf'
             valign: 'middle'
             halign: 'center'
             text_size: self.width, None
@@ -107,7 +112,8 @@ Builder.load_string('''
         Label:
             id: answer_label
             text: ''
-            font_size: 50
+            font_size: 60
+            font_name: 'RomanAntique.ttf'
             valign: 'middle'
             halign: 'center'
             text_size: self.width, None
@@ -116,16 +122,17 @@ Builder.load_string('''
             color: 0, 0, 0, 0  # initially invisible
 
         BoxLayout:
-            size_hint: (0.7, 0.15)
+            size_hint: (0.8, 0.12)
             spacing: 20
             padding: [20, 20]
             pos_hint: {'center_x': 0.5}
             spacing: 20
 
             Button:
-                text: 'Show Answer'
+                text: 'Answer'
                 background_normal: ''
                 font_size: 40
+                font_name: 'RomanAntique.ttf'
                 background_color: 0, 0, 0, 0
                 color: 0.82, 0.41, 0.12, 1
                 on_press: root.toggle_answer()
@@ -146,6 +153,7 @@ Builder.load_string('''
                 text: 'Next'
                 background_normal: ''
                 font_size: 40
+                font_name: 'RomanAntique.ttf'
                 background_color: 0, 0, 0, 0
                 color: 0.82, 0.41, 0.12, 1
                 on_press: root.next_question()
@@ -181,9 +189,9 @@ class DevModeScreen(Screen):
         try:
             with open('kw_topics.json', 'r') as f:
                 self.topics = json.load(f)
-                self.ids.topic_spinner.values = self.topics
+                self.ids.topic_spinner.values = [x.title() for x in self.topics]
                 if self.topics:
-                    self.ids.topic_spinner.text = self.topics[0]
+                    self.ids.topic_spinner.text = self.topics[0].title()
         except Exception as e:
             print(f"Error loading topics: {e}")
             self.topics = []
