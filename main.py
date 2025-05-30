@@ -11,7 +11,6 @@ from kivy.properties import ListProperty
 from kivy.core.window import Window
 from kivy.utils import get_color_from_hex
 from kivy.core.audio import SoundLoader
-Window.fullscreen = True
 
 import json
 import random
@@ -51,7 +50,7 @@ Builder.load_string('''
         Spinner:
             id: topic_spinner
             text: 'Topics'
-            font_size: 40
+            font_size: 50
             font_name: 'RomanAntique.ttf'
             size_hint: (0.8, 0.1)
             valign: 'bottom'
@@ -74,7 +73,7 @@ Builder.load_string('''
 
         Button:
             text: 'Load Questions'
-            font_size: 40
+            font_size: 50
             font_name: 'RomanAntique.ttf'
             size_hint: (0.8, 0.1)
             valign: 'top'
@@ -100,7 +99,7 @@ Builder.load_string('''
         Label:
             id: question_label
             text: ''
-            font_size: 60
+            font_size: 70
             font_name: 'RomanAntique.ttf'
             valign: 'middle'
             halign: 'center'
@@ -112,7 +111,7 @@ Builder.load_string('''
         Label:
             id: answer_label
             text: ''
-            font_size: 60
+            font_size: 70
             font_name: 'RomanAntique.ttf'
             valign: 'middle'
             halign: 'center'
@@ -198,7 +197,7 @@ class DevModeScreen(Screen):
             self.ids.topic_spinner.values = []
 
     def load_questions(self):
-        topic = self.ids.topic_spinner.text
+        topic = (self.ids.topic_spinner.text).lower()
         if not topic or topic == 'Topics':
             return
 
