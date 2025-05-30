@@ -37,7 +37,7 @@ Builder.load_string('''
 
         Label:
             text: 'Key Wiz Dev Mode'
-            font_size: 30  # Smaller title
+            font_size: 40  # Smaller title
             bold: True
             size_hint: (1, 0.1)
             valign: 'top'
@@ -47,7 +47,7 @@ Builder.load_string('''
         Spinner:
             id: topic_spinner
             text: 'Topics'
-            font_size: 30
+            font_size: 40
             size_hint: (1, 0.1)
             valign: 'bottom'
             halign: 'center'
@@ -68,7 +68,7 @@ Builder.load_string('''
 
         Button:
             text: 'Load Questions'
-            font_size: 30
+            font_size: 40
             size_hint: (1, 0.1)
             valign: 'top'
             halign: 'center'
@@ -92,7 +92,7 @@ Builder.load_string('''
         Label:
             id: question_label
             text: ''
-            font_size: 40
+            font_size: 50
             valign: 'middle'
             halign: 'center'
             text_size: self.width, None
@@ -103,7 +103,7 @@ Builder.load_string('''
         Label:
             id: answer_label
             text: ''
-            font_size: 40
+            font_size: 50
             valign: 'middle'
             halign: 'center'
             text_size: self.width, None
@@ -112,7 +112,7 @@ Builder.load_string('''
             color: 0, 0, 0, 0  # initially invisible
 
         BoxLayout:
-            size_hint_y: 0.2
+            size_hint_y: 0.1
             spacing: 20
             padding: [20, 20]
             spacing: 20
@@ -120,7 +120,7 @@ Builder.load_string('''
             Button:
                 text: 'Show Answer'
                 background_normal: ''
-                font_size: 30
+                font_size: 40
                 background_color: 0, 0, 0, 0
                 color: 1, 1, 1, 1
                 on_press: root.toggle_answer()
@@ -140,7 +140,7 @@ Builder.load_string('''
             Button:
                 text: 'Next'
                 background_normal: ''
-                font_size: 30
+                font_size: 40
                 background_color: 0, 0, 0, 0
                 color: 1, 1, 1, 1
                 on_press: root.next_question()
