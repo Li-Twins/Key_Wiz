@@ -106,11 +106,9 @@ class Quiz:
                 # already_answered > already_answered, xp > xp
                 if not qa[i][0] in self.player.already_answered:
                     self.player.xp += 1
-                self.player.remove_check(qa[i], True)
+                self.player.remove_check(qa[i])
                 self.player.already_answered.append(qa[i][0])
-            else:
-                # if incorrect, deduct one for the question
-                self.player.remove_check(qa[i], False)  
+
         # evaluate gamble result at the end of a run
         self.gamble_check()
         print(f"Points remaining: {self.player.points}\n")

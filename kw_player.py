@@ -14,7 +14,7 @@ class Player:
             if self.name in list(self.player_data.keys()):
                 self.last_played = self.player_data[self.name]['last_played']
                 if self.last_played != 'interrupted':   
-                    target = datetime.datetime.strptime(self.last_played, "%Y-%m-%d %H:%M:%S") + datetime.timedelta(hours=8)
+                    target = datetime.datetime.strptime(self.last_played, "%Y-%m-%d %H:%M:%S") + datetime.timedelta(hours=6)
                     if datetime.datetime.now() > target:
                         current = datetime.datetime.strptime(str(datetime.datetime.now()), "%Y-%m-%d %H:%M:%S")
                         extra = round(((datetime.datetime.strptime(current-target, "%Y-%m-%d %H:%M:%S")).hour)%8)
@@ -93,18 +93,10 @@ class Player:
         self.already_answered.append(question[0])
     
 
-    def remove_check(self, question, true):
+    def remove_check(self, question):
         if question[0] in list(self.answering.keys()):
-            if true == True:
-                if self.answering[question[0]] <= 1:
-                    self.answering[question[0]] += 1
-                elif self.answering[question[0]] == 2:
-                    self.removed.append(question[0])
-                    self.answering[question[0]] += 1
-            else:
-                self.answering[question[0]] -= 1
+            self.answering[question[0]] = 3
+
         else:
-            if true == True:
-                self.answering[question[0]] = 1
-            else:
-                self.answering[question[0]] = -1
+            self.answering[question[0]] = 1
+
