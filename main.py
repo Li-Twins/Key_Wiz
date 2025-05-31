@@ -182,7 +182,7 @@ Builder.load_string('''
 
         RollingQuoteLabel:
             id: rolling_quote
-            font_size: 24
+            font_size: 40
             font_name: 'zpix.ttf'
             size_hint: (0.8, 0.1)
             pos_hint: {'center_x': 0.5}

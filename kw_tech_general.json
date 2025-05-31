@@ -1,1 +1,122 @@
-[]
+[
+    [
+        "What was the first tool used by humans?",
+        "Stone tools, over 2 million years ago"
+    ],
+    [
+        "What is Moore's Law?",
+        "Computing power doubles within every 2 years"
+    ],
+    [
+        "Which country sends human into space first?",
+        "Soviet Russia"
+    ],
+    [
+        "What is the Paris Agreement?",
+        "Global pact to limit warming to 1.5 degrees, to which USA declined to participate"
+    ],
+    [
+        "What is 5G?",
+        "Fifth-gen wireless, with faster speed than the current 4G"
+    ],
+    [
+        "What is hyperloop?",
+        "The prototype of future transport, using high-speed vacuum tube"
+    ],
+    [
+        "What is Maglev?",
+        "Magnetic levitation train, like the one in Shanghai"
+    ],
+    [
+        "What is telehealth?",
+        "To diagnose through the use of video/internet with a medical professional."
+    ],
+    [
+        "What are nanobots and their use?",
+        "Microscopic robots for medical/industrial use."
+    ],
+    [
+        "What is stealth technology?",
+        "A military technology aiming at reducing radar detection"
+    ],
+    [
+        "What is cyberwarfare?",
+        "Digital attacks on infrastructure/military controls"
+    ],
+    [
+        "What does EMP do?",
+        "Electro-Magnetic pulse which disables electronics (particularly in weaponries)"
+    ],
+    [
+        "What is Dolby Atmos?",
+        "3D spatial audio technology"
+    ],
+    [
+        "What is an NFT?",
+        "Non-Fungible Token, a digital ownership of something."
+    ],
+    [
+        "What is the most commonly used material for 3D printing?",
+        "plastic"
+    ],
+    [
+        "What does a CNC machine do?",
+        "It is a very important part of all components that requires extremely high precision to make (Computer Numerical Control)"
+    ],
+    [
+        "What is robotics's Three Laws?",
+        "Dont harm humans, obey, self-preserve"
+    ],
+    [
+        "What the meaning of the term \"the digital divide\"?",
+        "The gap between those who use/have access to modern tech such as the internet and smart devices and those who don't"
+    ],
+    [
+        "Can you trust AI to be unbiased?",
+        "No, they are created by people with bias, to various degrees."
+    ],
+    [
+        "What are the three main things that make self-driving cars work?",
+        "sensors / Machine Learning / real-time data"
+    ],
+    [
+        "What is a \"Turing Test\"?",
+        "A test to determine if a machine can mimic human intelligence"
+    ],
+    [
+        "What does a DDos attack do?",
+        "Overwhelming a server with fake traffic"
+    ],
+    [
+        "What is Starlink?",
+        "Using low-orbit satellites to providing global broadband internet, requires high usage fees and large dish receiver"
+    ],
+    [
+        "Radar is to land as what is to water?",
+        "Sonar"
+    ],
+    [
+        "What is induction cooktop?",
+        "It uses electromagnetic field to cause campatible magnetic pan to heat up."
+    ],
+    [
+        "Is AI enviromental friendly?",
+        "No, it consumes massive amount of energy to function."
+    ],
+    [
+        "How does cloud gaming work?",
+        "Games are streamed from servers, which removes the requirement for hardware"
+    ],
+    [
+        "What does \"fatigue\" mean in materials?",
+        "Mainly refering to the cracks appear in metals from excessive usage"
+    ],
+    [
+        "What is big data?",
+        "Extremely large datasets (stealthy collected by large internet companies fro m users) that are analyzed for patterns"
+    ],
+    [
+        "What are the restrictions with powerbank on flight, and why?",
+        "1) no large powerbank, higher risk of explosion / 2) no powerbanks in check in luggage, to avoid impact damage / 3) no charging during flight, chance of fire"
+    ]
+]
