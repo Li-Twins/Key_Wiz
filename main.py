@@ -15,6 +15,8 @@ from kivy.core.audio import SoundLoader
 import json
 import random
 
+#!/sur/bin/python
+# -*- coding: utf-8 -*-
 
 Builder.load_string('''
 <DevModeScreen>:
@@ -37,7 +39,7 @@ Builder.load_string('''
         halign: 'center'
 
         Label:
-            text: 'Key Wiz Dev Mode'
+            text: 'In Key-Wiz Dev-Mode We Trust'
             font_size: 40  # Smaller title
             font_name: 'RomanAntique.ttf'
             bold: True
@@ -50,7 +52,7 @@ Builder.load_string('''
         Spinner:
             id: topic_spinner
             text: 'Topics'
-            font_size: 50
+            font_size: 60
             font_name: 'RomanAntique.ttf'
             size_hint: (0.8, 0.1)
             valign: 'bottom'
@@ -73,7 +75,7 @@ Builder.load_string('''
 
         Button:
             text: 'Load Questions'
-            font_size: 50
+            font_size: 60
             font_name: 'RomanAntique.ttf'
             size_hint: (0.8, 0.1)
             valign: 'top'
@@ -99,7 +101,7 @@ Builder.load_string('''
         Label:
             id: question_label
             text: ''
-            font_size: 70
+            font_size: 80
             font_name: 'RomanAntique.ttf'
             valign: 'middle'
             halign: 'center'
@@ -111,7 +113,7 @@ Builder.load_string('''
         Label:
             id: answer_label
             text: ''
-            font_size: 70
+            font_size: 80
             font_name: 'RomanAntique.ttf'
             valign: 'middle'
             halign: 'center'
@@ -130,7 +132,7 @@ Builder.load_string('''
             Button:
                 text: 'Answer'
                 background_normal: ''
-                font_size: 40
+                font_size: 50
                 font_name: 'RomanAntique.ttf'
                 background_color: 0, 0, 0, 0
                 color: 0.82, 0.41, 0.12, 1
@@ -151,7 +153,7 @@ Builder.load_string('''
             Button:
                 text: 'Next'
                 background_normal: ''
-                font_size: 40
+                font_size: 50
                 font_name: 'RomanAntique.ttf'
                 background_color: 0, 0, 0, 0
                 color: 0.82, 0.41, 0.12, 1
@@ -188,7 +190,7 @@ class DevModeScreen(Screen):
         try:
             with open('kw_topics.json', 'r') as f:
                 self.topics = json.load(f)
-                self.ids.topic_spinner.values = [x.title() for x in self.topics]
+                self.ids.topic_spinner.values = [x.title() for x in self.topics] # display topics as title
                 if self.topics:
                     self.ids.topic_spinner.text = self.topics[0].title()
         except Exception as e:
@@ -197,12 +199,18 @@ class DevModeScreen(Screen):
             self.ids.topic_spinner.values = []
 
     def load_questions(self):
-        topic = (self.ids.topic_spinner.text).lower()
+        topic = (self.ids.topic_spinner.text).lower() # change displayed topic into proper lower case for loading
         if not topic or topic == 'Topics':
             return
 
         try:
-            with open(f'kw_{topic}.json', 'r') as f:
+            with open(f'kw_{topic}.json', 'r', encoding='utf-8') as f: # ensures chinese encoding
+                if topic.startswith('chinese'): 
+                    self.ids.question_label.font_name = 'NotoSans.ttf'
+                    self.ids.answer_label.font_name = 'NotoSans.ttf'
+                else:
+                    self.ids.question_label.font_name = 'RomanAntique.ttf'
+                    self.ids.answer_label.font_name = 'RomanAntique.ttf'                    
                 self.questions = json.load(f)
                 random.shuffle(self.questions)
                 self.current_index = 0
@@ -235,6 +243,8 @@ class DevModeScreen(Screen):
 class KeyWizApp(App):
     def build(self):
         Window.clearcolor = (0.05, 0.05, 0.05, 1) 
+        from kivy.clock import Clock
+        Clock.schedule_once(lambda dt: Window.canvas.ask_update(), 0.1) # fix for black screen at start up
         self.sound = SoundLoader.load('music.mp3')     
         if self.sound:
             self.sound.loop = True  # Enable looping
