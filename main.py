@@ -41,7 +41,7 @@ Builder.load_string('''
         Label:
             text: 'In Key-Wiz Dev-Mode We Trust'
             font_size: 40  # Smaller title
-            font_name: 'RomanAntique.ttf'
+            font_name: 'zpix.ttf'
             bold: True
             size_hint: (0.8, 0.1)
             pos_hint: {'center_x': 0.5}
@@ -53,7 +53,7 @@ Builder.load_string('''
             id: topic_spinner
             text: 'Topics'
             font_size: 60
-            font_name: 'RomanAntique.ttf'
+            font_name: 'zpix.ttf'
             size_hint: (0.8, 0.1)
             valign: 'bottom'
             halign: 'center'
@@ -76,7 +76,7 @@ Builder.load_string('''
         Button:
             text: 'Load Questions'
             font_size: 60
-            font_name: 'RomanAntique.ttf'
+            font_name: 'zpix.ttf'
             size_hint: (0.8, 0.1)
             valign: 'top'
             halign: 'center'
@@ -101,24 +101,24 @@ Builder.load_string('''
         Label:
             id: question_label
             text: ''
-            font_size: 80
-            font_name: 'RomanAntique.ttf'
+            font_size: 70
+            font_name: 'zpix.ttf'
             valign: 'middle'
             halign: 'center'
             text_size: self.width, None
-            size_hint: (0.8, 0.2)
+            size_hint: (1, 0.2)
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
             color: 0.91, 0.59, 0.31, 1
 
         Label:
             id: answer_label
             text: ''
-            font_size: 80
-            font_name: 'RomanAntique.ttf'
+            font_size: 70
+            font_name: 'zpix.ttf'
             valign: 'middle'
             halign: 'center'
             text_size: self.width, None
-            size_hint: (0.8, 0.2)
+            size_hint: (1, 0.2)
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
             color: 0, 0, 0, 0  # initially invisible
 
@@ -133,7 +133,7 @@ Builder.load_string('''
                 text: 'Answer'
                 background_normal: ''
                 font_size: 50
-                font_name: 'RomanAntique.ttf'
+                font_name: 'zpix.ttf'
                 background_color: 0, 0, 0, 0
                 color: 0.82, 0.41, 0.12, 1
                 on_press: root.toggle_answer()
@@ -154,7 +154,7 @@ Builder.load_string('''
                 text: 'Next'
                 background_normal: ''
                 font_size: 50
-                font_name: 'RomanAntique.ttf'
+                font_name: 'zpix.ttf'
                 background_color: 0, 0, 0, 0
                 color: 0.82, 0.41, 0.12, 1
                 on_press: root.next_question()
@@ -205,12 +205,16 @@ class DevModeScreen(Screen):
 
         try:
             with open(f'kw_{topic}.json', 'r', encoding='utf-8') as f: # ensures chinese encoding
-                if topic.startswith('chinese'): 
+                '''if topic.startswith('chinese'): 
                     self.ids.question_label.font_name = 'NotoSans.ttf'
                     self.ids.answer_label.font_name = 'NotoSans.ttf'
+                    self.ids.question_label.font_size = 50
+                    self.ids.answer_label.font_size = 50
                 else:
-                    self.ids.question_label.font_name = 'RomanAntique.ttf'
-                    self.ids.answer_label.font_name = 'RomanAntique.ttf'                    
+                    self.ids.question_label.font_name = 'zpix.ttf'
+                    self.ids.answer_label.font_name = 'zpix.ttf'  
+                    self.ids.question_label.font_size = 70
+                    self.ids.answer_label.font_size = 70 '''               
                 self.questions = json.load(f)
                 random.shuffle(self.questions)
                 self.current_index = 0
