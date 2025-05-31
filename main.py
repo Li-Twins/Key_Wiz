@@ -133,10 +133,11 @@ Builder.load_string('''
 <RollingQuotes>:
     id: quote_label
     text: ''
+    text_size: self.width, None
     font_size: 24
     font_name: 'zpix.ttf'
-    size_hint: (0.8, 0.1)
-    pos_hint: {'center_x': 0.5}
+    size_hint: (0.9, 0.1)
+    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
     valign: 'top'
     halign: 'center'
     color: 0.82, 0.41, 0.12, 1
@@ -265,7 +266,7 @@ Builder.load_string('''
             color: 0, 0, 0, 0  # initially invisible
 
         BoxLayout:
-            size_hint: (0.8, 0.06)
+            size_hint: (0.8, 0.08)
             spacing: 20
             padding: [20, 20]
             pos_hint: {'center_x': 0.5}
@@ -332,9 +333,7 @@ class DevModeScreen(Screen):
         try:
             with open('kw_topics.json', 'r') as f:
                 self.topics = json.load(f)
-                self.ids.topic_spinner.values = [x.title() for x in self.topics] # display topics as title
-                if self.topics:
-                    self.ids.topic_spinner.text = self.topics[0].title()
+                self.ids.topic_spinner.values = sorted([x.title() for x in self.topics]) # display topics as title
         except Exception as e:
             print(f"Error loading topics: {e}")
             self.topics = []
