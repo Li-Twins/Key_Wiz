@@ -52,9 +52,9 @@ Builder.load_string('''
         Spinner:
             id: topic_spinner
             text: 'Topics'
-            font_size: 60
+            font_size: 50
             font_name: 'zpix.ttf'
-            size_hint: (0.8, 0.1)
+            size_hint: (0.8, 0.06)
             valign: 'bottom'
             halign: 'center'
             pos_hint: {'center_x': 0.5}
@@ -75,9 +75,9 @@ Builder.load_string('''
 
         Button:
             text: 'Load Questions'
-            font_size: 60
+            font_size: 50
             font_name: 'zpix.ttf'
-            size_hint: (0.8, 0.1)
+            size_hint: (0.8, 0.06)
             valign: 'top'
             halign: 'center'
             pos_hint: {'center_x': 0.5}
@@ -106,7 +106,7 @@ Builder.load_string('''
             valign: 'middle'
             halign: 'center'
             text_size: self.width, None
-            size_hint: (1, 0.2)
+            size_hint: (0.9, 0.3)
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
             color: 0.91, 0.59, 0.31, 1
 
@@ -118,12 +118,12 @@ Builder.load_string('''
             valign: 'middle'
             halign: 'center'
             text_size: self.width, None
-            size_hint: (1, 0.2)
+            size_hint: (0.9, 0.3)
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
             color: 0, 0, 0, 0  # initially invisible
 
         BoxLayout:
-            size_hint: (0.8, 0.12)
+            size_hint: (0.8, 0.06)
             spacing: 20
             padding: [20, 20]
             pos_hint: {'center_x': 0.5}
