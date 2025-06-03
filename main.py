@@ -21,7 +21,6 @@ from kivy.uix.modalview import ModalView
 from kivy.uix.floatlayout import FloatLayout
 from kivy.graphics import Color, Line, RoundedRectangle
 
-
 import re
 import json
 import random
@@ -29,10 +28,6 @@ import sys
 import smtplib
 import os
 import math
-#import fitz  # PyMuPDF
-#from ebooklib import epub
-#from docx import Document
-#from bs4 import BeautifulSoup
 from email.mime.text import MIMEText
 from datetime import datetime
 
@@ -1396,7 +1391,7 @@ Builder.load_string('''
                     size: (self.minimum_width, self.minimum_height)
                     width: max(self.minimum_width, root.width)  # Ensure full width
 ''')
-   
+    
 class PasscodeScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -1423,6 +1418,86 @@ class PasscodeScreen(Screen):
         self.ids.error_label.text = message
         Animation(opacity=1, duration=0.3).start(self.ids.error_label)
         Clock.schedule_once(lambda dt: Animation(opacity=0, duration=1).start(self.ids.error_label), 3)
+
+# Add this new class definition before the SauceScreen class
+class MusicListScreen(Screen):
+    now_playing_text = StringProperty("Select a track to play")
+    
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.current_sound = None
+        self.was_background_playing = False
+        self.load_music_files()
+        
+    def load_music_files(self):
+        music_dir = os.path.join(os.path.dirname(__file__))
+        if not os.path.exists(music_dir):
+            os.makedirs(music_dir)
+            return
+            
+        music_files = [f for f in os.listdir(music_dir) 
+                     if f.lower().endswith(('.mp3', '.wav', '.ogg', '.m4a'))]
+        
+        container = self.ids.music_container
+        container.clear_widgets()
+        
+        for music_file in music_files:
+            btn = Button(
+                text=music_file[:-4],
+                font_size=30,
+                font_name='zpix.ttf',
+                size_hint_y=None,
+                height=60,
+                background_normal='',
+                background_color=(0, 0, 0, 0.5),
+                color=(0.82, 0.41, 0.12, 1),
+            )
+            btn.bind(on_press=lambda instance, file=music_file: self.play_music(file))
+            container.add_widget(btn)
+    
+    def play_music(self, filename):
+        app = App.get_running_app()
+        
+        if app.background_music and app.background_music.state == 'play':
+            app.background_music.volume = 0
+            self.was_background_playing = True
+        else:
+            self.was_background_playing = False
+        
+        if self.current_sound:
+            self.current_sound.stop()
+            self.current_sound.unbind(on_stop=self.on_music_stop)
+        
+        music_dir = os.path.join(os.path.dirname(__file__))
+        filepath = os.path.join(music_dir, filename)
+        self.current_sound = SoundLoader.load(filepath)
+        
+        if self.current_sound:
+            #self.current_sound.bind(on_stop=self.on_music_stop)
+            self.current_sound.play()
+        else:
+            self.resume_background_music()
+    
+    def on_music_stop(self, instance):
+        self.resume_background_music()
+    
+    def resume_background_music(self):
+        app = App.get_running_app()
+        if self.was_background_playing and app.background_music:
+            app.background_music.volume = 1
+            if app.background_music.state != 'play':
+                app.background_music.play()
+    
+    def stop_music(self):
+        if self.current_sound:
+            self.current_sound.stop()
+            self.current_sound = None
+        self.resume_background_music()
+    
+    def back_to_root(self):
+        self.stop_music()
+        self.manager.transition = SlideTransition(direction='left')
+        self.manager.current = 'menu'
 
 class SauceScreen(Screen):
     def back_to_root(self):
@@ -1985,9 +2060,8 @@ class KeyWizApp(App):
         sm.add_widget(ToDoScreen(name='todo'))
         sm.add_widget(NotesScreen(name='notes'))
         sm.add_widget(SauceScreen(name='sauce'))
-        #sm.add_widget(MusicListScreen(name='music_list')) 
+        sm.add_widget(MusicListScreen(name='music_list')) 
         #sm.add_widget(PhotoGalleryScreen(name='photo_gallery'))  
-        #sm.add_widget(BookScreen(name='book_screen'))  
         sm.current = 'passcode'
         return sm
 
