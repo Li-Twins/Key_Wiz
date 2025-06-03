@@ -1421,7 +1421,6 @@ class PasscodeScreen(Screen):
 
 # Add this new class definition before the SauceScreen class
 class MusicListScreen(Screen):
-    now_playing_text = StringProperty("Select a track to play")
     
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -1431,9 +1430,6 @@ class MusicListScreen(Screen):
         
     def load_music_files(self):
         music_dir = os.path.join(os.path.dirname(__file__))
-        if not os.path.exists(music_dir):
-            os.makedirs(music_dir)
-            return
             
         music_files = [f for f in os.listdir(music_dir) 
                      if f.lower().endswith(('.mp3', '.wav', '.ogg', '.m4a'))]
