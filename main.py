@@ -16,6 +16,7 @@ from kivy.animation import Animation
 from kivy.uix.popup import Popup
 from kivy.uix.textinput import TextInput
 
+import re
 import json
 import random
 import sys
@@ -127,6 +128,75 @@ QUOTES = [
 ]
 
 Builder.load_string('''
+<PasscodeScreen>:
+    canvas.before:
+        Rectangle:
+            source: 'bg2.jpg'
+            pos: self.pos
+            size: self.size        
+        Color:
+            rgba: 0, 0, 0, 0.7 # Darker background
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 50
+        spacing: 30
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        size_hint: 0.8, 0.6
+
+        Label:
+            text: 'ENTER PASSCODE'
+            font_size: 40
+            font_name: 'zpix.ttf'
+            color: 0.82, 0.41, 0.12, 1
+            size_hint_y: 0.3
+
+        TextInput:
+            id: passcode_input
+            password: True  # Hides input with dots
+            multiline: False
+            font_size: 40
+            font_name: 'zpix.ttf'
+            size_hint_y: 0.2
+            background_color: 0, 0, 0, 0.5
+            foreground_color: 0.82, 0.41, 0.12, 1
+            cursor_color: 0.82, 0.41, 0.12, 1
+            padding: [20, (self.height - self.line_height)/2]
+            focus: True
+
+        Label:
+            id: error_label
+            text: ''
+            font_size: 30
+            font_name: 'zpix.ttf'
+            color: 1, 0.2, 0.2, 0  # Starts invisible (alpha=0)
+            size_hint_y: 0.2
+
+        Button:
+            text: 'SUBMIT'
+            font_size: 40
+            font_name: 'zpix.ttf'
+            size_hint_y: 0.3
+            background_normal: ''
+            background_color: 0, 0, 0, 0
+            color: 0.82, 0.41, 0.12, 1
+            on_press: root.verify_passcode()
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, 0.5
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [5]
+                Color:
+                    rgba: 0.82, 0.41, 0.12, 1
+                Line:
+                    width: 1
+                    rounded_rectangle: (self.x, self.y, self.width, self.height, 5)                    
+
 <QuizScreen>:
     canvas.before:
         Rectangle:
@@ -166,6 +236,63 @@ Builder.load_string('''
                 Line:
                     width: 1.5
                     rounded_rectangle: (self.x, self.y, self.width, self.height, 5)  
+        
+
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: 0.8
+            padding: [20, 20]
+            spacing: 20
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+            TextInput:
+                id: code_input
+                font_size: 40
+                font_name: 'zpix.ttf'
+                size_hint: (0.8, None)
+                height: 100
+                pos_hint: {'center_x': 0.5}
+                multiline: False
+                background_color: 0, 0, 0, 0.5
+                foreground_color: 0.82, 0.41, 0.12, 1
+                cursor_color: 0.82, 0.41, 0.12, 1
+                hint_text: 'Enter code...'
+                padding: 10
+                    
+        BoxLayout:
+            size_hint_y: 0.1
+            padding: [70, 20]  # Remove horizontal padding
+            spacing: 0  # Remove spacing
+            
+            # This container will center the button
+            BoxLayout:
+                size_hint_x: 0.8  # Match todo button width
+                pos_hint: {'center_x': 0.5}
+                padding: [20, 0]  # Add some internal padding if needed
+                
+                Button:
+                    text: 'Submit'
+                    font_size: 50
+                    font_name: 'zpix.ttf'
+                    size_hint: (1, None)
+                    height: 80
+                    pos_hint: {'center_x': 0.5}
+                    background_normal: ''
+                    background_color: 0, 0, 0, 0
+                    color: 0.82, 0.41, 0.12, 1
+                    on_press: root.verify_code()
+                    canvas.before:
+                        Color:
+                            rgba: 0, 0, 0, 0.5
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [5]
+                        Color:
+                            rgba: 0.82, 0.41, 0.12, 1
+                        Line:
+                            width: 1
+                            rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
                     
 <MenuScreen>:
     canvas.before:
@@ -184,7 +311,7 @@ Builder.load_string('''
         rows: 3  # Three rows (will create 2x3 grid)
         padding: [20, 20]
         spacing: 0
-        size_hint: 1, 1
+        size_hint: 0.9, 0.9
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         
         # First row
@@ -814,28 +941,40 @@ Builder.load_string('''
                 foreground_color: (0.82, 0.41, 0.12, 1)
                 cursor_color: (0.82, 0.41, 0.12, 1)
                 multiline: True
+                    
+        BoxLayout:
+            size_hint_y: 0.1
+            padding: [70, 20]  # Remove horizontal padding
+            spacing: 0  # Remove spacing
+            
+            # This container will center the button
+            BoxLayout:
+                size_hint_x: 0.8  # Match todo button width
+                pos_hint: {'center_x': 0.5}
+                padding: [20, 0]  # Add some internal padding if needed
                 
-            Button:
-                text: 'Save Note'
-                font_size: 40
-                font_name: 'zpix.ttf'
-                size_hint_y: 0.4
-                background_normal: ''
-                background_color: 0, 0, 0, 0
-                color: 0.82, 0.41, 0.12, 1
-                on_press: root.save_note()
-                canvas.before:
-                    Color:
-                        rgba: 0, 0, 0, 0.5
-                    RoundedRectangle:
-                        pos: self.pos
-                        size: self.size
-                        radius: [5]
-                    Color:
-                        rgba: 0.82, 0.41, 0.12, 1
-                    Line:
-                        width: 1
-                        rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+                Button:
+                    text: 'Save Note'
+                    font_size: 50
+                    font_name: 'zpix.ttf'
+                    size_hint: (1, None)  # Take full width of container
+                    height: 80  # Match todo button height
+                    background_normal: ''
+                    background_color: 0, 0, 0, 0
+                    color: 0.82, 0.41, 0.12, 1
+                    on_press: root.save_note()
+                    canvas.before:
+                        Color:
+                            rgba: 0, 0, 0, 0.5
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [5]
+                        Color:
+                            rgba: 0.82, 0.41, 0.12, 1
+                        Line:
+                            width: 1
+                            rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
                     
 <SauceScreen>:
     canvas.before:
@@ -1028,6 +1167,34 @@ Builder.load_string('''
                             rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
                     
 ''')
+
+class PasscodeScreen(Screen):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.correct_passcode = "6969"  # Default passcode, you can change this
+        self.attempts = 0
+        self.max_attempts = 3
+
+    def verify_passcode(self):
+        entered_passcode = self.ids.passcode_input.text
+        if entered_passcode == self.correct_passcode:
+            self.manager.current = 'menu'
+            self.ids.passcode_input.text = ''
+            self.attempts = 0
+        else:
+            self.attempts += 1
+            if self.attempts >= self.max_attempts:
+                self.show_error("Max attempts reached! Exiting...")
+                Clock.schedule_once(lambda dt: App.get_running_app().stop(), 2)
+            else:
+                self.show_error(f"Wrong passcode! {self.max_attempts - self.attempts} attempts left")
+            self.ids.passcode_input.text = ''
+
+    def show_error(self, message):
+        self.ids.error_label.text = message
+        Animation(opacity=1, duration=0.3).start(self.ids.error_label)
+        Clock.schedule_once(lambda dt: Animation(opacity=0, duration=1).start(self.ids.error_label), 3)
+
 class SauceScreen(Screen):
     def back_to_root(self):
         self.manager.transition = SlideTransition(direction='left')
@@ -1391,10 +1558,72 @@ class MenuScreen(Screen):
         sys.exit()
 
 class QuizScreen(Screen):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.codes = {'5-8':'73113'}  # Example: code '73113' will access topics index 5-8
+        self.topics = json.load(open('kw_topics.json', 'r'))  # Will be populated from DevModeScreen's topics
+
+    def verify_code(self):
+        code = self.ids.code_input.text.strip()
+        if code in self.codes.values():
+            # Find which key matches this code
+            key = [k for k, v in self.codes.items() if v == code][0]
+            
+            # Use regex to extract indices from key (like '0-4')
+            match = re.match(r'(\d+)-(\d+)', key)
+            if match:
+                start_idx = int(match.group(1))
+                end_idx = int(match.group(2))
+                
+                # Get topics from DevModeScreen
+                self.topics = self.topics[start_idx:end_idx+1]  # +1 because slice is exclusive
+        else:
+            # If code not found, silently use first four topics
+            dev_screen = self.manager.get_screen('dev_mode')
+            self.topics = dev_screen.topics[:4] if len(dev_screen.topics) >= 4 else dev_screen.topics.copy()
+        
+        # Show available topics
+        topic_list = "\n".join([t.title() for t in self.topics])
+        self.show_popup("Available topics", f"\n{topic_list}")
+
+    def show_popup(self, title, message):
+        content = BoxLayout(orientation='vertical', padding=10, spacing=10)
+        content.add_widget(Label(
+            text=message,
+            font_name='zpix.ttf',
+            font_size=30,
+            color=(0.82, 0.41, 0.12, 1)
+        ))
+        
+        btn = Button(
+            text='OK',
+            size_hint=(1, 0.3),
+            font_name='zpix.ttf',
+            font_size=30,
+            background_normal='',
+            background_color=(0, 0, 0, 0),
+            color=(0.82, 0.41, 0.12, 1)
+        )
+        
+        popup = Popup(
+            title=title,
+            title_font='zpix.ttf',
+            title_size='30sp',
+            title_color=[0.82, 0.41, 0.12, 1],
+            content=content,
+            size_hint=(0.7, 0.4),
+            separator_color=[0.82, 0.41, 0.12, 1],
+            background='',
+            background_color=(0, 0, 0, 0.8)
+        )
+        
+        btn.bind(on_press=popup.dismiss)
+        content.add_widget(btn)
+        popup.open()
+    
     def back_to_root(self):
-        sm = self.manager       # Access the screen manager
-        sm.transition = SlideTransition(direction='left')       # Set transition direction
-        sm.current = 'menu'         # Change screen
+        self.manager.transition = SlideTransition(direction='left')
+        self.manager.current = 'menu'
 
 class ToDoScreen(Screen):
     current_date = StringProperty() # fix for traceback when calling current_date in builder
@@ -1500,12 +1729,15 @@ class KeyWizApp(App):
             self.sound.loop = True  # Enable looping
             self.sound.play()
         sm = ScreenManager()
+        sm.add_widget(PasscodeScreen(name='passcode'))
         sm.add_widget(MenuScreen(name='menu'))
         sm.add_widget(DevModeScreen(name='dev_mode'))
         sm.add_widget(QuizScreen(name='quiz_mode'))
         sm.add_widget(ToDoScreen(name='todo'))
         sm.add_widget(NotesScreen(name='notes'))
         sm.add_widget(SauceScreen(name='sauce'))
+
+        sm.current = 'passcode'
         return sm
 
 if __name__ == '__main__':
