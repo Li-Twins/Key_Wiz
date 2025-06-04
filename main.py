@@ -1071,7 +1071,6 @@ Builder.load_string('''
                     background_normal: ''
                     background_color: 0, 0, 0, 0
                     color: 0.82, 0.41, 0.12, 1
-                    on_press: root.show_music_list()
                     canvas.before:
                         Color:
                             rgba: 0, 0, 0, 0.5
@@ -1121,7 +1120,6 @@ Builder.load_string('''
                     background_normal: ''
                     background_color: 0, 0, 0, 0
                     color: 0.82, 0.41, 0.12, 1
-                    on_press: root.show_photo_gallery()
                     canvas.before:
                         Color:
                             rgba: 0, 0, 0, 0.5
@@ -1343,9 +1341,6 @@ class BookScreen(Screen):
     
     def load_books(self):
         book_dir = os.path.join(os.path.dirname(__file__))
-        if not os.path.exists(book_dir):
-            os.makedirs(book_dir)
-            return
             
         book_files = [f for f in os.listdir(book_dir) 
                     if f.lower().endswith(('.pdf', '.epub', '.txt', '.doc', '.docx', '.rtf'))]
