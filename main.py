@@ -771,41 +771,36 @@ Builder.load_string('''
         
         # Submit button area (10%)
         BoxLayout:
-            size_hint_y: 0.15
-            padding: [70, 20]  # Remove horizontal padding
-            spacing: 0  # Remove spacing
-            
-            # This container will center the button
-            BoxLayout:
-                size_hint_x: 0.8  # Match todo button width
-                pos_hint: {'center_x': 0.5}
-                padding: [20, 0]  # Add some internal padding if needed
+            size_hint: (0.8, 0.08)
+            spacing: 20
+            padding: [20, 20]
+            pos_hint: {'center_x': 0.5}
+            spacing: 20
                 
-                Button:
-                    text: 'Submit'
-                    font_size: 50
-                    font_name: 'zpix.ttf'
-                    size_hint: (1, None)  # Take full width of container
-                    height: 100  # Match todo button height
-                    valign: 'middle'
-                    halign: 'center'
-                    background_normal: ''
-                    background_color: 0, 0, 0, 0
-                    color: 0.88, 0.47, 0.18, 1
-                    on_press: root.send_email()
-                    canvas.before:
-                        Color:
-                            rgba: 0, 0, 0, 0.5
-                        RoundedRectangle:
-                            pos: self.pos
-                            size: self.size
-                            radius: [5]
-                        Color:
-                            rgba: 0.88, 0.47, 0.18, 1
-                        Line:
-                            width: 1
-                            rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
-
+            Button:
+                text: 'Submit'
+                font_size: 50
+                font_name: 'zpix.ttf'
+                size_hint: (1, None)  # Take full width of container
+                valign: 'middle'
+                halign: 'center'
+                background_normal: ''
+                background_color: 0, 0, 0, 0
+                color: 0.88, 0.47, 0.18, 1
+                on_press: root.send_email()
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 0.5
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [5]
+                    Color:
+                        rgba: 0.88, 0.47, 0.18, 1
+                    Line:
+                        width: 1
+                        rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+ 
 <TaskButton@Button>:
     font_size: 40
     font_name: 'zpix.ttf'
@@ -904,7 +899,7 @@ Builder.load_string('''
                 id: note_input
                 hint_text: 'Enter new note...'
                 font_name: 'zpix.ttf'
-                font_size: 40
+                font_size: 30
                 size_hint_y: 0.5
                 background_color: (0, 0, 0, 0.5)
                 foreground_color: (0.88, 0.47, 0.18, 1)
@@ -922,40 +917,38 @@ Builder.load_string('''
                 height: self.minimum_height
                 padding: [20, 10]
                 spacing: 20
-        
+
+        # Submit button area (10%)
         BoxLayout:
-            size_hint_y: 0.15
-            padding: [70, 20]  # Remove horizontal padding
-            spacing: 0  # Remove spacing
-            
-            # This container will center the button
-            BoxLayout:
-                size_hint_x: 0.8  # Match todo button width
-                pos_hint: {'center_x': 0.5}
-                padding: [20, 0]  # Add some internal padding if needed
+            size_hint: (0.8, 0.08)
+            spacing: 20
+            padding: [20, 20]
+            pos_hint: {'center_x': 0.5}
+            spacing: 20
                 
-                Button:
-                    text: 'Save Note'
-                    font_size: 50
-                    font_name: 'zpix.ttf'
-                    size_hint: (1, None)  # Take full width of container
-                    height: 100  # Match todo button height
-                    background_normal: ''
-                    background_color: 0, 0, 0, 0
-                    color: 0.88, 0.47, 0.18, 1
-                    on_press: root.save_note()
-                    canvas.before:
-                        Color:
-                            rgba: 0, 0, 0, 0.5
-                        RoundedRectangle:
-                            pos: self.pos
-                            size: self.size
-                            radius: [5]
-                        Color:
-                            rgba: 0.88, 0.47, 0.18, 1
-                        Line:
-                            width: 1
-                            rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+            Button:
+                text: 'Save Note'
+                font_size: 50
+                font_name: 'zpix.ttf'
+                size_hint: (1, None)  # Take full width of container
+                valign: 'middle'
+                halign: 'center'
+                background_normal: ''
+                background_color: 0, 0, 0, 0
+                color: 0.88, 0.47, 0.18, 1
+                on_press: root.save_note()
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 0.5
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [5]
+                    Color:
+                        rgba: 0.88, 0.47, 0.18, 1
+                    Line:
+                        width: 1
+                        rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
                     
                     
 ''')
@@ -1023,7 +1016,7 @@ class NotesScreen(Screen):
             if note.strip():  # Skip empty lines
                 # Calculate required height based on text length
                 text_width = Window.width * 0.9 - 30  # Account for padding
-                font_size = 20
+                font_size = 30
                 char_width = font_size * 0.6  # Approximate character width
                 max_chars_per_line = text_width / char_width
                 line_count = max(1, len(note) / max_chars_per_line)
