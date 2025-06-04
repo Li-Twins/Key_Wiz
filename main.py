@@ -219,10 +219,10 @@ Builder.load_string('''
             id: back_button
             text: 'O.o'
             on_press: root.back_to_root()
-            font_size: 20
+            font_size: 35
             font_name: 'zpix.ttf'
             size_hint: None, None
-            size: 50, 50
+            size: 60, 60
             pos_hint: {'right': 0.95, 'top': 0.95} # 5% margin from edges
             background_normal: ''
             background_color: 0, 0, 0, 0
@@ -494,7 +494,7 @@ Builder.load_string('''
                 RollingQuoteLabel:
                     id: rolling_quote
                     text: "In Key-Wiz We Trust"
-                    font_size: 30
+                    font_size: 40
                     font_name: 'zpix.ttf'
                     size_hint_x: 1
                     valign: 'center'
@@ -513,10 +513,10 @@ Builder.load_string('''
                     id: back_button
                     text: 'O.o'
                     on_press: root.back_to_root()
-                    font_size: 20
+                    font_size: 35
                     font_name: 'zpix.ttf'
                     size_hint: None, None
-                    size: 50, 50
+                    size: 60, 60
                     pos_hint: {'right': 1, 'center_y': 0.5}
                     background_normal: ''
                     background_color: 0, 0, 0, 0
@@ -595,7 +595,7 @@ Builder.load_string('''
             Label:
                 id: question_label
                 text: ''
-                font_size: 70
+                font_size: 60
                 font_name: 'zpix.ttf'
                 valign: 'middle'
                 halign: 'center'
@@ -607,7 +607,7 @@ Builder.load_string('''
             Label:
                 id: answer_label
                 text: ''
-                font_size: 70
+                font_size: 60
                 font_name: 'zpix.ttf'
                 valign: 'middle'
                 halign: 'center'
@@ -708,10 +708,10 @@ Builder.load_string('''
                     id: back_button
                     text: 'O.o'
                     on_press: root.back_to_root()
-                    font_size: 20
+                    font_size: 35
                     font_name: 'zpix.ttf'
                     size_hint: None, None
-                    size: 50, 50
+                    size: 60, 60
                     pos_hint: {'right': 1, 'center_y': 0.5}
                     background_normal: ''
                     background_color: 0, 0, 0, 0
@@ -732,7 +732,7 @@ Builder.load_string('''
         # Main content area (90%)
         ScrollView:
             id: scroll_view
-            size_hint_y: 0.7
+            size_hint_y: 0.73
             BoxLayout:
                 orientation: 'vertical'
                 size_hint_y: None
@@ -771,7 +771,7 @@ Builder.load_string('''
         
         # Submit button area (10%)
         BoxLayout:
-            size_hint: (0.8, 0.2)
+            size_hint: (0.8, 0.17)
             spacing: 20
             padding: [20, 20]
             pos_hint: {'center_x': 0.5}
@@ -781,7 +781,7 @@ Builder.load_string('''
                 text: 'Submit'
                 font_size: 50
                 font_name: 'zpix.ttf'
-                size_hint: (1, 0.9)  # Take full width of container
+                size_hint: (1, 0.7)  # Take full width of container
                 valign: 'middle'
                 halign: 'center'
                 background_normal: ''
@@ -850,7 +850,7 @@ Builder.load_string('''
             RollingQuoteLabel:
                 id: rolling_quote
                 text: "In Key-Wiz We Trust"
-                font_size: 30
+                font_size: 40
                 font_name: 'zpix.ttf'
                 size_hint_x: 0.9
                 valign: 'center'
@@ -867,10 +867,10 @@ Builder.load_string('''
                     id: back_button
                     text: 'O.o'
                     on_press: root.back_to_root()
-                    font_size: 20
+                    font_size: 35
                     font_name: 'zpix.ttf'
                     size_hint: None, None
-                    size: 50, 50
+                    size: 60, 60
                     pos_hint: {'right': 1, 'center_y': 0.5}
                     background_normal: ''
                     background_color: 0, 0, 0, 0
@@ -899,8 +899,8 @@ Builder.load_string('''
                 id: note_input
                 hint_text: 'Enter new note...'
                 font_name: 'zpix.ttf'
-                font_size: 30
-                size_hint_y: 0.5
+                font_size: 40
+                size_hint_y: 0.4
                 background_color: (0, 0, 0, 0.5)
                 foreground_color: (0.88, 0.47, 0.18, 1)
                 cursor_color: (0.88, 0.47, 0.18, 1)
@@ -909,7 +909,7 @@ Builder.load_string('''
         
         # Notes display area
         ScrollView:
-            size_hint_y: 0.6
+            size_hint_y: 0.63
             BoxLayout:
                 id: notes_container
                 orientation: 'vertical'
@@ -920,7 +920,7 @@ Builder.load_string('''
 
         # Submit button area (10%)
         BoxLayout:
-            size_hint: (0.8, 0.2)
+            size_hint: (0.8, 0.17)
             spacing: 20
             padding: [20, 20]
             pos_hint: {'center_x': 0.5}
@@ -930,7 +930,7 @@ Builder.load_string('''
                 text: 'Save Note'
                 font_size: 50
                 font_name: 'zpix.ttf'
-                size_hint: (1, 0.8)  # Take full width of container
+                size_hint: (1, 0.7)  # Take full width of container
                 valign: 'middle'
                 halign: 'center'
                 background_normal: ''
