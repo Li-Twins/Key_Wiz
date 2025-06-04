@@ -1,0 +1,82 @@
+I need a kivy build for a python script that does the following:
+
+three buttons at top of the main screen, horizontally placed, namely Quiz, Dev, Exit.
+
+upon Clicking of Quiz, it will pop up a prompt for user to input their name, then press enter to submit.
+
+upload:
+chinese_phrase
+zpix.ttf
+main
+
+App password
+apbq essb gler slhq
+
+toDo button -> Date -> List of Buttons(toDOs) -> click to mark -> submit button(email ray) -> back
+toDO list:
+
+Drink Water Lots
+Do Quiz 
+Check Belongings
+Sleep at 10pm
+Up by 730am
+Cook Eggs
+No acting cute
+No Immature Talk
+Insight  - write here
+
+Sauces -> Songs, Books, Photos, Video, learning material -> load locally from designated folder
+Use scrolling to move to next section of sauces
+
+N0t3 -> save notes locally
+
+
+
+KW 40 topics x 30 questions
+
+Maths 1, 2, 3, 4, 5 (probability, geometry, misc(linear equation, ratio), algebra, number)
+English 1, 2, 3, 4, 5, 6 (words*, slang, Shakespeare, grammar*, expression, idiom)
+Basics 1, 2, 3, 4, 5 (law, ethics, culture*, living*, practical*)
+Knowledge 1, 2, 3, 4, 5 (philosophy*, geography, zoology, science, medical)
+Chinese 1, 2, 3, 4, 5 (words C-E, words E-C, sentence*, expression*, substitute*)
+Entertainment 1, 2, 3, 4, 5 (movie, music*, internet*, sports, hobby)
+Tech 1, 2, 3, 4 (hardware, software*, general*, python)
+Gaming 1, 2, 3 (general, specific, more)
+Personal 1, 2 (easy, hard*)
+
+*1 gaming_general, maths_number,  basics_law, chinese_E2C
+
+*2 personal_easy, maths_geometry,  tech_python, english_slang,
+
+*3 gaming_specific, maths_algebra, english_words, entertainment_sports
+
+*4 know_geography, chinese_C2E, basics_ethics, english_grammar
+
+*5 maths_probability, know_science, entertainment_music, tech_hardware
+
+*6 basics_culture, chinese_phrase, gaming_more, know_zoology
+
+*7 maths_misc, english_shakespeare, basics_practical, tech_software
+
+*8 english_expression, basic_living, know_medical, entertainment_hobby
+
+*9 entertainment_movie, tech_general, chinese_substitute, english_idiom
+
+10 chinese_expression, entertainment_internet, know_philosophy, personal_hard, 
+
+
+########################################
+
+
+
+Additional topics
+English_profanity, USA_influence, USA_crimes, China_Problems, China_Advancements, China_History,  
+know_food, know_craft, entertainment_manga, english_reference, English_words(synonym) 
+Know_wechat, know_drugs (coffee, alcohol, tobacco), 
+
+
+dubious / game of attrition / addition by subtraction / zany / zesty / tangy /  haul / heave / jerk / yank / cower / beef / articulation / carry the water / fall back on / nuance / usurper / harbinger
+does this actually work?
+how about now?
+amazing work Ray! and Deepseek!
+How about koko?
