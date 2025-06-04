@@ -28,6 +28,10 @@ import sys
 import smtplib
 import os
 import math
+import fitz  # PyMuPDF
+from ebooklib import epub
+from docx import Document
+from bs4 import BeautifulSoup
 from email.mime.text import MIMEText
 from datetime import datetime
 
@@ -1229,168 +1233,68 @@ Builder.load_string('''
                 padding: [20, 20]
                 spacing: 20
                     
-                    
-<MusicListScreen>:
-    canvas.before:
-        Rectangle:
-            source: 'bg2.jpg'
-            pos: self.pos
-            size: self.size        
-        Color:
-            rgba: 0, 0, 0, 0.5
-        Rectangle:
-            pos: self.pos
-            size: self.size
-
-    BoxLayout:
-        orientation: 'vertical'
-        padding: 0
-        spacing: 0
-        
-        # Top 10pc container (same as other screens)
-        BoxLayout:
-            orientation: 'horizontal'
-            size_hint_y: 0.1
-            padding: [10, 0, 10, 0]
-
-            # Rolling quote
-            RollingQuoteLabel:
-                id: rolling_quote
-                text: "Music Files"
-                font_size: 30
-                font_name: 'zpix.ttf'
-                size_hint_x: 0.9
-                valign: 'center'
-                halign: 'right'
-                color: 0.82, 0.41, 0.12, 1
-                text_size: self.width, None
-            
-            # Back button container
-            BoxLayout:
-                size_hint_x: 0.1
-                padding: [0, 10, 0, 10]
-                
-                Button:
-                    id: back_button
-                    text: 'O.o'
-                    on_press: root.back_to_root()
-                    font_size: 20
-                    font_name: 'zpix.ttf'
-                    size_hint: None, None
-                    size: 50, 50
-                    pos_hint: {'right': 1, 'center_y': 0.5}
-                    background_normal: ''
-                    background_color: 0, 0, 0, 0
-                    color: 0.82, 0.41, 0.12, 1
-                    canvas.before:
-                        Color:
-                            rgba: 0, 0, 0, 0.5
-                        RoundedRectangle:
-                            pos: self.pos
-                            size: self.size
-                            radius: [5]
-                        Color:
-                            rgba: 0.82, 0.41, 0.12, 1
-                        Line:
-                            width: 1.5
-                            rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
-        
-        # Main content area
-        ScrollView:
-            BoxLayout:
-                id: music_container
-                orientation: 'vertical'
-                size_hint_y: None
-                height: self.minimum_height
-                padding: [20, 20]
-                spacing: 20
-                    
-<PhotoGalleryScreen>:
-    canvas.before:
-        Rectangle:
-            source: 'bg2.jpg'
-            pos: self.pos
-            size: self.size        
-        Color:
-            rgba: 0, 0, 0, 0.5
-        Rectangle:
-            pos: self.pos
-            size: self.size
-
-    BoxLayout:
-        orientation: 'vertical'
-        padding: 0
-        spacing: 0
-        
-        # Top 10pc container (same as other screens)
-        BoxLayout:
-            orientation: 'horizontal'
-            size_hint_y: 0.1
-            padding: [10, 0, 10, 0]
-
-            # Rolling quote
-            RollingQuoteLabel:
-                id: rolling_quote
-                text: "Music Files"
-                font_size: 30
-                font_name: 'zpix.ttf'
-                size_hint_x: 0.9
-                valign: 'center'
-                halign: 'right'
-                color: 0.82, 0.41, 0.12, 1
-                text_size: self.width, None
-            
-            # Back button container
-            BoxLayout:
-                size_hint_x: 0.1
-                padding: [0, 10, 0, 10]
-                
-                Button:
-                    id: back_button
-                    text: 'O.o'
-                    on_press: root.back_to_root()
-                    font_size: 20
-                    font_name: 'zpix.ttf'
-                    size_hint: None, None
-                    size: 50, 50
-                    pos_hint: {'right': 1, 'center_y': 0.5}
-                    background_normal: ''
-                    background_color: 0, 0, 0, 0
-                    color: 0.82, 0.41, 0.12, 1
-                    canvas.before:
-                        Color:
-                            rgba: 0, 0, 0, 0.5
-                        RoundedRectangle:
-                            pos: self.pos
-                            size: self.size
-                            radius: [5]
-                        Color:
-                            rgba: 0.82, 0.41, 0.12, 1
-                        Line:
-                            width: 1.5
-                            rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
-        
-        BoxLayout:
-            orientation: 'vertical'
-            size_hint_y: 0.9
-            padding: [0, 0, 0, 0]
-            
-            ScrollView:
-                size_hint_x: 1
-                bar_width: 10
-                scroll_type: ['bars', 'content']
-                bar_color: 0.82, 0.41, 0.12, 1
-                bar_inactive_color: 0.82, 0.41, 0.12, 0.5
-                
-                GridLayout:  # Main container for thumbnails
-                    id: photo_container
-                    cols: 4
-                    spacing: 10
-                    padding: [10, 10, 10, 10]
-                    size_hint: None, None
-                    size: (self.minimum_width, self.minimum_height)
-                    width: max(self.minimum_width, root.width)  # Ensure full width
 ''')
+
+class PDFHandler:
+    @staticmethod
+    def get_text(filepath):
+        doc = fitz.open(filepath)
+        text = ""
+        for page in doc:
+            text += page.get_text()
+        return text
+
+    @staticmethod
+    def get_page(filepath, page_num):
+        doc = fitz.open(filepath)
+        if page_num < len(doc):
+            return doc[page_num].get_text()
+        return ""
+
+    @staticmethod
+    def get_page_count(filepath):
+        doc = fitz.open(filepath)
+        return len(doc)
+
+class EPUBHandler:
+    @staticmethod
+    def get_text(filepath):
+        book = epub.read_epub(filepath)
+        text = []
+        for item in book.get_items():
+            if item.get_type() == epub.ITEM_DOCUMENT:
+                soup = BeautifulSoup(item.get_content(), 'html.parser')
+                text.append(soup.get_text())
+        return '\n'.join(text)
+
+    @staticmethod
+    def get_page(filepath, page_num, chars_per_page=2000):
+        full_text = EPUBHandler.get_text(filepath)
+        start = page_num * chars_per_page
+        end = start + chars_per_page
+        return full_text[start:end]
+
+    @staticmethod
+    def get_page_count(filepath, chars_per_page=2000):
+        full_text = EPUBHandler.get_text(filepath)
+        return (len(full_text) // chars_per_page) + 1
+
+class DOCXHandler:
+    @staticmethod
+    def get_text(filepath):
+        doc = Document(filepath)
+        return '\n'.join([para.text for para in doc.paragraphs])
+
+    @staticmethod
+    def get_page(filepath, page_num, lines_per_page=50):
+        paragraphs = Document(filepath).paragraphs
+        start = page_num * lines_per_page
+        end = start + lines_per_page
+        return '\n'.join([p.text for p in paragraphs[start:end]])
+
+    @staticmethod
+    def get_page_count(filepath, lines_per_page=50):
+        return (len(Document(filepath).paragraphs) // lines_per_page) + 1
     
 class PasscodeScreen(Screen):
     def __init__(self, **kwargs):
@@ -1419,27 +1323,39 @@ class PasscodeScreen(Screen):
         Animation(opacity=1, duration=0.3).start(self.ids.error_label)
         Clock.schedule_once(lambda dt: Animation(opacity=0, duration=1).start(self.ids.error_label), 3)
 
-# Add this new class definition before the SauceScreen class
-class MusicListScreen(Screen):
-    
+class BookScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.current_sound = None
-        self.was_background_playing = False
-        self.load_music_files()
-        
-    def load_music_files(self):
-        music_dir = os.path.join(os.path.dirname(__file__))
+        self.current_document = None
+        self.current_page = 0
+        self.total_pages = 0
+        self.file_type = None
+        self.load_books()
+
+    def get_handler(self, filepath):
+        if filepath.lower().endswith('.pdf'):
+            return PDFHandler()
+        elif filepath.lower().endswith('.epub'):
+            return EPUBHandler()
+        elif filepath.lower().endswith(('.doc', '.docx')):
+            return DOCXHandler()
+        return None  # Default to plain text
+    
+    def load_books(self):
+        book_dir = os.path.join(os.path.dirname(__file__))
+        if not os.path.exists(book_dir):
+            os.makedirs(book_dir)
+            return
             
-        music_files = [f for f in os.listdir(music_dir) 
-                     if f.lower().endswith(('.mp3', '.wav', '.ogg', '.m4a'))]
+        book_files = [f for f in os.listdir(book_dir) 
+                    if f.lower().endswith(('.pdf', '.epub', '.txt', '.doc', '.docx', '.rtf'))]
         
-        container = self.ids.music_container
+        container = self.ids.book_container
         container.clear_widgets()
         
-        for music_file in music_files:
+        for book_file in book_files:
             btn = Button(
-                text=music_file[:-4],
+                text=book_file,
                 font_size=30,
                 font_name='zpix.ttf',
                 size_hint_y=None,
@@ -1448,70 +1364,166 @@ class MusicListScreen(Screen):
                 background_color=(0, 0, 0, 0.5),
                 color=(0.82, 0.41, 0.12, 1),
             )
-            btn.bind(on_press=lambda instance, file=music_file: self.play_music(file))
+            btn.bind(on_press=lambda instance, file=book_file: self.open_book(file))
             container.add_widget(btn)
-    
-    def play_music(self, filename):
-        app = App.get_running_app()
-        
-        if app.background_music and app.background_music.state == 'play':
-            app.background_music.volume = 0
-            self.was_background_playing = True
-        else:
-            self.was_background_playing = False
-        
-        if self.current_sound:
-            self.current_sound.stop()
-            self.current_sound.unbind(on_stop=self.on_music_stop)
-        
-        music_dir = os.path.join(os.path.dirname(__file__))
-        filepath = os.path.join(music_dir, filename)
-        self.current_sound = SoundLoader.load(filepath)
-        
-        if self.current_sound:
-            #self.current_sound.bind(on_stop=self.on_music_stop)
-            self.current_sound.play()
-        else:
-            self.resume_background_music()
-    
-    def on_music_stop(self, instance):
-        self.resume_background_music()
-    
-    def resume_background_music(self):
-        app = App.get_running_app()
-        if self.was_background_playing and app.background_music:
-            app.background_music.volume = 1
-            if app.background_music.state != 'play':
-                app.background_music.play()
-    
-    def stop_music(self):
-        if self.current_sound:
-            self.current_sound.stop()
-            self.current_sound = None
-        self.resume_background_music()
-    
+
+    def open_book(self, filename):
+        try:
+            book_dir = os.path.join(os.path.dirname(__file__))
+            filepath = os.path.join(book_dir, filename)
+            
+            # Verify file exists
+            if not os.path.exists(filepath):
+                print(f"File not found: {filepath}")
+                return
+                
+            self.current_document = filepath
+            self.file_type = os.path.splitext(filename)[1].lower()  # Get extension in lowercase
+            
+            # For text files (including RTF), use a simpler approach
+            if self.file_type in ('.txt', '.rtf'):
+                with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
+                    content = f.read()
+                    self.total_pages = (len(content) // 2000) + 1
+                    self.current_page = 1
+                    self.show_page()
+                    return
+                    
+            handler = self.get_handler(filepath)
+            if handler:
+                if hasattr(handler, 'get_page_count'):
+                    self.total_pages = handler.get_page_count(filepath)
+                else:
+                    with open(filepath, 'rb') as f:
+                        content = f.read()
+                        self.total_pages = (len(content) // 2000) + 1
+                self.current_page = 1
+                self.show_page()
+                
+        except Exception as e:
+            print(f"Error opening book {filename}: {str(e)}")
+            self.show_error_popup(f"Error opening file: {str(e)}")
+
+    def show_page(self):
+        if not self.current_document:
+            return
+            
+        handler = self.get_handler(self.current_document)
+        try:
+            if handler:
+                page_content = handler.get_page(self.current_document, self.current_page - 1)
+            else:
+                # Fallback for plain text
+                with open(self.current_document, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                    start = (self.current_page - 1) * 2000
+                    end = self.current_page * 2000
+                    page_content = content[start:end]
+            
+            # Create reading view
+            view = ModalView(
+                size_hint=(0.9, 0.9),
+                background_color=(0, 0, 0, 0.8),
+                overlay_color=(0, 0, 0, 0.5)
+            )
+            
+            # Main layout with scrolling
+            main_layout = BoxLayout(orientation='vertical')
+            
+            # ScrollView for the content
+            scroll = ScrollView(do_scroll_x=False)
+            
+            # Content label with proper text sizing
+            content_label = Label(
+                text=page_content,
+                font_size=20,
+                font_name='zpix.ttf',
+                color=(0.82, 0.41, 0.12, 1),
+                size_hint_y=None,
+                halign='left',
+                valign='top',
+                text_size=(Window.width * 0.85, None),
+                padding=(20, 20),
+                line_height=1.4,
+                shorten=False
+            )
+            
+            # Calculate required height
+            content_label.bind(
+                width=lambda *x: content_label.setter('text_size')(content_label, (content_label.width, None)),
+                texture_size=lambda *x: content_label.setter('height')(content_label, content_label.texture_size[1] + 30)
+            )
+            
+            scroll.add_widget(content_label)
+            
+            # Navigation bar
+            nav_bar = BoxLayout(size_hint_y=0.1, orientation='horizontal')
+            
+            prev_btn = Button(
+                text='< Prev',
+                font_name='zpix.ttf',
+                font_size=30,
+                background_normal='',
+                background_color=(0, 0, 0, 0),
+                color=(0.82, 0.41, 0.12, 1),
+                on_press=lambda x: self.change_page(-1, view)
+            )
+            
+            page_label = Label(
+                text=f"Page {self.current_page}/{self.total_pages}",
+                font_name='zpix.ttf',
+                font_size=30,
+                color=(0.82, 0.41, 0.12, 1)
+            )
+            
+            next_btn = Button(
+                text='Next >',
+                font_name='zpix.ttf',
+                font_size=30,
+                background_normal='',
+                background_color=(0, 0, 0, 0),
+                color=(0.82, 0.41, 0.12, 1),
+                on_press=lambda x: self.change_page(1, view)
+            )
+            
+            nav_bar.add_widget(prev_btn)
+            nav_bar.add_widget(page_label)
+            nav_bar.add_widget(next_btn)
+            
+            main_layout.add_widget(scroll)
+            main_layout.add_widget(nav_bar)
+            view.add_widget(main_layout)
+            
+            # Add swipe gestures
+            def on_touch_move(touch):
+                if touch.dx < -50:  # Swipe left
+                    self.change_page(1, view)
+                elif touch.dx > 50:  # Swipe right
+                    self.change_page(-1, view)
+                return True
+                
+            view.bind(on_touch_move=on_touch_move)
+            view.open()
+            
+        except Exception as e:
+            print(f"Error showing page: {e}")
+
+    def change_page(self, delta, view):
+        new_page = self.current_page + delta
+        if 1 <= new_page <= self.total_pages:
+            self.current_page = new_page
+            view.dismiss()
+            self.show_page()
+
     def back_to_root(self):
-        self.stop_music()
         self.manager.transition = SlideTransition(direction='left')
         self.manager.current = 'menu'
+
 
 class SauceScreen(Screen):
     def back_to_root(self):
         self.manager.transition = SlideTransition(direction='left')
         self.manager.current = 'menu'
-    
-    def show_music_list(self):
-        self.manager.transition = SlideTransition(direction='left')
-        self.manager.current = 'music_list'
-        # Refresh the music list when showing the screen
-        music_screen = self.manager.get_screen('music_list')
-        music_screen.load_music_files()
-
-    def show_photo_gallery(self):
-        self.manager.transition = SlideTransition(direction='left')
-        self.manager.current = 'photo_gallery'
-        photo_screen = self.manager.get_screen('photo_gallery')
-        photo_screen.load_photos()
 
     def show_book_list(self):
         self.manager.transition = SlideTransition(direction='left')
@@ -2056,8 +2068,7 @@ class KeyWizApp(App):
         sm.add_widget(ToDoScreen(name='todo'))
         sm.add_widget(NotesScreen(name='notes'))
         sm.add_widget(SauceScreen(name='sauce'))
-        sm.add_widget(MusicListScreen(name='music_list')) 
-        #sm.add_widget(PhotoGalleryScreen(name='photo_gallery'))  
+        sm.add_widget(BookScreen(name='book_screen'))  
         sm.current = 'passcode'
         return sm
 
