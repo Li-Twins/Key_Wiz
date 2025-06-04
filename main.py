@@ -28,10 +28,6 @@ import sys
 import smtplib
 import os
 import math
-import fitz  # PyMuPDF
-from ebooklib import epub
-from docx import Document
-from bs4 import BeautifulSoup
 from email.mime.text import MIMEText
 from datetime import datetime
 
@@ -1233,66 +1229,6 @@ Builder.load_string('''
                     
 ''')
 
-class PDFHandler:
-    @staticmethod
-    def get_text(filepath):
-        doc = fitz.open(filepath)
-        text = ""
-        for page in doc:
-            text += page.get_text()
-        return text
-
-    @staticmethod
-    def get_page(filepath, page_num):
-        doc = fitz.open(filepath)
-        if page_num < len(doc):
-            return doc[page_num].get_text()
-        return ""
-
-    @staticmethod
-    def get_page_count(filepath):
-        doc = fitz.open(filepath)
-        return len(doc)
-
-class EPUBHandler:
-    @staticmethod
-    def get_text(filepath):
-        book = epub.read_epub(filepath)
-        text = []
-        for item in book.get_items():
-            if item.get_type() == epub.ITEM_DOCUMENT:
-                soup = BeautifulSoup(item.get_content(), 'html.parser')
-                text.append(soup.get_text())
-        return '\n'.join(text)
-
-    @staticmethod
-    def get_page(filepath, page_num, chars_per_page=2000):
-        full_text = EPUBHandler.get_text(filepath)
-        start = page_num * chars_per_page
-        end = start + chars_per_page
-        return full_text[start:end]
-
-    @staticmethod
-    def get_page_count(filepath, chars_per_page=2000):
-        full_text = EPUBHandler.get_text(filepath)
-        return (len(full_text) // chars_per_page) + 1
-
-class DOCXHandler:
-    @staticmethod
-    def get_text(filepath):
-        doc = Document(filepath)
-        return '\n'.join([para.text for para in doc.paragraphs])
-
-    @staticmethod
-    def get_page(filepath, page_num, lines_per_page=50):
-        paragraphs = Document(filepath).paragraphs
-        start = page_num * lines_per_page
-        end = start + lines_per_page
-        return '\n'.join([p.text for p in paragraphs[start:end]])
-
-    @staticmethod
-    def get_page_count(filepath, lines_per_page=50):
-        return (len(Document(filepath).paragraphs) // lines_per_page) + 1
     
 class PasscodeScreen(Screen):
     def __init__(self, **kwargs):
@@ -1329,15 +1265,6 @@ class BookScreen(Screen):
         self.total_pages = 0
         self.file_type = None
         self.load_books()
-
-    def get_handler(self, filepath):
-        if filepath.lower().endswith('.pdf'):
-            return PDFHandler()
-        elif filepath.lower().endswith('.epub'):
-            return EPUBHandler()
-        elif filepath.lower().endswith(('.doc', '.docx')):
-            return DOCXHandler()
-        return None  # Default to plain text
     
     def load_books(self):
         book_dir = os.path.join(os.path.dirname(__file__))
@@ -1383,17 +1310,6 @@ class BookScreen(Screen):
                     self.current_page = 1
                     self.show_page()
                     return
-                    
-            handler = self.get_handler(filepath)
-            if handler:
-                if hasattr(handler, 'get_page_count'):
-                    self.total_pages = handler.get_page_count(filepath)
-                else:
-                    with open(filepath, 'rb') as f:
-                        content = f.read()
-                        self.total_pages = (len(content) // 2000) + 1
-                self.current_page = 1
-                self.show_page()
                 
         except Exception as e:
             print(f"Error opening book {filename}: {str(e)}")
@@ -1402,18 +1318,13 @@ class BookScreen(Screen):
     def show_page(self):
         if not self.current_document:
             return
-            
-        handler = self.get_handler(self.current_document)
-        try:
-            if handler:
-                page_content = handler.get_page(self.current_document, self.current_page - 1)
-            else:
-                # Fallback for plain text
-                with open(self.current_document, 'r', encoding='utf-8') as f:
-                    content = f.read()
-                    start = (self.current_page - 1) * 2000
-                    end = self.current_page * 2000
-                    page_content = content[start:end]
+
+        else:    
+            with open(self.current_document, 'r', encoding='utf-8') as f:
+                content = f.read()
+                start = (self.current_page - 1) * 2000
+                end = self.current_page * 2000
+                page_content = content[start:end]
             
             # Create reading view
             view = ModalView(
@@ -1499,9 +1410,7 @@ class BookScreen(Screen):
                 
             view.bind(on_touch_move=on_touch_move)
             view.open()
-            
-        except Exception as e:
-            print(f"Error showing page: {e}")
+        
 
     def change_page(self, delta, view):
         new_page = self.current_page + delta
