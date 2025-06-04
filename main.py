@@ -732,7 +732,7 @@ Builder.load_string('''
         # Main content area (90%)
         ScrollView:
             id: scroll_view
-            size_hint_y: 0.8
+            size_hint_y: 0.7
             BoxLayout:
                 orientation: 'vertical'
                 size_hint_y: None
@@ -771,7 +771,7 @@ Builder.load_string('''
         
         # Submit button area (10%)
         BoxLayout:
-            size_hint: (0.8, 0.08)
+            size_hint: (0.8, 0.2)
             spacing: 20
             padding: [20, 20]
             pos_hint: {'center_x': 0.5}
@@ -781,7 +781,7 @@ Builder.load_string('''
                 text: 'Submit'
                 font_size: 50
                 font_name: 'zpix.ttf'
-                size_hint: (1, None)  # Take full width of container
+                size_hint: (1, 0.9)  # Take full width of container
                 valign: 'middle'
                 halign: 'center'
                 background_normal: ''
@@ -909,7 +909,7 @@ Builder.load_string('''
         
         # Notes display area
         ScrollView:
-            size_hint_y: 0.7
+            size_hint_y: 0.6
             BoxLayout:
                 id: notes_container
                 orientation: 'vertical'
@@ -920,7 +920,7 @@ Builder.load_string('''
 
         # Submit button area (10%)
         BoxLayout:
-            size_hint: (0.8, 0.08)
+            size_hint: (0.8, 0.2)
             spacing: 20
             padding: [20, 20]
             pos_hint: {'center_x': 0.5}
@@ -930,7 +930,7 @@ Builder.load_string('''
                 text: 'Save Note'
                 font_size: 50
                 font_name: 'zpix.ttf'
-                size_hint: (1, None)  # Take full width of container
+                size_hint: (1, 0.8)  # Take full width of container
                 valign: 'middle'
                 halign: 'center'
                 background_normal: ''
@@ -1016,7 +1016,7 @@ class NotesScreen(Screen):
             if note.strip():  # Skip empty lines
                 # Calculate required height based on text length
                 text_width = Window.width * 0.9 - 30  # Account for padding
-                font_size = 30
+                font_size = 40
                 char_width = font_size * 0.6  # Approximate character width
                 max_chars_per_line = text_width / char_width
                 line_count = max(1, len(note) / max_chars_per_line)
