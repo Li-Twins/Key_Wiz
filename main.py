@@ -156,7 +156,7 @@ Builder.load_string('''
             text: 'ENTER PASSCODE'
             font_size: 40
             font_name: 'zpix.ttf'
-            color: 0.82, 0.41, 0.12, 1
+            color: 0.88, 0.47, 0.18, 1
             size_hint_y: 0.3
 
         TextInput:
@@ -167,8 +167,8 @@ Builder.load_string('''
             font_name: 'zpix.ttf'
             size_hint_y: 0.2
             background_color: 0, 0, 0, 0.5
-            foreground_color: 0.82, 0.41, 0.12, 1
-            cursor_color: 0.82, 0.41, 0.12, 1
+            foreground_color: 0.88, 0.47, 0.18, 1
+            cursor_color: 0.88, 0.47, 0.18, 1
             padding: [20, (self.height - self.line_height)/2]
             focus: True
 
@@ -187,7 +187,7 @@ Builder.load_string('''
             size_hint_y: 0.3
             background_normal: ''
             background_color: 0, 0, 0, 0
-            color: 0.82, 0.41, 0.12, 1
+            color: 0.88, 0.47, 0.18, 1
             on_press: root.verify_passcode()
             canvas.before:
                 Color:
@@ -197,7 +197,7 @@ Builder.load_string('''
                     size: self.size
                     radius: [5]
                 Color:
-                    rgba: 0.82, 0.41, 0.12, 1
+                    rgba: 0.88, 0.47, 0.18, 1
                 Line:
                     width: 1
                     rounded_rectangle: (self.x, self.y, self.width, self.height, 5)                    
@@ -226,7 +226,7 @@ Builder.load_string('''
             pos_hint: {'right': 0.95, 'top': 0.95} # 5% margin from edges
             background_normal: ''
             background_color: 0, 0, 0, 0
-            color: 0.82, 0.41, 0.12, 1
+            color: 0.88, 0.47, 0.18, 1
             canvas.before:
                 # Background
                 Color:
@@ -237,7 +237,7 @@ Builder.load_string('''
                     radius: [5]
                 # Border
                 Color:
-                    rgba: 0.82, 0.41, 0.12, 1
+                    rgba: 0.88, 0.47, 0.18, 1
                 Line:
                     width: 1.5
                     rounded_rectangle: (self.x, self.y, self.width, self.height, 5)  
@@ -259,8 +259,8 @@ Builder.load_string('''
                 pos_hint: {'center_x': 0.5}
                 multiline: False
                 background_color: 0, 0, 0, 0.5
-                foreground_color: 0.82, 0.41, 0.12, 1
-                cursor_color: 0.82, 0.41, 0.12, 1
+                foreground_color: 0.88, 0.47, 0.18, 1
+                cursor_color: 0.88, 0.47, 0.18, 1
                 hint_text: 'Enter code...'
                 padding: 10
                     
@@ -284,7 +284,7 @@ Builder.load_string('''
                     pos_hint: {'center_x': 0.5}
                     background_normal: ''
                     background_color: 0, 0, 0, 0
-                    color: 0.82, 0.41, 0.12, 1
+                    color: 0.88, 0.47, 0.18, 1
                     on_press: root.verify_code()
                     canvas.before:
                         Color:
@@ -294,7 +294,7 @@ Builder.load_string('''
                             size: self.size
                             radius: [5]
                         Color:
-                            rgba: 0.82, 0.41, 0.12, 1
+                            rgba: 0.88, 0.47, 0.18, 1
                         Line:
                             width: 1
                             rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
@@ -330,7 +330,7 @@ Builder.load_string('''
             halign: 'center'
             background_normal: ''
             background_color: 0, 0, 0, 0
-            color: 0.82, 0.41, 0.12, 1
+            color: 0.88, 0.47, 0.18, 1
             canvas.before:
                 Color:
                     rgba: 0, 0, 0, 0.5
@@ -339,7 +339,7 @@ Builder.load_string('''
                     size: self.size
                     radius: [5]
                 Color:
-                    rgba: 0.82, 0.41, 0.12, 1
+                    rgba: 0.88, 0.47, 0.18, 1
                 Line:
                     width: 1
                     rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
@@ -354,7 +354,7 @@ Builder.load_string('''
             halign: 'center'
             background_normal: ''
             background_color: 0, 0, 0, 0
-            color: 0.82, 0.41, 0.12, 1
+            color: 0.88, 0.47, 0.18, 1
             canvas.before:
                 Color:
                     rgba: 0, 0, 0, 0.5
@@ -363,7 +363,7 @@ Builder.load_string('''
                     size: self.size
                     radius: [5]
                 Color:
-                    rgba: 0.82, 0.41, 0.12, 1
+                    rgba: 0.88, 0.47, 0.18, 1
                 Line:
                     width: 1
                     rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
@@ -379,7 +379,7 @@ Builder.load_string('''
             halign: 'center'
             background_normal: ''
             background_color: 0, 0, 0, 0
-            color: 0.82, 0.41, 0.12, 1
+            color: 0.88, 0.47, 0.18, 1
             canvas.before:
                 Color:
                     rgba: 0, 0, 0, 0.5
@@ -388,7 +388,7 @@ Builder.load_string('''
                     size: self.size
                     radius: [5]
                 Color:
-                    rgba: 0.82, 0.41, 0.12, 1
+                    rgba: 0.88, 0.47, 0.18, 1
                 Line:
                     width: 1
                     rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
@@ -403,7 +403,7 @@ Builder.load_string('''
             halign: 'center'
             background_normal: ''
             background_color: 0, 0, 0, 0
-            color: 0.82, 0.41, 0.12, 1
+            color: 0.88, 0.47, 0.18, 1
             canvas.before:
                 Color:
                     rgba: 0, 0, 0, 0.5
@@ -412,7 +412,7 @@ Builder.load_string('''
                     size: self.size
                     radius: [5]
                 Color:
-                    rgba: 0.82, 0.41, 0.12, 1
+                    rgba: 0.88, 0.47, 0.18, 1
                 Line:
                     width: 1
                     rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
@@ -427,7 +427,7 @@ Builder.load_string('''
             halign: 'center'
             background_normal: ''
             background_color: 0, 0, 0, 0
-            color: 0.82, 0.41, 0.12, 1
+            color: 0.88, 0.47, 0.18, 1
             canvas.before:
                 Color:
                     rgba: 0, 0, 0, 0.5
@@ -436,7 +436,7 @@ Builder.load_string('''
                     size: self.size
                     radius: [5]
                 Color:
-                    rgba: 0.82, 0.41, 0.12, 1
+                    rgba: 0.88, 0.47, 0.18, 1
                 Line:
                     width: 1
                     rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
@@ -445,7 +445,7 @@ Builder.load_string('''
 <CustomSpinnerOption>:
     background_normal: ''
     background_color: (0, 0, 0, 0.5)
-    color: 0.82, 0.41, 0.12, 1
+    color: 0.88, 0.47, 0.18, 1
     font_size: 30
     font_name: 'zpix.ttf'
     height: '40dp'
@@ -457,7 +457,7 @@ Builder.load_string('''
             size: self.size
             radius: [5]
         Color:
-            rgba: 0.82, 0.41, 0.12, 1
+            rgba: 0.88, 0.47, 0.18, 1
         Line:
             width: 1
             rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
@@ -520,7 +520,7 @@ Builder.load_string('''
                     pos_hint: {'right': 1, 'center_y': 0.5}
                     background_normal: ''
                     background_color: 0, 0, 0, 0
-                    color: 0.82, 0.41, 0.12, 1
+                    color: 0.88, 0.47, 0.18, 1
                     canvas.before:
                         Color:
                             rgba: 0, 0, 0, 0.5
@@ -529,7 +529,7 @@ Builder.load_string('''
                             size: self.size
                             radius: [5]
                         Color:
-                            rgba: 0.82, 0.41, 0.12, 1
+                            rgba: 0.88, 0.47, 0.18, 1
                         Line:
                             width: 1.5
                             rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
@@ -552,7 +552,7 @@ Builder.load_string('''
                 halign: 'center'
                 pos_hint: {'center_x': 0.5}
                 background_color: 0, 0, 0, 0
-                color: 0.82, 0.41, 0.12, 1
+                color: 0.88, 0.47, 0.18, 1
                 option_cls: 'CustomSpinnerOption'
                 canvas.before:
                     Color:
@@ -562,7 +562,7 @@ Builder.load_string('''
                         size: self.size
                         radius: [5]
                     Color:
-                        rgba: 0.82, 0.41, 0.12, 1  # Border color
+                        rgba: 0.88, 0.47, 0.18, 1  # Border color
                     Line:
                         width: 1
                         rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
@@ -577,7 +577,7 @@ Builder.load_string('''
                 pos_hint: {'center_x': 0.5}
                 background_normal: ''
                 background_color: 0, 0, 0, 0  # Make transparent
-                color: 0.82, 0.41, 0.12, 1
+                color: 0.88, 0.47, 0.18, 1
                 on_press: root.load_questions()
                 canvas.before:
                     Color:
@@ -587,7 +587,7 @@ Builder.load_string('''
                         size: self.size
                         radius: [5]
                     Color:
-                        rgba: 0.82, 0.41, 0.12, 1 # Border color
+                        rgba: 0.88, 0.47, 0.18, 1 # Border color
                     Line:
                         width: 1
                         rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
@@ -629,7 +629,7 @@ Builder.load_string('''
                     font_size: 50
                     font_name: 'zpix.ttf'
                     background_color: 0, 0, 0, 0
-                    color: 0.82, 0.41, 0.12, 1
+                    color: 0.88, 0.47, 0.18, 1
                     on_press: root.toggle_answer()
                     canvas.before:
                         Color:
@@ -639,7 +639,7 @@ Builder.load_string('''
                             size: self.size
                             radius: [5]
                         Color:
-                            rgba: 0.82, 0.41, 0.12, 1 # Border color
+                            rgba: 0.88, 0.47, 0.18, 1 # Border color
                         Line:
                             width: 1
                             rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
@@ -650,7 +650,7 @@ Builder.load_string('''
                     font_size: 50
                     font_name: 'zpix.ttf'
                     background_color: 0, 0, 0, 0
-                    color: 0.82, 0.41, 0.12, 1
+                    color: 0.88, 0.47, 0.18, 1
                     on_press: root.next_question()
                     canvas.before:
                         Color:
@@ -660,7 +660,7 @@ Builder.load_string('''
                             size: self.size
                             radius: [5]
                         Color:
-                            rgba: 0.82, 0.41, 0.12, 1  # Border color
+                            rgba: 0.88, 0.47, 0.18, 1  # Border color
                         Line:
                             width: 1
                             rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
@@ -696,7 +696,7 @@ Builder.load_string('''
                 size_hint_x: 0.9
                 valign: 'center'
                 halign: 'right'
-                color: 0.82, 0.41, 0.12, 1
+                color: 0.88, 0.47, 0.18, 1
                 text_size: self.width, None
             
             # Back button container
@@ -715,7 +715,7 @@ Builder.load_string('''
                     pos_hint: {'right': 1, 'center_y': 0.5}
                     background_normal: ''
                     background_color: 0, 0, 0, 0
-                    color: 0.82, 0.41, 0.12, 1
+                    color: 0.88, 0.47, 0.18, 1
                     canvas.before:
                         Color:
                             rgba: 0, 0, 0, 0.5
@@ -724,7 +724,7 @@ Builder.load_string('''
                             size: self.size
                             radius: [5]
                         Color:
-                            rgba: 0.82, 0.41, 0.12, 1
+                            rgba: 0.88, 0.47, 0.18, 1
                         Line:
                             width: 1.5
                             rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
@@ -771,7 +771,7 @@ Builder.load_string('''
         
         # Submit button area (10%)
         BoxLayout:
-            size_hint_y: 0.1
+            size_hint_y: 0.15
             padding: [70, 20]  # Remove horizontal padding
             spacing: 0  # Remove spacing
             
@@ -786,12 +786,12 @@ Builder.load_string('''
                     font_size: 50
                     font_name: 'zpix.ttf'
                     size_hint: (1, None)  # Take full width of container
-                    height: 80  # Match todo button height
+                    height: 100  # Match todo button height
                     valign: 'middle'
                     halign: 'center'
                     background_normal: ''
                     background_color: 0, 0, 0, 0
-                    color: 0.82, 0.41, 0.12, 1
+                    color: 0.88, 0.47, 0.18, 1
                     on_press: root.send_email()
                     canvas.before:
                         Color:
@@ -801,7 +801,7 @@ Builder.load_string('''
                             size: self.size
                             radius: [5]
                         Color:
-                            rgba: 0.82, 0.41, 0.12, 1
+                            rgba: 0.88, 0.47, 0.18, 1
                         Line:
                             width: 1
                             rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
@@ -814,7 +814,7 @@ Builder.load_string('''
     pos_hint: {'center_x': 0.5}
     background_normal: ''
     background_color: 0, 0, 0, 0.5
-    color: 0.82, 0.41, 0.12, 1
+    color: 0.88, 0.47, 0.18, 1
     canvas.before:
         Color:
             rgba: 0, 0, 0, 0.5
@@ -823,7 +823,7 @@ Builder.load_string('''
             size: self.size
             radius: [5]
         Color:
-            rgba: 0.82, 0.41, 0.12, 1
+            rgba: 0.88, 0.47, 0.18, 1
         Line:
             width: 1
             rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
@@ -879,7 +879,7 @@ Builder.load_string('''
                     pos_hint: {'right': 1, 'center_y': 0.5}
                     background_normal: ''
                     background_color: 0, 0, 0, 0
-                    color: 0.82, 0.41, 0.12, 1
+                    color: 0.88, 0.47, 0.18, 1
                     canvas.before:
                         Color:
                             rgba: 0, 0, 0, 0.5
@@ -888,10 +888,29 @@ Builder.load_string('''
                             size: self.size
                             radius: [5]
                         Color:
-                            rgba: 0.82, 0.41, 0.12, 1
+                            rgba: 0.88, 0.47, 0.18, 1
                         Line:
                             width: 1.5
                             rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+
+        # New note input area
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: 0.2
+            padding: [70, 10]
+            spacing: 10
+            
+            TextInput:
+                id: note_input
+                hint_text: 'Enter new note...'
+                font_name: 'zpix.ttf'
+                font_size: 40
+                size_hint_y: 0.5
+                background_color: (0, 0, 0, 0.5)
+                foreground_color: (0.88, 0.47, 0.18, 1)
+                cursor_color: (0.88, 0.47, 0.18, 1)
+                multiline: True
+                    
         
         # Notes display area
         ScrollView:
@@ -904,26 +923,8 @@ Builder.load_string('''
                 padding: [20, 10]
                 spacing: 20
         
-        # New note input area
         BoxLayout:
-            orientation: 'vertical'
-            size_hint_y: 0.2
-            padding: [70, 10]
-            spacing: 10
-            
-            TextInput:
-                id: note_input
-                hint_text: 'Enter new note...'
-                font_name: 'zpix.ttf'
-                font_size: 30
-                size_hint_y: 0.6
-                background_color: (0, 0, 0, 0.5)
-                foreground_color: (0.82, 0.41, 0.12, 1)
-                cursor_color: (0.82, 0.41, 0.12, 1)
-                multiline: True
-                    
-        BoxLayout:
-            size_hint_y: 0.1
+            size_hint_y: 0.15
             padding: [70, 20]  # Remove horizontal padding
             spacing: 0  # Remove spacing
             
@@ -938,10 +939,10 @@ Builder.load_string('''
                     font_size: 50
                     font_name: 'zpix.ttf'
                     size_hint: (1, None)  # Take full width of container
-                    height: 80  # Match todo button height
+                    height: 100  # Match todo button height
                     background_normal: ''
                     background_color: 0, 0, 0, 0
-                    color: 0.82, 0.41, 0.12, 1
+                    color: 0.88, 0.47, 0.18, 1
                     on_press: root.save_note()
                     canvas.before:
                         Color:
@@ -951,7 +952,7 @@ Builder.load_string('''
                             size: self.size
                             radius: [5]
                         Color:
-                            rgba: 0.82, 0.41, 0.12, 1
+                            rgba: 0.88, 0.47, 0.18, 1
                         Line:
                             width: 1
                             rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
@@ -1036,7 +1037,7 @@ class NotesScreen(Screen):
                     height=label_height,
                     halign='left',
                     valign='top',
-                    color=(0.82, 0.41, 0.12, 1),
+                    color=(0.88, 0.47, 0.18, 1),
                     text_size=(text_width, None),
                     padding=(10, 10),
                     shorten=False
@@ -1065,7 +1066,7 @@ class NotesScreen(Screen):
             text=message,
             font_name='zpix.ttf',
             font_size=20,
-            color=(0.82, 0.41, 0.12, 1)
+            color=(0.88, 0.47, 0.18, 1)
         ))
         
         btn = Button(
@@ -1075,17 +1076,17 @@ class NotesScreen(Screen):
             font_size=20,
             background_normal='',
             background_color=(0, 0, 0, 0),
-            color=(0.82, 0.41, 0.12, 1)
+            color=(0.88, 0.47, 0.18, 1)
         )
         
         popup = Popup(
             title='Error',
             title_font='zpix.ttf',
             title_size='20sp',
-            title_color=[0.82, 0.41, 0.12, 1],
+            title_color=[0.88, 0.47, 0.18, 1],
             content=content,
             size_hint=(0.7, 0.4),
-            separator_color=[0.82, 0.41, 0.12, 1],
+            separator_color=[0.88, 0.47, 0.18, 1],
             background='',
             background_color=(0, 0, 0, 0.8)
         )
@@ -1201,8 +1202,8 @@ class InsightPopup(Popup):
         # Set popup background to dark theme
         self.background = ''
         self.background_color = (0.1, 0.1, 0.1, 1)  # Dark background
-        self.separator_color = (0.82, 0.41, 0.12, 1)  # Orange-brown separator
-        self.title_color = (0.82, 0.41, 0.12, 1)  # Orange-brown title
+        self.separator_color = (0.88, 0.47, 0.18, 1)  # Orange-brown separator
+        self.title_color = (0.88, 0.47, 0.18, 1)  # Orange-brown title
         self.title_size = '30sp'
         self.title_font = 'zpix.ttf'
         
@@ -1219,8 +1220,8 @@ class InsightPopup(Popup):
             font_name='zpix.ttf',
             font_size=30,
             background_color=(0, 0, 0, 0.5),
-            foreground_color=(0.82, 0.41, 0.12, 1),
-            cursor_color=(0.82, 0.41, 0.12, 1),
+            foreground_color=(0.88, 0.47, 0.18, 1),
+            cursor_color=(0.88, 0.47, 0.18, 1),
             selection_color=(0.82, 0.41, 0.12, 0.5)
         )
         
@@ -1234,7 +1235,7 @@ class InsightPopup(Popup):
             font_size=30,
             background_normal='',
             background_color=(0, 0, 0, 0),
-            color=(0.82, 0.41, 0.12, 1)
+            color=(0.88, 0.47, 0.18, 1)
         )
         
         # Cancel button
@@ -1244,7 +1245,7 @@ class InsightPopup(Popup):
             font_size=30,
             background_normal='',
             background_color=(0, 0, 0, 0),
-            color=(0.82, 0.41, 0.12, 1)
+            color=(0.88, 0.47, 0.18, 1)
         )
         
         # Add buttons to layout
@@ -1268,7 +1269,7 @@ class InsightPopup(Popup):
         for btn in buttons:
             with btn.canvas.before:
                 # Border
-                Color(0.82, 0.41, 0.12, 1)
+                Color(0.88, 0.47, 0.18, 1)
                 RoundedRectangle(pos=btn.pos, size=btn.size, radius=[5])
                 # Inner fill
                 Color(0, 0, 0, 0.5)
@@ -1283,7 +1284,7 @@ class InsightPopup(Popup):
         instance.canvas.before.clear()
         with instance.canvas.before:
             # Border
-            Color(0.82, 0.41, 0.12, 1)
+            Color(0.88, 0.47, 0.18, 1)
             RoundedRectangle(pos=instance.pos, size=instance.size, radius=[5])
             # Inner fill
             Color(0, 0, 0, 0.5)
@@ -1379,7 +1380,7 @@ class QuizScreen(Screen):
             text=message,
             font_name='zpix.ttf',
             font_size=30,
-            color=(0.82, 0.41, 0.12, 1)
+            color=(0.88, 0.47, 0.18, 1)
         ))
         
         btn = Button(
@@ -1389,17 +1390,17 @@ class QuizScreen(Screen):
             font_size=30,
             background_normal='',
             background_color=(0, 0, 0, 0),
-            color=(0.82, 0.41, 0.12, 1)
+            color=(0.88, 0.47, 0.18, 1)
         )
         
         popup = Popup(
             title=title,
             title_font='zpix.ttf',
             title_size='30sp',
-            title_color=[0.82, 0.41, 0.12, 1],
+            title_color=[0.88, 0.47, 0.18, 1],
             content=content,
             size_hint=(0.7, 0.4),
-            separator_color=[0.82, 0.41, 0.12, 1],
+            separator_color=[0.88, 0.47, 0.18, 1],
             background='',
             background_color=(0, 0, 0, 0.8)
         )
@@ -1429,7 +1430,7 @@ class ToDoScreen(Screen):
             if button.text in self.completed_tasks:
                 self.completed_tasks.remove(button.text)
                 button.background_color = (0, 0, 0, 0.5)
-                button.color = (0.82, 0.41, 0.12, 1)
+                button.color = (0.88, 0.47, 0.18, 1)
             else:
                 self.completed_tasks.append(button.text)
                 button.background_color = (0.5, 0.5, 0.5, 0.5)
@@ -1472,7 +1473,7 @@ class ToDoScreen(Screen):
             text=message,
             font_name='zpix.ttf',
             font_size=30,
-            color=(0.82, 0.41, 0.12, 1)
+            color=(0.88, 0.47, 0.18, 1)
         ))
         
         btn = Button(
@@ -1482,17 +1483,17 @@ class ToDoScreen(Screen):
             font_size=30,
             background_normal='',
             background_color=(0, 0, 0, 0),
-            color=(0.82, 0.41, 0.12, 1)
+            color=(0.88, 0.47, 0.18, 1)
         )
         
         popup = Popup(
             title=title,
             title_font='zpix.ttf',
             title_size='30sp',
-            title_color=[0.82, 0.41, 0.12, 1],
+            title_color=[0.88, 0.47, 0.18, 1],
             content=content,
             size_hint=(0.7, 0.4),
-            separator_color=[0.82, 0.41, 0.12, 1],
+            separator_color=[0.88, 0.47, 0.18, 1],
             background='',
             background_color=(0, 0, 0, 0.8) # 0.8 transparency of pop up, 0 is transparent
         )
