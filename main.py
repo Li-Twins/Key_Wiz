@@ -714,13 +714,12 @@ Builder.load_string('''
                 orientation: 'vertical'
                 size_hint_y: None
                 height: self.minimum_height
-                spacing: 20
+                spacing: 50
                 padding: [20, 20]
                 
                 # Task buttons
                 TaskButton:
                     text: 'Drink Water Lots'
-                    color: app.color_scheme
                     on_press: root.toggle_task(self)
                 TaskButton:
                     text: 'Do Quiz'
@@ -868,7 +867,7 @@ Builder.load_string('''
                 hint_text: 'Enter new note...'
                 font_name: 'zpix.ttf'
                 font_size: 40
-                size_hint_y: 0.4
+                size_hint_y: 0.3
                 background_color: (0, 0, 0, 0.5)
                 foreground_color: app.color_scheme
                 cursor_color: app.color_scheme
@@ -923,55 +922,82 @@ Builder.load_string('''
         padding: [20, 10]
         spacing: 20
         
-        # Back button at top
+        # Top 10pc container
         BoxLayout:
-            size_hint_y: 0.1
-            Button:
-                text: 'O.o'
-                on_press: root.back_to_root()
-                font_size: 20
-                font_name: app.current_font
-                size_hint: None, None
-                size: 50, 50
-                pos_hint: {'right': 1, 'center_y': 0.5}
-                background_normal: ''
-                background_color: 0, 0, 0, 0
-                color: app.color_scheme
-                canvas.before:
-                    Color:
-                        rgba: 0, 0, 0, 0.5
-                    RoundedRectangle:
-                        pos: self.pos
-                        size: self.size
-                        radius: [5]
-                    Color:
-                        rgba: app.color_scheme
-                    Line:
-                        width: 1.5
-                        rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+            orientation: 'horizontal'
+            size_hint_y: 0.1  # Takes exactly 10pc of screen height
+            padding: [10, 0, 10, 0]  # Left/right padding only
+
+            # Main content area (90% width)
+            BoxLayout:
+                size_hint_x: 0.9
+                orientation: 'horizontal'
+                
+                # Rolling quote (takes available space)
+                RollingQuoteLabel:
+                    id: rolling_quote
+                    text: "In Key-Wiz We Trust"
+                    font_size: 40
+                    font_name: 'zpix.ttf'
+                    size_hint_x: 1
+                    valign: 'center'
+                    halign: 'right'
+                    color: app.color_scheme
+                    text_size: self.width, None
+                    shorten: True
+                    shorten_from: 'right'
+            
+            # Back button container (10% width)
+            BoxLayout:
+                size_hint_x: 0.1
+                padding: [0, 10, 0, 10]  # Removed right padding from here
+                
+                Button:
+                    id: back_button
+                    text: 'O.o'
+                    on_press: root.back_to_root()
+                    font_size: 35
+                    font_name: 'zpix.ttf'
+                    size_hint: None, None
+                    size: 60, 60
+                    pos_hint: {'right': 1, 'center_y': 0.5}
+                    background_normal: ''
+                    background_color: 0, 0, 0, 0
+                    color: app.color_scheme
+                    canvas.before:
+                        Color:
+                            rgba: 0, 0, 0, 0.5
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [5]
+                        Color:
+                            rgba: app.color_scheme
+                        Line:
+                            width: 1.5
+                            rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
         
         ScrollView:
             BoxLayout:
                 orientation: 'vertical'
-                size_hint_y: None
+                size_hint_y: 0.8
                 height: self.minimum_height
-                spacing: 30
+                spacing: 80
                 padding: [20, 20]
                 pos_hint: {'center_x': 0.5}  # Center horizontally
                                     
                 # Sound Section
                 BoxLayout:
                     orientation: 'vertical'
-                    size_hint_y: None
-                    height: 150
+                    size_hint_y: 0.2
                     size_hint_x: 0.8  # Take 80% width
                     pos_hint: {'center_x': 0.5}  # Center horizontally
 
                     Label:
                         text: 'Sound'
-                        font_size: 50
+                        font_size: 60
                         font_name: app.current_font
-                        size_hint_y: 0.4
+                        size_hint_y: 0.5
                         color: app.color_scheme
                         canvas.before:
                             Color:
@@ -987,11 +1013,11 @@ Builder.load_string('''
                                 rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
                     
                     BoxLayout:
-                        size_hint_y: 0.6
-                        spacing: 10
+                        size_hint_y: 0.5
+                        spacing: 20
                         Button:
                             text: 'Jazz'
-                            font_size: 30
+                            font_size: 40
                             on_press: app.change_music('music1.mp3')
                             font_name: app.current_font
                             background_normal: ''
@@ -999,7 +1025,7 @@ Builder.load_string('''
                             color: app.color_scheme
                         Button:
                             text: 'Trip'
-                            font_size: 30
+                            font_size: 40
                             on_press: app.change_music('music2.mp3')
                             font_name: app.current_font
                             background_normal: ''
@@ -1007,7 +1033,7 @@ Builder.load_string('''
                             color: app.color_scheme
                         Button:
                             text: 'Silly'
-                            font_size: 30
+                            font_size: 40
                             on_press: app.change_music('music3.mp3')
                             font_name: app.current_font
                             background_normal: ''
@@ -1017,16 +1043,15 @@ Builder.load_string('''
                 # Look Section
                 BoxLayout:
                     orientation: 'vertical'
-                    size_hint_y: None
-                    height: 150
+                    size_hint_y: 0.2
                     size_hint_x: 0.8  # Take 80% width
                     pos_hint: {'center_x': 0.5}  # Center horizontally
 
                     Label:
                         text: 'Look'
-                        font_size: 50
+                        font_size: 60
                         font_name: app.current_font
-                        size_hint_y: 0.4
+                        size_hint_y: 0.5
                         color: app.color_scheme
                         canvas.before:
                             Color:
@@ -1042,11 +1067,11 @@ Builder.load_string('''
                                 rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
                     
                     BoxLayout:
-                        size_hint_y: 0.6
-                        spacing: 10
+                        size_hint_y: 0.5
+                        spacing: 20
                         Button:
                             text: 'Dark'
-                            font_size: 30
+                            font_size: 40
                             on_press: app.change_color_scheme('Dark')
                             font_name: app.current_font
                             background_normal: ''
@@ -1054,7 +1079,7 @@ Builder.load_string('''
                             color: app.color_scheme
                         Button:
                             text: 'Techno'
-                            font_size: 30
+                            font_size: 40
                             on_press: app.change_color_scheme('Techno')
                             font_name: app.current_font
                             background_normal: ''
@@ -1062,7 +1087,7 @@ Builder.load_string('''
                             color: app.color_scheme
                         Button:
                             text: 'Dull'
-                            font_size: 30
+                            font_size: 40
                             on_press: app.change_color_scheme('Dull')
                             font_name: app.current_font
                             background_normal: ''
@@ -1072,16 +1097,15 @@ Builder.load_string('''
                 # Image Section
                 BoxLayout:
                     orientation: 'vertical'
-                    size_hint_y: None
-                    height: 150
+                    size_hint_y: 0.2
                     size_hint_x: 0.8  # Take 80% width
                     pos_hint: {'center_x': 0.5}  # Center horizontally
 
                     Label:
                         text: 'Image'
-                        font_size: 50
+                        font_size: 60
                         font_name: app.current_font
-                        size_hint_y: 0.4
+                        size_hint_y: 0.5
                         color: app.color_scheme
                         canvas.before:
                             Color:
@@ -1097,11 +1121,11 @@ Builder.load_string('''
                                 rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
                     
                     BoxLayout:
-                        size_hint_y: 0.6
-                        spacing: 10
+                        size_hint_y: 0.5
+                        spacing: 20
                         Button:
                             text: 'You'
-                            font_size: 30
+                            font_size: 40
                             on_press: app.change_bg_image('bg1.jpg')
                             font_name: app.current_font
                             background_normal: ''
@@ -1109,7 +1133,7 @@ Builder.load_string('''
                             color: app.color_scheme
                         Button:
                             text: 'Me'
-                            font_size: 30
+                            font_size: 40
                             on_press: app.change_bg_image('bg2.jpg')
                             font_name: app.current_font
                             background_normal: ''
@@ -1117,7 +1141,7 @@ Builder.load_string('''
                             color: app.color_scheme
                         Button:
                             text: 'Who'
-                            font_size: 30
+                            font_size: 40
                             on_press: app.change_bg_image('bg3.jpg')
                             font_name: app.current_font
                             background_normal: ''
@@ -1127,16 +1151,15 @@ Builder.load_string('''
                 # Font Section
                 BoxLayout:
                     orientation: 'vertical'
-                    size_hint_y: None
-                    height: 150
+                    size_hint_y: 0.2
                     size_hint_x: 0.8  # Take 80% width
                     pos_hint: {'center_x': 0.5}  # Center horizontally
 
                     Label:
                         text: 'Font'
-                        font_size: 50
+                        font_size: 60
                         font_name: app.current_font
-                        size_hint_y: 0.4
+                        size_hint_y: 0.5
                         color: app.color_scheme
                         canvas.before:
                             Color:
@@ -1152,11 +1175,11 @@ Builder.load_string('''
                                 rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
                     
                     BoxLayout:
-                        size_hint_y: 0.6
-                        spacing: 10
+                        size_hint_y: 0.5
+                        spacing: 20
                         Button:
                             text: 'Old'
-                            font_size: 30
+                            font_size: 40
                             on_press: app.change_font('RomanAntique.ttf')
                             font_name: app.current_font
                             background_normal: ''
@@ -1164,7 +1187,7 @@ Builder.load_string('''
                             color: app.color_scheme
                         Button:
                             text: 'New'
-                            font_size: 30
+                            font_size: 40
                             on_press: app.change_font('Tox.ttf')
                             font_name: app.current_font
                             background_normal: ''
@@ -1172,7 +1195,7 @@ Builder.load_string('''
                             color: app.color_scheme
                         Button:
                             text: 'Both'
-                            font_size: 30
+                            font_size: 40
                             on_press: app.change_font('zpix.ttf')
                             font_name: app.current_font
                             background_normal: ''
@@ -1288,22 +1311,24 @@ class NotesScreen(BaseScreen):
         for note in reversed(notes):  # Show newest first
             lbl = Label(
                 text=note,
-                font_size='30sp',
+                font_size=40,
                 font_name=App.get_running_app().current_font,
                 size_hint_y=None,
                 size_hint_x=1, # take full available width
-                height='60dp',  # Increased line height
+                height='50',  # Increased line height
                 halign='left',
                 valign='top',
                 color=App.get_running_app().color_scheme,
                 text_size=(label_width-20, None), # resized after new note is added
-                padding=(20, 15),  # Increased padding
+                padding=(10, 10, 10, 10),  # Increased padding
                 markup=True,
                 shorten=False
             )
-            
+            # Calculate required height based on text content
+            lbl.texture_update()  # Force texture creation
+            lbl.height = max(lbl.texture_size[1] + 10, 30)  # Add padding            
             notes_container.add_widget(lbl)
-
+                            
     def on_pre_enter(self, *args):
         self.load_notes()
         
@@ -1451,6 +1476,7 @@ class DevModeScreen(BaseScreen):
 
     def next_question(self):
         self.current_index += 1
+        self.ids.answer_label.opacity = 0
         self.show_question()
 
     def back_to_root(self):
