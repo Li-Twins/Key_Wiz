@@ -7,7 +7,7 @@ from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.scrollview import ScrollView
 from kivy.graphics import Color, RoundedRectangle
-from kivy.properties import ListProperty, StringProperty
+from kivy.properties import ListProperty, StringProperty, BooleanProperty
 from kivy.core.window import Window
 from kivy.utils import get_color_from_hex
 from kivy.core.audio import SoundLoader
@@ -19,7 +19,7 @@ from kivy.uix.image import AsyncImage
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.modalview import ModalView
 from kivy.uix.floatlayout import FloatLayout
-from kivy.graphics import Color, Line, RoundedRectangle
+from kivy.graphics import Color, Line, RoundedRectangle, Rectangle
 
 import re
 import json
@@ -134,16 +134,6 @@ QUOTES = [
 
 Builder.load_string('''
 <PasscodeScreen>:
-    canvas.before:
-        Rectangle:
-            source: 'bg2.jpg'
-            pos: self.pos
-            size: self.size        
-        Color:
-            rgba: 0, 0, 0, 0.7 # Darker background
-        Rectangle:
-            pos: self.pos
-            size: self.size
 
     BoxLayout:
         orientation: 'vertical'
@@ -156,7 +146,7 @@ Builder.load_string('''
             text: 'ENTER PASSCODE'
             font_size: 40
             font_name: 'zpix.ttf'
-            color: 0.88, 0.47, 0.18, 1
+            color: app.color_scheme
             size_hint_y: 0.3
 
         TextInput:
@@ -177,7 +167,7 @@ Builder.load_string('''
             text: ''
             font_size: 30
             font_name: 'zpix.ttf'
-            color: 1, 0.2, 0.2, 0  # Starts invisible (alpha=0)
+            color: app.color_scheme # Starts invisible (alpha=0)
             size_hint_y: 0.2
 
         Button:
@@ -187,7 +177,7 @@ Builder.load_string('''
             size_hint_y: 0.3
             background_normal: ''
             background_color: 0, 0, 0, 0
-            color: 0.88, 0.47, 0.18, 1
+            color: app.color_scheme
             on_press: root.verify_passcode()
             canvas.before:
                 Color:
@@ -197,22 +187,12 @@ Builder.load_string('''
                     size: self.size
                     radius: [5]
                 Color:
-                    rgba: 0.88, 0.47, 0.18, 1
+                    rgba: app.color_scheme
                 Line:
                     width: 1
                     rounded_rectangle: (self.x, self.y, self.width, self.height, 5)                    
 
 <QuizScreen>:
-    canvas.before:
-        Rectangle:
-            source: 'bg2.jpg'
-            pos: self.pos
-            size: self.size        
-        Color:
-            rgba: 0, 0, 0, 0.5 # Dark background
-        Rectangle:
-            pos: self.pos
-            size: self.size
     
     FloatLayout:
         Button:
@@ -226,7 +206,7 @@ Builder.load_string('''
             pos_hint: {'right': 0.95, 'top': 0.95} # 5% margin from edges
             background_normal: ''
             background_color: 0, 0, 0, 0
-            color: 0.88, 0.47, 0.18, 1
+            color: app.color_scheme
             canvas.before:
                 # Background
                 Color:
@@ -237,7 +217,7 @@ Builder.load_string('''
                     radius: [5]
                 # Border
                 Color:
-                    rgba: 0.88, 0.47, 0.18, 1
+                    rgba: app.color_scheme
                 Line:
                     width: 1.5
                     rounded_rectangle: (self.x, self.y, self.width, self.height, 5)  
@@ -284,7 +264,7 @@ Builder.load_string('''
                     pos_hint: {'center_x': 0.5}
                     background_normal: ''
                     background_color: 0, 0, 0, 0
-                    color: 0.88, 0.47, 0.18, 1
+                    color: app.color_scheme
                     on_press: root.verify_code()
                     canvas.before:
                         Color:
@@ -294,26 +274,16 @@ Builder.load_string('''
                             size: self.size
                             radius: [5]
                         Color:
-                            rgba: 0.88, 0.47, 0.18, 1
+                            rgba: app.color_scheme
                         Line:
                             width: 1
                             rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
                     
-<MenuScreen>:
-    canvas.before:
-        Rectangle:
-            source: 'bg2.jpg'
-            pos: self.pos
-            size: self.size        
-        Color:
-            rgba: 0, 0, 0, 0.5 # Dark background
-        Rectangle:
-            pos: self.pos
-            size: self.size                    
+<MenuScreen>:               
 
     GridLayout:
-        cols: 1  # Two columns
-        rows: 5  # Three rows (will create 1x5 grid)
+        cols: 2  # Two columns
+        rows: 3  # Three rows (will create 1x5 grid)
         padding: [20, 20]
         spacing: 0
         size_hint: 0.9, 0.9
@@ -330,7 +300,7 @@ Builder.load_string('''
             halign: 'center'
             background_normal: ''
             background_color: 0, 0, 0, 0
-            color: 0.88, 0.47, 0.18, 1
+            color: app.color_scheme
             canvas.before:
                 Color:
                     rgba: 0, 0, 0, 0.5
@@ -339,7 +309,7 @@ Builder.load_string('''
                     size: self.size
                     radius: [5]
                 Color:
-                    rgba: 0.88, 0.47, 0.18, 1
+                    rgba: app.color_scheme
                 Line:
                     width: 1
                     rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
@@ -354,7 +324,7 @@ Builder.load_string('''
             halign: 'center'
             background_normal: ''
             background_color: 0, 0, 0, 0
-            color: 0.88, 0.47, 0.18, 1
+            color: app.color_scheme
             canvas.before:
                 Color:
                     rgba: 0, 0, 0, 0.5
@@ -363,7 +333,7 @@ Builder.load_string('''
                     size: self.size
                     radius: [5]
                 Color:
-                    rgba: 0.88, 0.47, 0.18, 1
+                    rgba: app.color_scheme
                 Line:
                     width: 1
                     rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
@@ -379,7 +349,7 @@ Builder.load_string('''
             halign: 'center'
             background_normal: ''
             background_color: 0, 0, 0, 0
-            color: 0.88, 0.47, 0.18, 1
+            color: app.color_scheme
             canvas.before:
                 Color:
                     rgba: 0, 0, 0, 0.5
@@ -388,7 +358,7 @@ Builder.load_string('''
                     size: self.size
                     radius: [5]
                 Color:
-                    rgba: 0.88, 0.47, 0.18, 1
+                    rgba: app.color_scheme
                 Line:
                     width: 1
                     rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
@@ -403,7 +373,7 @@ Builder.load_string('''
             halign: 'center'
             background_normal: ''
             background_color: 0, 0, 0, 0
-            color: 0.88, 0.47, 0.18, 1
+            color: app.color_scheme
             canvas.before:
                 Color:
                     rgba: 0, 0, 0, 0.5
@@ -412,7 +382,31 @@ Builder.load_string('''
                     size: self.size
                     radius: [5]
                 Color:
-                    rgba: 0.88, 0.47, 0.18, 1
+                    rgba: app.color_scheme
+                Line:
+                    width: 1
+                    rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+
+        Button:
+            text: 'SetTing'
+            on_press: root.switch_to_settings()
+            font_size: 50
+            font_name: app.current_font
+            size_hint: (0.9, 0.9)
+            valign: 'middle'
+            halign: 'center'
+            background_normal: ''
+            background_color: 0, 0, 0, 0
+            color: app.color_scheme
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, 0.5
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [5]
+                Color:
+                    rgba: app.color_scheme
                 Line:
                     width: 1
                     rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
@@ -427,7 +421,7 @@ Builder.load_string('''
             halign: 'center'
             background_normal: ''
             background_color: 0, 0, 0, 0
-            color: 0.88, 0.47, 0.18, 1
+            color: app.color_scheme
             canvas.before:
                 Color:
                     rgba: 0, 0, 0, 0.5
@@ -436,7 +430,7 @@ Builder.load_string('''
                     size: self.size
                     radius: [5]
                 Color:
-                    rgba: 0.88, 0.47, 0.18, 1
+                    rgba: app.color_scheme
                 Line:
                     width: 1
                     rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
@@ -445,7 +439,7 @@ Builder.load_string('''
 <CustomSpinnerOption>:
     background_normal: ''
     background_color: (0, 0, 0, 0.5)
-    color: 0.88, 0.47, 0.18, 1
+    color: app.color_scheme
     font_size: 30
     font_name: 'zpix.ttf'
     height: '40dp'
@@ -457,22 +451,12 @@ Builder.load_string('''
             size: self.size
             radius: [5]
         Color:
-            rgba: 0.88, 0.47, 0.18, 1
+            rgba: app.color_scheme
         Line:
             width: 1
             rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
                     
 <DevModeScreen>:
-    canvas.before:
-        Rectangle:
-            source: 'bg2.jpg'
-            pos: self.pos
-            size: self.size        
-        Color:
-            rgba: 0, 0, 0, 0.5
-        Rectangle:
-            pos: self.pos
-            size: self.size
 
     BoxLayout:
         orientation: 'vertical'
@@ -499,7 +483,7 @@ Builder.load_string('''
                     size_hint_x: 1
                     valign: 'center'
                     halign: 'right'
-                    color: 0.82, 0.41, 0.12, 1
+                    color: app.color_scheme
                     text_size: self.width, None
                     shorten: True
                     shorten_from: 'right'
@@ -520,7 +504,7 @@ Builder.load_string('''
                     pos_hint: {'right': 1, 'center_y': 0.5}
                     background_normal: ''
                     background_color: 0, 0, 0, 0
-                    color: 0.88, 0.47, 0.18, 1
+                    color: app.color_scheme
                     canvas.before:
                         Color:
                             rgba: 0, 0, 0, 0.5
@@ -529,7 +513,7 @@ Builder.load_string('''
                             size: self.size
                             radius: [5]
                         Color:
-                            rgba: 0.88, 0.47, 0.18, 1
+                            rgba: app.color_scheme
                         Line:
                             width: 1.5
                             rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
@@ -552,7 +536,7 @@ Builder.load_string('''
                 halign: 'center'
                 pos_hint: {'center_x': 0.5}
                 background_color: 0, 0, 0, 0
-                color: 0.88, 0.47, 0.18, 1
+                color: app.color_scheme
                 option_cls: 'CustomSpinnerOption'
                 canvas.before:
                     Color:
@@ -562,7 +546,7 @@ Builder.load_string('''
                         size: self.size
                         radius: [5]
                     Color:
-                        rgba: 0.88, 0.47, 0.18, 1  # Border color
+                        rgba: app.color_scheme # Border color
                     Line:
                         width: 1
                         rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
@@ -577,7 +561,7 @@ Builder.load_string('''
                 pos_hint: {'center_x': 0.5}
                 background_normal: ''
                 background_color: 0, 0, 0, 0  # Make transparent
-                color: 0.88, 0.47, 0.18, 1
+                color: app.color_scheme
                 on_press: root.load_questions()
                 canvas.before:
                     Color:
@@ -587,7 +571,7 @@ Builder.load_string('''
                         size: self.size
                         radius: [5]
                     Color:
-                        rgba: 0.88, 0.47, 0.18, 1 # Border color
+                        rgba: app.color_scheme # Border color
                     Line:
                         width: 1
                         rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
@@ -596,25 +580,28 @@ Builder.load_string('''
                 id: question_label
                 text: ''
                 font_size: 60
-                font_name: 'zpix.ttf'
+                font_name: app.current_font
                 valign: 'middle'
                 halign: 'center'
                 text_size: self.width, None
                 size_hint: (0.9, 0.3)
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                color: 0.91, 0.59, 0.31, 1
-
+                color: app.color_scheme  # initially invisible
+                opacity: 1
+                    
             Label:
                 id: answer_label
                 text: ''
                 font_size: 60
-                font_name: 'zpix.ttf'
+                font_name: app.current_font
                 valign: 'middle'
                 halign: 'center'
                 text_size: self.width, None
                 size_hint: (0.9, 0.3)
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                color: 0, 0, 0, 0  # initially invisible
+                color: app.color_scheme  # initially invisible
+                opacity: 0
+
 
             BoxLayout:
                 size_hint: (0.8, 0.08)
@@ -629,7 +616,7 @@ Builder.load_string('''
                     font_size: 50
                     font_name: 'zpix.ttf'
                     background_color: 0, 0, 0, 0
-                    color: 0.88, 0.47, 0.18, 1
+                    color: app.color_scheme
                     on_press: root.toggle_answer()
                     canvas.before:
                         Color:
@@ -639,7 +626,7 @@ Builder.load_string('''
                             size: self.size
                             radius: [5]
                         Color:
-                            rgba: 0.88, 0.47, 0.18, 1 # Border color
+                            rgba: app.color_scheme # Border color
                         Line:
                             width: 1
                             rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
@@ -650,7 +637,7 @@ Builder.load_string('''
                     font_size: 50
                     font_name: 'zpix.ttf'
                     background_color: 0, 0, 0, 0
-                    color: 0.88, 0.47, 0.18, 1
+                    color: app.color_scheme
                     on_press: root.next_question()
                     canvas.before:
                         Color:
@@ -660,22 +647,12 @@ Builder.load_string('''
                             size: self.size
                             radius: [5]
                         Color:
-                            rgba: 0.88, 0.47, 0.18, 1  # Border color
+                            rgba: app.color_scheme # Border color
                         Line:
                             width: 1
                             rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
 
 <ToDoScreen>:
-    canvas.before:
-        Rectangle:
-            source: 'bg2.jpg'
-            pos: self.pos
-            size: self.size        
-        Color:
-            rgba: 0, 0, 0, 0.5
-        Rectangle:
-            pos: self.pos
-            size: self.size
 
     BoxLayout:
         orientation: 'vertical'
@@ -696,7 +673,7 @@ Builder.load_string('''
                 size_hint_x: 0.9
                 valign: 'center'
                 halign: 'right'
-                color: 0.88, 0.47, 0.18, 1
+                color: app.color_scheme
                 text_size: self.width, None
             
             # Back button container
@@ -715,7 +692,7 @@ Builder.load_string('''
                     pos_hint: {'right': 1, 'center_y': 0.5}
                     background_normal: ''
                     background_color: 0, 0, 0, 0
-                    color: 0.88, 0.47, 0.18, 1
+                    color: app.color_scheme
                     canvas.before:
                         Color:
                             rgba: 0, 0, 0, 0.5
@@ -724,7 +701,7 @@ Builder.load_string('''
                             size: self.size
                             radius: [5]
                         Color:
-                            rgba: 0.88, 0.47, 0.18, 1
+                            rgba: app.color_scheme
                         Line:
                             width: 1.5
                             rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
@@ -743,6 +720,7 @@ Builder.load_string('''
                 # Task buttons
                 TaskButton:
                     text: 'Drink Water Lots'
+                    color: app.color_scheme
                     on_press: root.toggle_task(self)
                 TaskButton:
                     text: 'Do Quiz'
@@ -786,7 +764,7 @@ Builder.load_string('''
                 halign: 'center'
                 background_normal: ''
                 background_color: 0, 0, 0, 0
-                color: 0.88, 0.47, 0.18, 1
+                color: app.color_scheme
                 on_press: root.send_email()
                 canvas.before:
                     Color:
@@ -796,7 +774,7 @@ Builder.load_string('''
                         size: self.size
                         radius: [5]
                     Color:
-                        rgba: 0.88, 0.47, 0.18, 1
+                        rgba: app.color_scheme
                     Line:
                         width: 1
                         rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
@@ -809,31 +787,21 @@ Builder.load_string('''
     pos_hint: {'center_x': 0.5}
     background_normal: ''
     background_color: 0, 0, 0, 0.5
-    color: 0.88, 0.47, 0.18, 1
+    color: app.color_scheme
     canvas.before:
         Color:
-            rgba: 0, 0, 0, 0.5
+            rgba: app.color_scheme
         RoundedRectangle:
             pos: self.pos
             size: self.size
             radius: [5]
         Color:
-            rgba: 0.88, 0.47, 0.18, 1
+            rgba: app.color_scheme
         Line:
             width: 1
             rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
                     
 <NotesScreen>:
-    canvas.before:
-        Rectangle:
-            source: 'bg2.jpg'
-            pos: self.pos
-            size: self.size        
-        Color:
-            rgba: 0, 0, 0, 0.5
-        Rectangle:
-            pos: self.pos
-            size: self.size
 
     BoxLayout:
         orientation: 'vertical'
@@ -855,7 +823,7 @@ Builder.load_string('''
                 size_hint_x: 0.9
                 valign: 'center'
                 halign: 'right'
-                color: 0.82, 0.41, 0.12, 1
+                color: app.color_scheme
                 text_size: self.width, None
             
             # Back button container
@@ -874,7 +842,7 @@ Builder.load_string('''
                     pos_hint: {'right': 1, 'center_y': 0.5}
                     background_normal: ''
                     background_color: 0, 0, 0, 0
-                    color: 0.88, 0.47, 0.18, 1
+                    color: app.color_scheme
                     canvas.before:
                         Color:
                             rgba: 0, 0, 0, 0.5
@@ -883,7 +851,7 @@ Builder.load_string('''
                             size: self.size
                             radius: [5]
                         Color:
-                            rgba: 0.88, 0.47, 0.18, 1
+                            rgba: app.color_scheme
                         Line:
                             width: 1.5
                             rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
@@ -902,21 +870,19 @@ Builder.load_string('''
                 font_size: 40
                 size_hint_y: 0.4
                 background_color: (0, 0, 0, 0.5)
-                foreground_color: (0.88, 0.47, 0.18, 1)
-                cursor_color: (0.88, 0.47, 0.18, 1)
+                foreground_color: app.color_scheme
+                cursor_color: app.color_scheme
                 multiline: True
                     
-        
-        # Notes display area
         ScrollView:
-            size_hint_y: 0.63
+            size_hint_y: 0.6           
             BoxLayout:
                 id: notes_container
                 orientation: 'vertical'
-                size_hint_y: None
+                size_hint: (1, None)
                 height: self.minimum_height
-                padding: [20, 10]
                 spacing: 20
+                padding: [20, 20]
 
         # Submit button area (10%)
         BoxLayout:
@@ -935,7 +901,7 @@ Builder.load_string('''
                 halign: 'center'
                 background_normal: ''
                 background_color: 0, 0, 0, 0
-                color: 0.88, 0.47, 0.18, 1
+                color: app.color_scheme
                 on_press: root.save_note()
                 canvas.before:
                     Color:
@@ -945,16 +911,327 @@ Builder.load_string('''
                         size: self.size
                         radius: [5]
                     Color:
-                        rgba: 0.88, 0.47, 0.18, 1
+                        rgba: app.color_scheme
                     Line:
                         width: 1
                         rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
                     
+<SettingsScreen>:
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: [20, 10]
+        spacing: 20
+        
+        # Back button at top
+        BoxLayout:
+            size_hint_y: 0.1
+            Button:
+                text: 'O.o'
+                on_press: root.back_to_root()
+                font_size: 20
+                font_name: app.current_font
+                size_hint: None, None
+                size: 50, 50
+                pos_hint: {'right': 1, 'center_y': 0.5}
+                background_normal: ''
+                background_color: 0, 0, 0, 0
+                color: app.color_scheme
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 0.5
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [5]
+                    Color:
+                        rgba: app.color_scheme
+                    Line:
+                        width: 1.5
+                        rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+        
+        ScrollView:
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: 30
+                padding: [20, 20]
+                pos_hint: {'center_x': 0.5}  # Center horizontally
+                                    
+                # Sound Section
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: 150
+                    size_hint_x: 0.8  # Take 80% width
+                    pos_hint: {'center_x': 0.5}  # Center horizontally
+
+                    Label:
+                        text: 'Sound'
+                        font_size: 50
+                        font_name: app.current_font
+                        size_hint_y: 0.4
+                        color: app.color_scheme
+                        canvas.before:
+                            Color:
+                                rgba: 0, 0, 0, 0.5
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [5]
+                            Color:
+                                rgba: app.color_scheme
+                            Line:
+                                width: 1
+                                rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
                     
+                    BoxLayout:
+                        size_hint_y: 0.6
+                        spacing: 10
+                        Button:
+                            text: 'Jazz'
+                            font_size: 30
+                            on_press: app.change_music('music1.mp3')
+                            font_name: app.current_font
+                            background_normal: ''
+                            background_color: 0, 0, 0, 0.5
+                            color: app.color_scheme
+                        Button:
+                            text: 'Trip'
+                            font_size: 30
+                            on_press: app.change_music('music2.mp3')
+                            font_name: app.current_font
+                            background_normal: ''
+                            background_color: 0, 0, 0, 0.5
+                            color: app.color_scheme
+                        Button:
+                            text: 'Silly'
+                            font_size: 30
+                            on_press: app.change_music('music3.mp3')
+                            font_name: app.current_font
+                            background_normal: ''
+                            background_color: 0, 0, 0, 0.5
+                            color: app.color_scheme
+                
+                # Look Section
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: 150
+                    size_hint_x: 0.8  # Take 80% width
+                    pos_hint: {'center_x': 0.5}  # Center horizontally
+
+                    Label:
+                        text: 'Look'
+                        font_size: 50
+                        font_name: app.current_font
+                        size_hint_y: 0.4
+                        color: app.color_scheme
+                        canvas.before:
+                            Color:
+                                rgba: 0, 0, 0, 0.5
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [5]
+                            Color:
+                                rgba: app.color_scheme
+                            Line:
+                                width: 1
+                                rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+                    
+                    BoxLayout:
+                        size_hint_y: 0.6
+                        spacing: 10
+                        Button:
+                            text: 'Dark'
+                            font_size: 30
+                            on_press: app.change_color_scheme('Dark')
+                            font_name: app.current_font
+                            background_normal: ''
+                            background_color: 0, 0, 0, 0.5
+                            color: app.color_scheme
+                        Button:
+                            text: 'Techno'
+                            font_size: 30
+                            on_press: app.change_color_scheme('Techno')
+                            font_name: app.current_font
+                            background_normal: ''
+                            background_color: 0, 0, 0, 0.5
+                            color: app.color_scheme
+                        Button:
+                            text: 'Dull'
+                            font_size: 30
+                            on_press: app.change_color_scheme('Dull')
+                            font_name: app.current_font
+                            background_normal: ''
+                            background_color: 0, 0, 0, 0.5
+                            color: app.color_scheme
+                
+                # Image Section
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: 150
+                    size_hint_x: 0.8  # Take 80% width
+                    pos_hint: {'center_x': 0.5}  # Center horizontally
+
+                    Label:
+                        text: 'Image'
+                        font_size: 50
+                        font_name: app.current_font
+                        size_hint_y: 0.4
+                        color: app.color_scheme
+                        canvas.before:
+                            Color:
+                                rgba: 0, 0, 0, 0.5
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [5]
+                            Color:
+                                rgba: app.color_scheme
+                            Line:
+                                width: 1
+                                rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+                    
+                    BoxLayout:
+                        size_hint_y: 0.6
+                        spacing: 10
+                        Button:
+                            text: 'You'
+                            font_size: 30
+                            on_press: app.change_bg_image('bg1.jpg')
+                            font_name: app.current_font
+                            background_normal: ''
+                            background_color: 0, 0, 0, 0.5
+                            color: app.color_scheme
+                        Button:
+                            text: 'Me'
+                            font_size: 30
+                            on_press: app.change_bg_image('bg2.jpg')
+                            font_name: app.current_font
+                            background_normal: ''
+                            background_color: 0, 0, 0, 0.5
+                            color: app.color_scheme
+                        Button:
+                            text: 'Who'
+                            font_size: 30
+                            on_press: app.change_bg_image('bg3.jpg')
+                            font_name: app.current_font
+                            background_normal: ''
+                            background_color: 0, 0, 0, 0.5
+                            color: app.color_scheme
+                
+                # Font Section
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: 150
+                    size_hint_x: 0.8  # Take 80% width
+                    pos_hint: {'center_x': 0.5}  # Center horizontally
+
+                    Label:
+                        text: 'Font'
+                        font_size: 50
+                        font_name: app.current_font
+                        size_hint_y: 0.4
+                        color: app.color_scheme
+                        canvas.before:
+                            Color:
+                                rgba: 0, 0, 0, 0.5
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [5]
+                            Color:
+                                rgba: app.color_scheme
+                            Line:
+                                width: 1
+                                rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+                    
+                    BoxLayout:
+                        size_hint_y: 0.6
+                        spacing: 10
+                        Button:
+                            text: 'Old'
+                            font_size: 30
+                            on_press: app.change_font('RomanAntique.ttf')
+                            font_name: app.current_font
+                            background_normal: ''
+                            background_color: 0, 0, 0, 0.5
+                            color: app.color_scheme
+                        Button:
+                            text: 'New'
+                            font_size: 30
+                            on_press: app.change_font('Tox.ttf')
+                            font_name: app.current_font
+                            background_normal: ''
+                            background_color: 0, 0, 0, 0.5
+                            color: app.color_scheme
+                        Button:
+                            text: 'Both'
+                            font_size: 30
+                            on_press: app.change_font('zpix.ttf')
+                            font_name: app.current_font
+                            background_normal: ''
+                            background_color: 0, 0, 0, 0.5
+                            color: app.color_scheme                    
 ''')
 
+class BaseScreen(Screen):
+    current_date = StringProperty() 
     
-class PasscodeScreen(Screen):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.bind(on_pre_enter=self.update_style)
+        self.bind(size=self._update_rect, pos=self._update_rect)
+        
+        # Initialize canvas elements
+        with self.canvas.before:
+            # Background image (drawn first)
+            self.bg_image = Rectangle(source='', pos=self.pos, size=self.size)
+            # Semi-transparent overlay (drawn on top of image)
+            Color(0, 0, 0, 0.5)
+            self.bg_overlay = Rectangle(pos=self.pos, size=self.size)
+    
+    def update_child_colors(self, widget=None):
+        """Recursively update colors for all widgets"""
+        widget = widget or self
+        app = App.get_running_app()
+        
+        if hasattr(widget, 'color'):
+            widget.color = app.color_scheme
+        if hasattr(widget, 'font_name'):
+            widget.font_name = app.current_font
+            
+        if hasattr(widget, 'children'):
+            for child in widget.children:
+                self.update_child_colors(child)
+    
+    def _update_rect(self, instance, value):
+        """Update rectangle positions/sizes when screen changes"""
+        self.bg_image.pos = self.pos
+        self.bg_image.size = self.size
+        self.bg_overlay.pos = self.pos
+        self.bg_overlay.size = self.size
+    
+    def update_style(self, *args):
+        """Update visual elements when screen becomes active"""
+        app = App.get_running_app()
+        # Update background image
+        self.bg_image.source = app.current_bg_image
+        # Force reload of the image
+        self.bg_image.source = ''
+        self.bg_image.source = app.current_bg_image
+
+class SettingsScreen(BaseScreen):
+    def back_to_root(self):
+        self.manager.transition = SlideTransition(direction='left')
+        self.manager.current = 'menu'
+    
+class PasscodeScreen(BaseScreen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.correct_passcode = "6969"  # Default passcode, you can change this
@@ -981,77 +1258,74 @@ class PasscodeScreen(Screen):
         Animation(opacity=1, duration=0.3).start(self.ids.error_label)
         Clock.schedule_once(lambda dt: Animation(opacity=0, duration=1).start(self.ids.error_label), 3)
 
-class NotesScreen(Screen):
-    current_date = StringProperty() # fix for traceback when calling current_date in builder
+class NotesScreen(BaseScreen):
+    notes = ListProperty([])  # Add this property
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.bind(notes=self.update_note_display)  # Bind to notes changes
+        Clock.schedule_once(lambda dt: self.update_note_colors(), 0.1)
         # Use app's data directory for Android compatibility
         self.notes_file = os.path.join(App.get_running_app().user_data_dir, 'notes.txt')
         self.current_date = datetime.now().strftime("%Y-%m-%d")
         self.load_notes()
-        
+
+    def update_note_colors(self):
+        """Update colors for all existing notes"""
+        app = App.get_running_app()
+        for child in self.ids.notes_container.children:
+            if isinstance(child, Label):
+                child.color = app.color_scheme
+                child.font_name = app.current_font
+    
+    def update_note_display(self, instance, notes):
+        """Update the notes display with proper spacing"""
+        notes_container = self.ids.notes_container
+        notes_container.clear_widgets()
+        notes_container.spacing = '20dp'  # Increased spacing between notes
+
+        label_width = Window.width * 0.95
+        for note in reversed(notes):  # Show newest first
+            lbl = Label(
+                text=note,
+                font_size='30sp',
+                font_name=App.get_running_app().current_font,
+                size_hint_y=None,
+                size_hint_x=1, # take full available width
+                height='60dp',  # Increased line height
+                halign='left',
+                valign='top',
+                color=App.get_running_app().color_scheme,
+                text_size=(label_width-20, None), # resized after new note is added
+                padding=(20, 15),  # Increased padding
+                markup=True,
+                shorten=False
+            )
+            
+            notes_container.add_widget(lbl)
+
     def on_pre_enter(self, *args):
         self.load_notes()
         
     def load_notes(self):
         try:
-            # Ensure directory exists
-            os.makedirs(os.path.dirname(self.notes_file), exist_ok=True)
-            
-            # Read or create file
-            with open(self.notes_file, 'a+') as f:  # 'a+' creates file if it doesn't exist
-                f.seek(0)
-                notes = f.read().splitlines()
+            with open(self.notes_file, 'r') as f:
+                self.notes = [line.strip() for line in f.readlines() if line.strip()]
         except Exception as e:
             print(f"Error loading notes: {e}")
-            notes = []
-            
-        # Clear existing notes
-        notes_container = self.ids.notes_container
-        notes_container.clear_widgets()
-        
-        # Add existing notes with proper height calculation
-        for note in notes:
-            if note.strip():  # Skip empty lines
-                # Calculate required height based on text length
-                text_width = Window.width * 0.9 - 30  # Account for padding
-                font_size = 40
-                char_width = font_size * 0.6  # Approximate character width
-                max_chars_per_line = text_width / char_width
-                line_count = max(1, len(note) / max_chars_per_line)
-                label_height = max(40, (line_count + 1) * font_size)
-                
-                lbl = Label(
-                    text=note,
-                    font_size=font_size,
-                    font_name='zpix.ttf',
-                    size_hint_y=None,
-                    height=label_height,
-                    halign='left',
-                    valign='top',
-                    color=(0.88, 0.47, 0.18, 1),
-                    text_size=(text_width, None),
-                    padding=(10, 10),
-                    shorten=False
-                )
-                notes_container.add_widget(lbl)
+            self.notes = []
                 
     def save_note(self):
         note_text = self.ids.note_input.text.strip()
-        note_text = self.current_date + ': ' + note_text # format note with date added
         if note_text:
             try:
-                # Ensure directory exists
-                os.makedirs(os.path.dirname(self.notes_file), exist_ok=True)
-                
+                note_text = f"{self.current_date}: {note_text}"
                 with open(self.notes_file, 'a') as f:
                     f.write(note_text + '\n')
                 self.ids.note_input.text = ''
-                self.load_notes()
+                self.notes.append(note_text)  # Update the notes property
             except Exception as e:
                 print(f"Error saving note: {e}")
-                self.show_error_popup(f"Failed to save note: {str(e)}")
                 
     def show_error_popup(self, message):
         content = BoxLayout(orientation='vertical', padding=10)
@@ -1092,13 +1366,38 @@ class NotesScreen(Screen):
         self.manager.transition = SlideTransition(direction='left')
         self.manager.current = 'menu'
 
-class DevModeScreen(Screen):
+class DevModeScreen(BaseScreen):
+    show_answer = BooleanProperty(False)
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.bind(show_answer=self.update_answer_visibility)
+        # Bind to app properties
+        App.get_running_app().bind(
+            color_scheme=self.update_answer_style,
+            current_font=self.update_answer_style
+        )
         self.questions = []
         self.current_index = 0
         self.topics = []
         self.load_topics()
+
+    def update_answer_visibility(self, instance, value):
+        """Toggle answer visibility"""
+        if value and self.current_index < len(self.questions):
+            self.ids.answer_label.opacity = 1
+        else:
+            self.ids.answer_label.opacity = 0
+    
+    def update_answer_style(self, *args):
+        """Update answer label style dynamically"""
+        app = App.get_running_app()
+        answer_label = self.ids.answer_label
+        answer_label.color = app.color_scheme
+        answer_label.font_name = app.current_font
+        
+        # Force texture update
+        answer_label.texture_update()
 
     def on_pre_enter(self, *args):
         self.load_topics()
@@ -1114,35 +1413,41 @@ class DevModeScreen(Screen):
             self.ids.topic_spinner.values = []
 
     def load_questions(self):
-        topic = (self.ids.topic_spinner.text).lower() # change displayed topic into proper lower case for loading
-        if not topic or topic == 'Topics':
-            return
-
         try:
-            with open(f'kw_{topic}.json', 'r', encoding='utf-8') as f: # ensures chinese encoding             
+            topic = self.ids.topic_spinner.text.lower()
+            if not topic or topic == 'topics':
+                return
+                
+            if not os.path.exists(f'kw_{topic}.json'):
+                raise FileNotFoundError(f"kw_{topic}.json not found")
+                
+            with open(f'kw_{topic}.json', 'r', encoding='utf-8') as f:
                 self.questions = json.load(f)
                 random.shuffle(self.questions)
                 self.current_index = 0
                 self.show_question()
-        except Exception as e:
-            print(f"Error loading questions: {e}")
+                
+        except:
+            pass
 
     def show_question(self):
         if self.current_index < len(self.questions):
             question, answer = self.questions[self.current_index]
-            self.ids.question_label.text = f"{question}"
-            self.ids.answer_label.text = f"{answer}"
-            self.ids.answer_label.color = (0, 0, 0, 0)  # Hide answer
+            self.ids.question_label.text = question
+            self.ids.answer_label.text = answer
+            self.show_answer = False  # Reset visibility
+            # Update style immediately
+            #self.update_answer_style()
         else:
             self.ids.question_label.text = "No more questions!"
             self.ids.answer_label.text = ""
             self.ids.answer_label.color = (0, 0, 0, 0)
 
     def toggle_answer(self):
-        if self.ids.answer_label.color[3] == 0:
-            self.ids.answer_label.color = (0.91, 0.59, 0.31, 1)
+        if self.ids.answer_label.opacity == 0:
+            self.ids.answer_label.opacity = 1
         else:
-            self.ids.answer_label.color = (0, 0, 0, 0)
+            self.ids.answer_label.opacity = 0
 
     def next_question(self):
         self.current_index += 1
@@ -1309,7 +1614,7 @@ class InsightPopup(Popup):
                     break
         self.dismiss()
 
-class MenuScreen(Screen):
+class MenuScreen(BaseScreen):
     def switch_to_dev_mode(self):
         sm = self.manager       # Access the screen manager
         sm.transition = SlideTransition(direction='left')       # Set transition direction
@@ -1335,10 +1640,15 @@ class MenuScreen(Screen):
         sm.transition = SlideTransition(direction='left')
         sm.current = 'sauce'
 
+    def switch_to_settings(self):
+        sm = self.manager
+        sm.transition = SlideTransition(direction='left')
+        sm.current = 'settings'
+
     def quit(self):
         sys.exit()
 
-class QuizScreen(Screen):
+class QuizScreen(BaseScreen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.codes = {'5-8':'73113'}  # Example: code '73113' will access topics index 5-8
@@ -1406,8 +1716,7 @@ class QuizScreen(Screen):
         self.manager.transition = SlideTransition(direction='left')
         self.manager.current = 'menu'
 
-class ToDoScreen(Screen):
-    current_date = StringProperty() # fix for traceback when calling current_date in builder
+class ToDoScreen(BaseScreen):
     insight_text = StringProperty("")  # To store the insight text
 
     def __init__(self, **kwargs):
@@ -1502,23 +1811,105 @@ class ToDoScreen(Screen):
 
 # Update the KeyWizApp class to store the background music reference
 class KeyWizApp(App):
+    current_bg_music = StringProperty('music.mp3')
+    current_bg_image = StringProperty('bg2.jpg')
+    current_font = StringProperty('zpix.ttf')
+    color_scheme = ListProperty([0.88, 0.47, 0.18, 1])  # Default orange-brown
+    
+    # Color schemes
+    COLOR_SCHEMES = {
+        'Dark': [0.88, 0.47, 0.18, 1],  # Original orange-brown
+        'Techno': [0.2, 0.6, 1, 1],      # Blue
+        'Dull': [0.5, 0.5, 0.5, 1]       # Gray
+    }
     def build(self):
         Window.clearcolor = (0.05, 0.05, 0.05, 1) 
-        from kivy.clock import Clock
-        Clock.schedule_once(lambda dt: Window.canvas.ask_update(), 0.1)
-        self.background_music = SoundLoader.load('music.mp3')  # Store as instance variable
+        self.background_music = SoundLoader.load(self.current_bg_music)
         if self.background_music:
             self.background_music.loop = True
             self.background_music.play()
+        
         sm = ScreenManager()
-        sm.add_widget(PasscodeScreen(name='passcode'))
-        sm.add_widget(MenuScreen(name='menu'))
-        sm.add_widget(DevModeScreen(name='dev_mode'))
-        sm.add_widget(QuizScreen(name='quiz_mode'))
-        sm.add_widget(ToDoScreen(name='todo'))
-        sm.add_widget(NotesScreen(name='notes'))
+        screens = [
+            PasscodeScreen(name='passcode'),
+            MenuScreen(name='menu'),
+            DevModeScreen(name='dev_mode'),
+            QuizScreen(name='quiz_mode'),
+            ToDoScreen(name='todo'),
+            NotesScreen(name='notes'),
+            SettingsScreen(name='settings')
+        ]
+        
+        for screen in screens:
+            sm.add_widget(screen)
+        
         sm.current = 'passcode'
         return sm
+    
+    def update_all_screens(self):
+        """Update all screens with current settings"""
+        for screen in self.root.screens:
+            if hasattr(screen, 'update_style'):
+                screen.update_style()
+    
+    def update_widget_colors(self, widget):
+        """Recursively update colors for widget and its children"""
+        if hasattr(widget, 'color'):
+            # Skip special labels that shouldn't change color
+            if not hasattr(widget, 'id') or ('error_label' not in widget.id and 'answer_label' not in widget.id):
+                widget.color = self.color_scheme
+        
+        # Update canvas instructions
+        if hasattr(widget, 'canvas'):
+            self.update_canvas_colors(widget.canvas)
+            if hasattr(widget, 'canvas_before'):
+                self.update_canvas_colors(widget.canvas.before)
+            if hasattr(widget, 'canvas_after'):
+                self.update_canvas_colors(widget.canvas.after)
+        
+        # Recursively update children
+        if hasattr(widget, 'children'):
+            for child in widget.children:
+                self.update_widget_colors(child)
+    
+    def update_canvas_colors(self, canvas):
+        """Update color instructions in a canvas"""
+        # We can't iterate directly, so we need to handle this differently
+        # The background updates are already handled in update_all_screens
+        pass
+
+    def change_music(self, music_file):
+        if self.background_music:
+            self.background_music.stop()
+        self.current_bg_music = music_file
+        self.background_music = SoundLoader.load(music_file)
+        if self.background_music:
+            self.background_music.loop = True
+            self.background_music.play()
+    
+    def change_color_scheme(self, scheme_name):
+        self.color_scheme = self.COLOR_SCHEMES.get(scheme_name, [0.88, 0.47, 0.18, 1])
+        for screen in self.root.screens:
+            if hasattr(screen, 'update_child_colors'):
+                screen.update_child_colors()
+    
+    def change_bg_image(self, image_file):
+        """Change background image for all screens"""
+        # Verify the file exists first
+        if not os.path.exists(image_file):
+            print(f"Error: Background image {image_file} not found!")
+            return
+            
+        self.current_bg_image = image_file
+        self.update_all_screens()
+
+    def change_font(self, font_file):
+        self.current_font = font_file
+        # Force refresh all screens
+        for screen in self.root.screens:
+            for child in screen.walk():
+                if hasattr(child, 'font_name'):
+                    child.font_name = font_file
 
 if __name__ == '__main__':
     KeyWizApp().run()
