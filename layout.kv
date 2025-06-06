@@ -391,6 +391,31 @@
             spacing: 20
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 
+            Button:
+                text: 'New/Edit'
+                font_size: 50
+                font_name: 'zpix.ttf'
+                size_hint: (0.8, 0.06)
+                valign: 'top'
+                halign: 'center'
+                pos_hint: {'center_x': 0.5}
+                background_normal: ''
+                background_color: 0, 0, 0, 0
+                color: app.color_scheme
+                on_press: root.switch_to_edit_mode()
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 0.5
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [5]
+                    Color:
+                        rgba: app.color_scheme
+                    Line:
+                        width: 1
+                        rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+
             Spinner:
                 id: topic_spinner
                 text: 'Topics'
@@ -1100,3 +1125,191 @@
                             background_normal: ''
                             background_color: 0, 0, 0, 0.5
                             color: app.color_scheme                    
+
+<EditTopicScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 0
+        spacing: 0
+
+        # Header - fixed at top (10% height)
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: 0.1
+            padding: [10, 0, 10, 0]
+
+            RollingQuoteLabel:
+                id: rolling_quote
+                text: "In Key-Wiz We Trust"
+                font_size: 40
+                font_name: 'zpix.ttf'
+                size_hint_x: 0.9
+                valign: 'center'
+                halign: 'right'
+                color: app.color_scheme
+                text_size: self.width, None
+            
+            BoxLayout:
+                size_hint_x: 0.1
+                padding: [0, 10, 0, 10]
+                
+                Button:
+                    id: back_button
+                    text: 'O.o'
+                    on_press: root.back_to_dev_mode()
+                    font_size: 35
+                    font_name: 'zpix.ttf'
+                    size_hint: None, None
+                    size: 60, 60
+                    pos_hint: {'right': 1, 'center_y': 0.5}
+                    background_normal: ''
+                    background_color: 0, 0, 0, 0
+                    color: app.color_scheme
+                    canvas.before:
+                        Color:
+                            rgba: 0, 0, 0, 0.5
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [5]
+                        Color:
+                            rgba: app.color_scheme
+                        Line:
+                            width: 1.5
+                            rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+
+        # Main content area - properly centered
+        AnchorLayout:
+            size_hint: 1, 0.9
+            anchor_x: 'center'
+            
+            ScrollView:
+                size_hint: (0.8, 1)
+                do_scroll_x: False  # Only vertical scrolling
+                
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: self.minimum_height
+                    spacing: 20
+                    padding: [0, 20]  # Only vertical padding
+                    width: self.parent.width  # Match ScrollView width
+                    
+                    # Topic input section
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        size_hint_y: None
+                        height: 80
+                        spacing: 10
+
+                        TextInput:
+                            id: topic_input
+                            hint_text: 'Enter topic name'
+                            font_size: 40
+                            font_name: 'zpix.ttf'
+                            size_hint_x: 0.7
+                            background_color: 0, 0, 0, 0.5
+                            foreground_color: app.color_scheme
+                            cursor_color: app.color_scheme
+                            multiline: False
+
+                        Button:
+                            text: 'Select'
+                            font_size: 30
+                            font_name: 'zpix.ttf'
+                            size_hint_x: 0.3
+                            background_normal: ''
+                            background_color: 0, 0, 0, 0
+                            color: app.color_scheme
+                            on_press: root.check_topic()
+                            canvas.before:
+                                Color:
+                                    rgba: 0, 0, 0, 0.5
+                                RoundedRectangle:
+                                    pos: self.pos
+                                    size: self.size
+                                    radius: [5]
+                                Color:
+                                    rgba: app.color_scheme
+                                Line:
+                                    width: 1
+                                    rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+                    
+                    # Status label
+                    Label:
+                        id: status_label
+                        text: ''
+                        font_size: 40
+                        font_name: 'zpix.ttf'
+                        size_hint_y: None
+                        height: 50
+                        color: app.color_scheme
+                        halign: 'center'
+
+                    # Question input
+                    Label:
+                        text: 'Question:'
+                        font_size: 40
+                        font_name: 'zpix.ttf'
+                        size_hint_y: None
+                        height: 50
+                        color: app.color_scheme
+                        halign: 'center'
+
+                    TextInput:
+                        id: question_input
+                        font_size: 40
+                        font_name: 'zpix.ttf'
+                        size_hint_y: None
+                        height: 150
+                        background_color: 0, 0, 0, 0.5
+                        foreground_color: app.color_scheme
+                        cursor_color: app.color_scheme
+                        multiline: True
+                        padding: [10, 10]
+
+                    # Answer input
+                    Label:
+                        text: 'Answer:'
+                        font_size: 40
+                        font_name: 'zpix.ttf'
+                        size_hint_y: None
+                        height: 50
+                        color: app.color_scheme
+                        halign: 'center'
+
+                    TextInput:
+                        id: answer_input
+                        font_size: 40
+                        font_name: 'zpix.ttf'
+                        size_hint_y: None
+                        height: 150
+                        background_color: 0, 0, 0, 0.5
+                        foreground_color: app.color_scheme
+                        cursor_color: app.color_scheme
+                        multiline: True
+                        padding: [10, 10]
+
+                    # Add button
+                    Button:
+                        text: 'Add Question'
+                        font_size: 50
+                        font_name: 'zpix.ttf'
+                        size_hint_y: None
+                        height: 80
+                        background_normal: ''
+                        background_color: 0, 0, 0, 0
+                        color: app.color_scheme
+                        on_press: root.add_question()
+                        canvas.before:
+                            Color:
+                                rgba: 0, 0, 0, 0.5
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [5]
+                            Color:
+                                rgba: app.color_scheme
+                            Line:
+                                width: 1
+                                rounded_rectangle: (self.x, self.y, self.width, self.height, 5)

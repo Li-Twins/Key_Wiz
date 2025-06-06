@@ -217,19 +217,23 @@ class NotesScreen(BaseScreen):
 
 class DevModeScreen(BaseScreen):
     show_answer = BooleanProperty(False)
+    edit_mode = BooleanProperty(False)  # New property to track edit mode
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.bind(show_answer=self.update_answer_visibility)
-        # Bind to app properties
         App.get_running_app().bind(
             color_scheme=self.update_answer_style,
             current_font=self.update_answer_style
-        )
+        )         # Bind to app properties
         self.questions = []
         self.current_index = 0
         self.topics = []
         self.load_topics()
+
+    def switch_to_edit_mode(self):
+        self.manager.transition = SlideTransition(direction='left')
+        self.manager.current = 'edit_topic'
 
     def update_answer_visibility(self, instance, value):
         """Toggle answer visibility"""
@@ -307,6 +311,83 @@ class DevModeScreen(BaseScreen):
         sm = self.manager       # Access the screen manager
         sm.transition = SlideTransition(direction='left')       # Set transition direction
         sm.current = 'menu'         # Change screen
+
+class EditTopicScreen(BaseScreen):
+    current_topic = StringProperty('')
+    topic_exists = BooleanProperty(False)
+    
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.topic_file = ''
+        
+    def check_topic(self):
+        topic_name = self.ids.topic_input.text.strip().lower()
+        if not topic_name:
+            self.ids.status_label.text = "enter topic name"
+            return
+            
+        self.current_topic = topic_name
+        self.topic_file = f'kw_{self.current_topic}.json'
+        self.topic_exists = os.path.exists(self.topic_file)
+        
+        if self.topic_exists:
+            try:
+                with open(self.topic_file, 'r', encoding='utf-8') as f:
+                    questions = json.load(f)
+                self.ids.status_label.text = f"'{self.current_topic}' ({len(questions)})"
+            except Exception as e:
+                self.ids.status_label.text = f"Error loading topic: {str(e)}"
+        else:
+            self.ids.status_label.text = f"New topic: '{self.current_topic}'"
+    
+    def add_question(self):
+        if not self.current_topic:
+            self.ids.status_label.text = "Please input a topic first"
+            return
+            
+        question = self.ids.question_input.text.strip()
+        answer = self.ids.answer_input.text.strip()
+        
+        if not question or not answer:
+            self.ids.status_label.text = "Need both question and answer!"
+            return
+            
+        try:
+            # Load existing questions or create new list
+            questions = []
+            if os.path.exists(self.topic_file):
+                with open(self.topic_file, 'r', encoding='utf-8') as f:
+                    questions = json.load(f)
+            
+            # Add new question
+            questions.append([question, answer])
+            
+            # Save back to file
+            with open(self.topic_file, 'w', encoding='utf-8') as f:
+                json.dump(questions, f, ensure_ascii=False, indent=2)
+                
+            # Update topics list if this was a new topic
+            if not self.topic_exists:
+                dev_screen = self.manager.get_screen('dev_mode')
+                if self.current_topic not in dev_screen.topics:
+                    dev_screen.topics.append(self.current_topic)
+                    dev_screen.ids.topic_spinner.values = sorted([x.title() for x in dev_screen.topics])
+                    # Update topics.json
+                    with open('kw_topics.json', 'w') as f:
+                        json.dump(dev_screen.topics, f)
+                self.topic_exists = True
+                
+            # Update UI
+            self.ids.status_label.text = f"Added to '{self.current_topic}' ({len(questions)})"
+            self.ids.question_input.text = ''
+            self.ids.answer_input.text = ''
+            
+        except Exception as e:
+            self.ids.status_label.text = f"Error: {str(e)}"
+    
+    def back_to_dev_mode(self):
+        self.manager.transition = SlideTransition(direction='right')
+        self.manager.current = 'dev_mode'
 
 class RollingQuoteLabel(Label):
     def __init__(self, **kwargs):
@@ -696,7 +777,8 @@ class KeyWizApp(App):
             QuizScreen(name='quiz_mode'),
             ToDoScreen(name='todo'),
             NotesScreen(name='notes'),
-            SettingsScreen(name='settings')
+            SettingsScreen(name='settings'),
+            EditTopicScreen(name='edit_topic') 
         ]
         
         for screen in screens:
