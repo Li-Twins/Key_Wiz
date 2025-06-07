@@ -545,15 +545,16 @@ class InsightPopup(Popup):
         self.dismiss()
 
 class MenuScreen(BaseScreen):
+
+    app = ObjectProperty()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.app = App.get_running_app()
+        
     def switch_to_dev_mode(self):
         sm = self.manager       # Access the screen manager
         sm.transition = SlideTransition(direction='left')       # Set transition direction
         sm.current = 'dev_mode'         # Change screen
-
-    def switch_to_quiz_mode(self):
-        sm = self.manager       # Access the screen manager
-        sm.transition = SlideTransition(direction='left')       # Set transition direction
-        sm.current = 'quiz_mode'         # Change screen
 
     def switch_to_todo_mode(self):
         sm = self.manager
@@ -574,6 +575,59 @@ class MenuScreen(BaseScreen):
         sm = self.manager
         sm.transition = SlideTransition(direction='left')
         sm.current = 'settings'
+
+    def switch_to_quiz_mode(self):
+        # Create the content for the popup
+        content = BoxLayout(orientation='vertical', spacing=20, padding=20)
+        
+        # Add title label
+        title_label = Label(
+            text='QUIZ MODE',
+            font_size=30,
+            font_name='zpix.ttf',
+            color= self.app.color_scheme,
+            size_hint_y=0.2
+        )
+        content.add_widget(title_label)
+        
+        # Create buttons for each mode
+        modes = [
+            ('Single Minded', 'quiz_single'),
+            ('Golden Mean', 'golden_mean'),
+            ("Pandora's Box", 'quiz_all')
+        ]
+        
+        for mode_text, mode_id in modes:
+            btn = Button(
+                text=mode_text,
+                font_size=40,
+                font_name='zpix.ttf',
+                size_hint_y=0.2,
+                background_normal='',
+                background_color=(0, 0, 0, 0),
+                color= self.app.color_scheme
+            )
+            btn.bind(on_press=lambda instance, mode=mode_id: self.select_quiz_mode(mode))
+            content.add_widget(btn)
+        
+        # Create the popup
+        self.quiz_mode_popup = Popup(
+            title='',
+            content=content,
+            size_hint=(0.8, 0.8),
+            separator_height=0,
+            background='',
+            background_color=(0, 0, 0, 0.8)
+        )
+        
+        # Style the popup buttons 
+        self.quiz_mode_popup.open()
+
+    def select_quiz_mode(self, mode):
+        # Close the popup
+        self.quiz_mode_popup.dismiss()
+        self.manager.transition = SlideTransition(direction='left')
+        self.manager.current = mode
 
     def quit(self):
         sys.exit()
@@ -683,29 +737,21 @@ class ToDoScreen(BaseScreen):
             if self.insight_text:
                 body += "\n\nInsight:\n" + self.insight_text
             
-            # Run in a background thread
-            from threading import Thread
-            def send_in_background():
-                try:
-                    msg = MIMEText(body)
-                    msg['Subject'] = subject
-                    msg['From'] = sender
-                    msg['To'] = recipient
+            msg = MIMEText(body)
+            msg['Subject'] = subject
+            msg['From'] = sender
+            msg['To'] = recipient
                     
-                    # Use alternative port if needed
-                    with smtplib.SMTP_SSL('smtp.gmail.com', 465, timeout=10) as smtp:
-                        smtp.login(sender, password)
-                        smtp.send_message(msg)
+            # Send email
+            with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+                smtp.login(sender, password)
+                smtp.send_message(msg)
                     
-                    # Show success on UI thread
-                    Clock.schedule_once(lambda dt: self.show_popup("Success", "Email sent!"))
-                except Exception as e:
-                    Clock.schedule_once(lambda dt: self.show_popup("Error", f"Failed: {str(e)}"))
-            
-            Thread(target=send_in_background).start()
+            # Show confirmation
+            self.show_popup("Success", "Email sent successfully!")
             
         except Exception as e:
-            self.show_popup("Error", f"Failed to prepare email: {str(e)}")
+            self.show_popup("Error", f"Failed to send email: {str(e)}")
 
     def show_popup(self, title, message):
         content = BoxLayout(orientation='vertical', padding=10, spacing=10)
@@ -747,6 +793,192 @@ class ToDoScreen(BaseScreen):
         self.manager.transition = SlideTransition(direction='left')
         self.manager.current = 'menu'
 
+class QuizSingleScreen(BaseScreen):
+    show_answer = BooleanProperty(False)
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.bind(show_answer=self.update_answer_visibility)
+        App.get_running_app().bind(
+            color_scheme=self.update_answer_style,
+            current_font=self.update_answer_style
+        )         # Bind to app properties
+        self.questions = []
+        self.current_index = 0
+        self.topics = []
+        self.load_topics()
+
+    def update_answer_visibility(self, instance, value):
+        """Toggle answer visibility"""
+        if value and self.current_index < len(self.questions):
+            self.ids.answer_label.opacity = 1
+        else:
+            self.ids.answer_label.opacity = 0
+    
+    def update_answer_style(self, *args):
+        """Update answer label style dynamically"""
+        app = App.get_running_app()
+        answer_label = self.ids.answer_label
+        answer_label.color = app.color_scheme
+        answer_label.font_name = app.current_font
+        # Force texture update
+        answer_label.texture_update()
+
+    def on_pre_enter(self, *args):
+        self.load_topics()
+
+    def load_topics(self):
+        try:
+            with open('kw_topics.json', 'r') as f:
+                self.topics = json.load(f)
+                self.ids.topic_spinner.values = sorted([x.title() for x in self.topics]) # display topics as title
+        except Exception as e:
+            print(f"Error loading topics: {e}")
+            self.topics = []
+            self.ids.topic_spinner.values = []
+
+    def load_questions(self):
+        try:
+            topic = self.ids.topic_spinner.text.lower()
+            if not topic or topic == 'topics':
+                return
+                
+            if not os.path.exists(f'kw_{topic}.json'):
+                raise FileNotFoundError(f"kw_{topic}.json not found")
+                
+            with open(f'kw_{topic}.json', 'r', encoding='utf-8') as f:
+                self.questions = json.load(f)
+                random.shuffle(self.questions)
+                self.current_index = 0
+                self.show_question()
+                
+        except:
+            pass
+
+    def show_question(self):
+        if self.current_index < len(self.questions):
+            question, answer = self.questions[self.current_index]
+            self.ids.question_label.text = question
+            self.ids.answer_label.text = answer
+            self.show_answer = False  # Reset visibility
+            # Update style immediately
+            #self.update_answer_style()
+        else:
+            if self.questions:
+                random.shuffle(self.questions)
+                self.current_index = 0
+
+    def toggle_answer(self):
+        if self.ids.answer_label.opacity == 0:
+            self.ids.answer_label.opacity = 1
+        else:
+            self.ids.answer_label.opacity = 0
+
+    def next_question(self):
+        self.current_index += 1
+        self.ids.answer_label.opacity = 0
+        self.show_question()
+
+    def back_to_root(self):
+        sm = self.manager       # Access the screen manager
+        sm.transition = SlideTransition(direction='left')       # Set transition direction
+        sm.current = 'menu'         # Change screen
+
+    def mark_correct(self):
+        del self.questions[self.current_index]
+
+class QuizAllScreen(BaseScreen):
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        App.get_running_app().bind(
+            color_scheme=self.update_answer_style,
+            current_font=self.update_answer_style
+        )         # Bind to app properties
+        self.questions = []
+        self.current_index = 0
+        self.topics = []
+        self.correct_questions = 0
+        self.load_topics()
+
+    
+    def update_answer_style(self, *args):
+        """Update answer label style dynamically"""
+        app = App.get_running_app()
+        answer_label = self.ids.answer_label
+        answer_label.color = app.color_scheme
+        answer_label.font_name = app.current_font
+        
+        # Force texture update
+        answer_label.texture_update()
+
+    def on_pre_enter(self, *args):
+        self.load_topics()
+
+    def load_topics(self):
+        try:
+            with open('kw_topics.json', 'r') as f:
+                self.topics = json.load(f)
+                self.ids.topic_label.text = random.choice(self.topics)
+        except Exception as e:
+            print(f"Error loading topics: {e}")
+            self.topics = []
+
+    def load_questions(self):
+        try:
+            topic = self.ids.topic_label.text.lower()
+            if not topic or topic == 'topics':
+                return
+                
+            if not os.path.exists(f'kw_{topic}.json'):
+                raise FileNotFoundError(f"kw_{topic}.json not found")
+                
+            with open(f'kw_{topic}.json', 'r', encoding='utf-8') as f:
+                self.all_questions = json.load(f)
+                self.questions = random.choices(self.all_questions, k=10)
+                self.current_index = 0
+                self.show_question()
+                
+        except:
+            pass
+
+    def show_question(self):
+        if self.current_index < len(self.questions):
+            question, answer = self.questions[self.current_index]
+            self.ids.question_label.text = question
+            self.ids.answer_label.text = answer
+        else:
+            self.ids.question_label.text = f"Score: {self.correct_questions}"
+            self.ids.answer_label.text = ""
+            self.on_pre_enter()
+
+    def toggle_answer(self):
+        if self.ids.answer_label.opacity == 0:
+            self.ids.answer_label.opacity = 1
+        else:
+            self.ids.answer_label.opacity = 0
+
+    def next_question(self):
+        self.current_index += 1
+        self.ids.answer_label.opacity = 0
+        self.ids.correct_button.text = 'Correct'
+        self.ids.answer_input.text = ''
+        self.show_question()
+
+    def back_to_root(self):
+        sm = self.manager       # Access the screen manager
+        sm.transition = SlideTransition(direction='left')       # Set transition direction
+        sm.current = 'menu'         # Change screen
+
+    def mark_correct(self):
+        if self.ids.correct_button.text == 'Correct':
+            self.correct_questions += 1
+            self.ids.correct_button.text = str(self.correct_questions)
+        else:
+            self.correct_questions -= 1
+            self.ids.correct_button.text = 'Correct'
+        
+
 class KeyWizApp(App):
     current_bg_music = StringProperty('music.mp3')
     current_bg_image = StringProperty('bg2.jpg')
@@ -762,7 +994,6 @@ class KeyWizApp(App):
     def build(self):
         kv_file = os.path.join(os.path.dirname(__file__), 'layout.kv')
         Builder.load_file(kv_file)
-
         Window.clearcolor = (0.05, 0.05, 0.05, 1) 
         self.background_music = SoundLoader.load(self.current_bg_music)
         if self.background_music:
@@ -778,7 +1009,9 @@ class KeyWizApp(App):
             ToDoScreen(name='todo'),
             NotesScreen(name='notes'),
             SettingsScreen(name='settings'),
-            EditTopicScreen(name='edit_topic') 
+            EditTopicScreen(name='edit_topic'),
+            QuizSingleScreen(name='quiz_single'),
+            QuizAllScreen(name='quiz_all') 
         ]
         
         for screen in screens:

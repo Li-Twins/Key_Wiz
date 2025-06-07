@@ -10,7 +10,7 @@
         Label:
             text: 'ENTER PASSCODE'
             font_size: 40
-            font_name: 'zpix.ttf'
+            font_name: app.current_font
             color: app.color_scheme
             size_hint_y: 0.3
 
@@ -19,7 +19,7 @@
             password: True  # Hides input with dots
             multiline: False
             font_size: 40
-            font_name: 'zpix.ttf'
+            font_name: app.current_font
             size_hint_y: 0.2
             background_color: 0, 0, 0, 0.5
             foreground_color: 0.88, 0.47, 0.18, 1
@@ -31,14 +31,14 @@
             id: error_label
             text: ''
             font_size: 30
-            font_name: 'zpix.ttf'
+            font_name: app.current_font
             color: app.color_scheme # Starts invisible (alpha=0)
             size_hint_y: 0.2
 
         Button:
             text: 'SUBMIT'
             font_size: 40
-            font_name: 'zpix.ttf'
+            font_name: app.current_font
             size_hint_y: 0.2
             background_normal: ''
             background_color: 0, 0, 0, 0
@@ -58,6 +58,7 @@
                     rounded_rectangle: (self.x, self.y, self.width, self.height, 5)                    
 
 <QuizScreen>:
+
     
     FloatLayout:
         Button:
@@ -148,7 +149,7 @@
 
     GridLayout:
         cols: 2  # Two columns
-        rows: 3  # Three rows (will create 1x5 grid)
+        rows: 3  # Three rows (will create 2x3 grid)
         padding: [20, 20]
         spacing: 0
         size_hint: 0.9, 0.9
@@ -159,7 +160,7 @@
             text: 'Dev Mode'
             on_press: root.switch_to_dev_mode()
             font_size: 50
-            font_name: 'zpix.ttf'
+            font_name: app.current_font
             size_hint: (0.9, 0.9)
             valign: 'middle'
             halign: 'center'
@@ -183,7 +184,7 @@
             text: 'Quiz Run'
             on_press: root.switch_to_quiz_mode()
             font_size: 50
-            font_name: 'zpix.ttf'
+            font_name: app.current_font
             size_hint: (0.9, 0.9)
             valign: 'middle'
             halign: 'center'
@@ -208,7 +209,7 @@
             text: '2(0.d.0)'
             on_press: root.switch_to_todo_mode()
             font_size: 50
-            font_name: 'zpix.ttf'
+            font_name: app.current_font
             size_hint: (0.9, 0.9)
             valign: 'middle'
             halign: 'center'
@@ -232,7 +233,7 @@
             text: 'n0t3'
             on_press: root.switch_to_notes_mode()
             font_size: 50
-            font_name: 'zpix.ttf'
+            font_name: app.current_font
             size_hint: (0.9, 0.9)
             valign: 'middle'
             halign: 'center'
@@ -252,6 +253,7 @@
                     width: 1
                     rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
 
+        # Third row
         Button:
             text: 'SetTing'
             on_press: root.switch_to_settings()
@@ -280,7 +282,7 @@
             text: 'Exit >.<'
             on_press: root.quit()
             font_size: 50
-            font_name: 'zpix.ttf'
+            font_name: app.current_font
             size_hint: (0.9, 0.9)
             valign: 'middle'
             halign: 'center'
@@ -306,7 +308,7 @@
     background_color: (0, 0, 0, 0.5)
     color: app.color_scheme
     font_size: 30
-    font_name: 'zpix.ttf'
+    font_name: app.current_font
     height: '40dp'
     canvas.before:
         Color:
@@ -344,7 +346,7 @@
                     id: rolling_quote
                     text: "In Key-Wiz We Trust"
                     font_size: 40
-                    font_name: 'zpix.ttf'
+                    font_name: app.current_font
                     size_hint_x: 1
                     valign: 'center'
                     halign: 'right'
@@ -363,7 +365,7 @@
                     text: 'O.o'
                     on_press: root.back_to_root()
                     font_size: 35
-                    font_name: 'zpix.ttf'
+                    font_name: app.current_font
                     size_hint: None, None
                     size: 60, 60
                     pos_hint: {'right': 1, 'center_y': 0.5}
@@ -394,7 +396,7 @@
             Button:
                 text: 'New/Edit'
                 font_size: 50
-                font_name: 'zpix.ttf'
+                font_name: app.current_font
                 size_hint: (0.8, 0.06)
                 valign: 'top'
                 halign: 'center'
@@ -420,7 +422,7 @@
                 id: topic_spinner
                 text: 'Topics'
                 font_size: 50
-                font_name: 'zpix.ttf'
+                font_name: app.current_font
                 size_hint: (0.8, 0.06)
                 valign: 'bottom'
                 halign: 'center'
@@ -444,7 +446,7 @@
             Button:
                 text: 'Load Questions'
                 font_size: 50
-                font_name: 'zpix.ttf'
+                font_name: app.current_font
                 size_hint: (0.8, 0.06)
                 valign: 'top'
                 halign: 'center'
@@ -504,7 +506,7 @@
                     text: 'Answer'
                     background_normal: ''
                     font_size: 50
-                    font_name: 'zpix.ttf'
+                    font_name: app.current_font
                     background_color: 0, 0, 0, 0
                     color: app.color_scheme
                     on_press: root.toggle_answer()
@@ -525,7 +527,7 @@
                     text: 'Next'
                     background_normal: ''
                     font_size: 50
-                    font_name: 'zpix.ttf'
+                    font_name: app.current_font
                     background_color: 0, 0, 0, 0
                     color: app.color_scheme
                     on_press: root.next_question()
@@ -559,7 +561,7 @@
             Label:
                 text: root.current_date
                 font_size: 40
-                font_name: 'zpix.ttf'
+                font_name: app.current_font
                 size_hint_x: 0.9
                 valign: 'center'
                 halign: 'right'
@@ -576,7 +578,7 @@
                     text: 'O.o'
                     on_press: root.back_to_root()
                     font_size: 35
-                    font_name: 'zpix.ttf'
+                    font_name: app.current_font
                     size_hint: None, None
                     size: 60, 60
                     pos_hint: {'right': 1, 'center_y': 0.5}
@@ -647,7 +649,7 @@
             Button:
                 text: 'Submit'
                 font_size: 50
-                font_name: 'zpix.ttf'
+                font_name: app.current_font
                 size_hint: (1, 0.7)  # Take full width of container
                 valign: 'middle'
                 halign: 'center'
@@ -670,7 +672,7 @@
  
 <TaskButton@Button>:
     font_size: 40
-    font_name: 'zpix.ttf'
+    font_name: app.current_font
     size_hint: (0.8, None)
     height: 80
     pos_hint: {'center_x': 0.5}
@@ -742,7 +744,7 @@
                 id: rolling_quote
                 text: "In Key-Wiz We Trust"
                 font_size: 40
-                font_name: 'zpix.ttf'
+                font_name: app.current_font
                 size_hint_x: 0.9
                 valign: 'center'
                 halign: 'right'
@@ -759,7 +761,7 @@
                     text: 'O.o'
                     on_press: root.back_to_root()
                     font_size: 35
-                    font_name: 'zpix.ttf'
+                    font_name: app.current_font
                     size_hint: None, None
                     size: 60, 60
                     pos_hint: {'right': 1, 'center_y': 0.5}
@@ -789,7 +791,7 @@
             TextInput:
                 id: note_input
                 hint_text: 'Enter new note...'
-                font_name: 'zpix.ttf'
+                font_name: app.current_font
                 font_size: 40
                 size_hint_y: 0.3
                 background_color: (0, 0, 0, 0.5)
@@ -797,6 +799,7 @@
                 cursor_color: app.color_scheme
                 multiline: True
                     
+        # Notes display area
         ScrollView:
             size_hint_y: 0.6           
             BoxLayout:
@@ -818,7 +821,7 @@
             Button:
                 text: 'Save Note'
                 font_size: 50
-                font_name: 'zpix.ttf'
+                font_name: app.current_font
                 size_hint: (1, 0.7)  # Take full width of container
                 valign: 'middle'
                 halign: 'center'
@@ -862,7 +865,7 @@
                     id: rolling_quote
                     text: "In Key-Wiz We Trust"
                     font_size: 40
-                    font_name: 'zpix.ttf'
+                    font_name: app.current_font
                     size_hint_x: 1
                     valign: 'center'
                     halign: 'right'
@@ -881,7 +884,7 @@
                     text: 'O.o'
                     on_press: root.back_to_root()
                     font_size: 35
-                    font_name: 'zpix.ttf'
+                    font_name: app.current_font
                     size_hint: None, None
                     size: 60, 60
                     pos_hint: {'right': 1, 'center_y': 0.5}
@@ -1120,7 +1123,7 @@
                         Button:
                             text: 'Both'
                             font_size: 40
-                            on_press: app.change_font('zpix.ttf')
+                            on_press: app.change_font(app.current_font)
                             font_name: app.current_font
                             background_normal: ''
                             background_color: 0, 0, 0, 0.5
@@ -1142,7 +1145,7 @@
                 id: rolling_quote
                 text: "In Key-Wiz We Trust"
                 font_size: 40
-                font_name: 'zpix.ttf'
+                font_name: app.current_font
                 size_hint_x: 0.9
                 valign: 'center'
                 halign: 'right'
@@ -1158,7 +1161,7 @@
                     text: 'O.o'
                     on_press: root.back_to_dev_mode()
                     font_size: 35
-                    font_name: 'zpix.ttf'
+                    font_name: app.current_font
                     size_hint: None, None
                     size: 60, 60
                     pos_hint: {'right': 1, 'center_y': 0.5}
@@ -1191,7 +1194,7 @@
                     orientation: 'vertical'
                     size_hint_y: None
                     height: self.minimum_height
-                    spacing: 20
+                    spacing: 60
                     padding: [0, 20]  # Only vertical padding
                     width: self.parent.width  # Match ScrollView width
                     
@@ -1206,7 +1209,7 @@
                             id: topic_input
                             hint_text: 'Enter topic name'
                             font_size: 40
-                            font_name: 'zpix.ttf'
+                            font_name: app.current_font
                             size_hint_x: 0.7
                             background_color: 0, 0, 0, 0.5
                             foreground_color: app.color_scheme
@@ -1215,8 +1218,8 @@
 
                         Button:
                             text: 'Select'
-                            font_size: 30
-                            font_name: 'zpix.ttf'
+                            font_size: 40
+                            font_name: app.current_font
                             size_hint_x: 0.3
                             background_normal: ''
                             background_color: 0, 0, 0, 0
@@ -1240,7 +1243,7 @@
                         id: status_label
                         text: ''
                         font_size: 40
-                        font_name: 'zpix.ttf'
+                        font_name: app.current_font
                         size_hint_y: None
                         height: 50
                         color: app.color_scheme
@@ -1250,7 +1253,7 @@
                     Label:
                         text: 'Question:'
                         font_size: 40
-                        font_name: 'zpix.ttf'
+                        font_name: app.current_font
                         size_hint_y: None
                         height: 50
                         color: app.color_scheme
@@ -1259,7 +1262,7 @@
                     TextInput:
                         id: question_input
                         font_size: 40
-                        font_name: 'zpix.ttf'
+                        font_name: app.current_font
                         size_hint_y: None
                         height: 150
                         background_color: 0, 0, 0, 0.5
@@ -1272,7 +1275,7 @@
                     Label:
                         text: 'Answer:'
                         font_size: 40
-                        font_name: 'zpix.ttf'
+                        font_name: app.current_font
                         size_hint_y: None
                         height: 50
                         color: app.color_scheme
@@ -1281,7 +1284,7 @@
                     TextInput:
                         id: answer_input
                         font_size: 40
-                        font_name: 'zpix.ttf'
+                        font_name: app.current_font
                         size_hint_y: None
                         height: 150
                         background_color: 0, 0, 0, 0.5
@@ -1294,7 +1297,7 @@
                     Button:
                         text: 'Add Question'
                         font_size: 50
-                        font_name: 'zpix.ttf'
+                        font_name: app.current_font
                         size_hint_y: None
                         height: 80
                         background_normal: ''
@@ -1313,3 +1316,688 @@
                             Line:
                                 width: 1
                                 rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+
+<QuizModeSelectionScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 50
+        spacing: 30
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        size_hint: 0.8, 0.8
+
+        Label:
+            text: 'QUIZ MODE'
+            font_size: 20
+            font_name: 'zpix.ttf'
+            color: app.color_scheme
+            size_hint_y: 0.2
+
+        Button:
+            text: 'Single Minded'
+            font_size: 40
+            font_name: 'zpix.ttf'
+            size_hint_y: 0.2
+            background_normal: ''
+            background_color: 0, 0, 0, 0
+            color: app.color_scheme
+            on_press: root.select_quiz_mode('single')
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, 0.5
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [5]
+                Color:
+                    rgba: app.color_scheme
+                Line:
+                    width: 1
+                    rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+
+        Button:
+            text: 'Golden Mean'
+            font_size: 40
+            font_name: 'zpix.ttf'
+            size_hint_y: 0.2
+            background_normal: ''
+            background_color: 0, 0, 0, 0
+            color: app.color_scheme
+            on_press: root.select_quiz_mode('golden')
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, 0.5
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [5]
+                Color:
+                    rgba: app.color_scheme
+                Line:
+                    width: 1
+                    rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+
+        Button:
+            text: "Pandora's Box"
+            font_size: 40
+            font_name: 'zpix.ttf'
+            size_hint_y: 0.2
+            background_normal: ''
+            background_color: 0, 0, 0, 0
+            color: app.color_scheme
+            on_press: root.select_quiz_mode('pandora')
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, 0.5
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [5]
+                Color:
+                    rgba: app.color_scheme
+                Line:
+                    width: 1
+                    rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+
+        Button:
+            text: 'BACK'
+            font_size: 30
+            font_name: 'zpix.ttf'
+            size_hint_y: 0.1
+            background_normal: ''
+            background_color: 0, 0, 0, 0
+            color: app.color_scheme
+            on_press: root.back_to_root()
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, 0.5
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [5]
+                Color:
+                    rgba: app.color_scheme
+                Line:
+                    width: 1
+                    rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+
+<Popup>:
+    canvas.before:
+        Color:
+            rgba: 0, 0, 0, 0.8
+        Rectangle:
+            pos: self.pos
+            size: self.size
+        Color:
+            rgba: 0, 0, 0, 0.5
+        RoundedRectangle:
+            pos: self.pos[0] + 20, self.pos[1] + 20
+            size: self.size[0] - 40, self.size[1] - 40
+            radius: [10]
+        Color:
+            rgba: app.color_scheme
+        Line:
+            width: 1.5
+            rounded_rectangle: (self.x + 20, self.y + 20, self.width - 40, self.height - 40, 10)
+
+
+
+<QuizSingleScreen>:
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 0
+        spacing: 0
+        
+        # Top 10pc container
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: 0.1  # Takes exactly 10pc of screen height
+            padding: [10, 0, 10, 0]  # Left/right padding only
+
+            # Main content area (90% width)
+            BoxLayout:
+                size_hint_x: 0.9
+                orientation: 'horizontal'
+                
+                # Rolling quote (takes available space)
+                RollingQuoteLabel:
+                    id: rolling_quote
+                    text: "In Key-Wiz We Trust"
+                    font_size: 40
+                    font_name: 'zpix.ttf'
+                    size_hint_x: 1
+                    valign: 'center'
+                    halign: 'right'
+                    color: app.color_scheme
+                    text_size: self.width, None
+                    shorten: True
+                    shorten_from: 'right'
+            
+            # Back button container (10% width)
+            BoxLayout:
+                size_hint_x: 0.1
+                padding: [0, 10, 0, 10]  # Removed right padding from here
+                
+                Button:
+                    id: back_button
+                    text: 'O.o'
+                    on_press: root.back_to_root()
+                    font_size: 35
+                    font_name: 'zpix.ttf'
+                    size_hint: None, None
+                    size: 60, 60
+                    pos_hint: {'right': 1, 'center_y': 0.5}
+                    background_normal: ''
+                    background_color: 0, 0, 0, 0
+                    color: app.color_scheme
+                    canvas.before:
+                        Color:
+                            rgba: 0, 0, 0, 0.5
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [5]
+                        Color:
+                            rgba: app.color_scheme
+                        Line:
+                            width: 1.5
+                            rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+                    
+        # Rest of your content (takes remaining 90%)
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: 0.9
+            padding: [20, 20]
+            spacing: 20
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+            Label:
+                id: quiz_single_title
+                text: '- Single Minded -'
+                font_size: 50
+                font_name: app.current_font
+                valign: 'middle'
+                halign: 'center'
+                text_size: self.width, None
+                size_hint: (0.8, 0.08)
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                color: app.color_scheme 
+
+            Label:
+                id: quiz_single_intro
+                text: '| choose topic | answer all |'
+                font_size: 30
+                font_name: app.current_font
+                valign: 'middle'
+                halign: 'center'
+                text_size: self.width, None
+                size_hint: (0.8, 0.08)
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                color: app.color_scheme 
+
+            Spinner:
+                id: topic_spinner
+                text: 'Topics'
+                font_size: 50
+                font_name: 'zpix.ttf'
+                size_hint: (0.7, 0.08)
+                valign: 'bottom'
+                halign: 'center'
+                pos_hint: {'center_x': 0.5}
+                background_color: 0, 0, 0, 0
+                color: app.color_scheme
+                option_cls: 'CustomSpinnerOption'
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 0.5 # Button fill color
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [5]
+                    Color:
+                        rgba: app.color_scheme # Border color
+                    Line:
+                        width: 1
+                        rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+
+            Button:
+                text: 'Load Questions'
+                font_size: 50
+                font_name: 'zpix.ttf'
+                size_hint: (0.7, 0.08)
+                valign: 'top'
+                halign: 'center'
+                pos_hint: {'center_x': 0.5}
+                background_normal: ''
+                background_color: 0, 0, 0, 0  # Make transparent
+                color: app.color_scheme
+                on_press: root.load_questions()
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 0.5  # Button fill color
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [5]
+                    Color:
+                        rgba: app.color_scheme # Border color
+                    Line:
+                        width: 1
+                        rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+
+            Label:
+                id: question_label
+                text: ''
+                font_size: 40
+                font_name: app.current_font
+                valign: 'middle'
+                halign: 'center'
+                background_normal: ''
+                background_color: 0, 0, 0, 0.5  # Make transparent
+                text_size: self.width, None
+                size_hint: (0.7, 0.3)
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                color: app.color_scheme  # initially invisible
+                opacity: 1
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 0.5  # Button fill color
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [5]
+
+            TextInput:
+                id: answer_input
+                hint_text: '?'
+                font_size: 40
+                font_name: app.current_font
+                valign: 'middle'
+                halign: 'center'
+                background_normal: ''
+                foreground_color: app.color_scheme
+                background_color: 0, 0, 0, 0.2  # Make transparent
+                text_size: self.width, None
+                size_hint: (0.7, 0.3)
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                color: app.color_scheme
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 0.5  # Button fill color
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [5]
+                    Color:
+                        rgba: app.color_scheme # Border color
+
+            Label:
+                id: answer_label
+                hint_text: 'actual answer'
+                font_size: 40
+                font_name: app.current_font
+                valign: 'middle'
+                halign: 'center'
+                text_size: self.width, None
+                size_hint: (0.7, 0.3)
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                color: app.color_scheme
+                opacity: 0
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 0.5  # Button fill color
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [5]
+
+            BoxLayout:
+                size_hint: (0.8, 0.08)
+                spacing: 20
+                padding: [20, 20]
+                pos_hint: {'center_x': 0.5}
+                spacing: 20
+
+                Button:
+                    text: 'Answer'
+                    background_normal: ''
+                    font_size: 50
+                    font_name: 'zpix.ttf'
+                    background_color: 0, 0, 0, 0
+                    color: app.color_scheme
+                    on_press: root.toggle_answer()
+                    canvas.before:
+                        Color:
+                            rgba: 0, 0, 0, 0.5  # Button fill color
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [5]
+                        Color:
+                            rgba: app.color_scheme # Border color
+                        Line:
+                            width: 1
+                            rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+
+                Button:
+                    text: 'Correct'
+                    background_normal: ''
+                    font_size: 50
+                    font_name: 'zpix.ttf'
+                    background_color: 0, 0, 0, 0
+                    color: app.color_scheme
+                    on_press: root.mark_correct()
+                    canvas.before:
+                        Color:
+                            rgba: 0, 0, 0, 0.5  # Button fill color
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [5]
+                        Color:
+                            rgba: app.color_scheme # Border color
+                        Line:
+                            width: 1
+                            rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+
+                Button:
+                    text: 'Next'
+                    background_normal: ''
+                    font_size: 50
+                    font_name: 'zpix.ttf'
+                    background_color: 0, 0, 0, 0
+                    color: app.color_scheme
+                    on_press: root.next_question()
+                    canvas.before:
+                        Color:
+                            rgba: 0, 0, 0, 0.5  # Button fill color
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [5]
+                        Color:
+                            rgba: app.color_scheme # Border color
+                        Line:
+                            width: 1
+                            rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+
+<QuizAllScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 0
+        spacing: 0
+        
+        # Top 10pc container
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: 0.1  # Takes exactly 10pc of screen height
+            padding: [10, 0, 10, 0]  # Left/right padding only
+
+            # Main content area (90% width)
+            BoxLayout:
+                size_hint_x: 0.9
+                orientation: 'horizontal'
+                
+                # Rolling quote (takes available space)
+                RollingQuoteLabel:
+                    id: rolling_quote
+                    text: "In Key-Wiz We Trust"
+                    font_size: 40
+                    font_name: 'zpix.ttf'
+                    size_hint_x: 1
+                    valign: 'center'
+                    halign: 'right'
+                    color: app.color_scheme
+                    text_size: self.width, None
+                    shorten: True
+                    shorten_from: 'right'
+            
+            # Back button container (10% width)
+            BoxLayout:
+                size_hint_x: 0.1
+                padding: [0, 10, 0, 10]  # Removed right padding from here
+                
+                Button:
+                    id: back_button
+                    text: 'O.o'
+                    on_press: root.back_to_root()
+                    font_size: 35
+                    font_name: 'zpix.ttf'
+                    size_hint: None, None
+                    size: 60, 60
+                    pos_hint: {'right': 1, 'center_y': 0.5}
+                    background_normal: ''
+                    background_color: 0, 0, 0, 0
+                    color: app.color_scheme
+                    canvas.before:
+                        Color:
+                            rgba: 0, 0, 0, 0.5
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [5]
+                        Color:
+                            rgba: app.color_scheme
+                        Line:
+                            width: 1.5
+                            rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+                    
+        # Rest of your content (takes remaining 90%)
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: 0.9
+            padding: [20, 20]
+            spacing: 20
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+            Label:
+                id: quiz_all_title
+                text: "- Pandora's box -"
+                font_size: 50
+                font_name: app.current_font
+                valign: 'middle'
+                halign: 'center'
+                text_size: self.width, None
+                size_hint: (0.8, 0.08)
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                color: app.color_scheme 
+
+            Label:
+                id: quiz_all_intro
+                text: '| random topic | ten questions |'
+                font_size: 30
+                font_name: app.current_font
+                valign: 'middle'
+                halign: 'center'
+                text_size: self.width, None
+                size_hint: (0.8, 0.08)
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                color: app.color_scheme 
+
+            Label:
+                id: topic_label
+                text: ''
+                font_size: 40
+                font_name: 'zpix.ttf'
+                size_hint: (0.7, 0.08)
+                valign: 'bottom'
+                halign: 'center'
+                pos_hint: {'center_x': 0.5}
+                background_color: 0, 0, 0, 0
+                color: app.color_scheme
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 0.5 # Button fill color
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [5]
+                    Color:
+                        rgba: app.color_scheme # Border color
+                    Line:
+                        width: 1
+                        rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+
+            Button:
+                text: 'Start'
+                font_size: 40
+                font_name: 'zpix.ttf'
+                size_hint: (0.7, 0.08)
+                valign: 'top'
+                halign: 'center'
+                pos_hint: {'center_x': 0.5}
+                background_normal: ''
+                background_color: 0, 0, 0, 0  # Make transparent
+                color: app.color_scheme
+                on_press: root.load_questions()
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 0.5  # Button fill color
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [5]
+                    Color:
+                        rgba: app.color_scheme # Border color
+                    Line:
+                        width: 1
+                        rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+
+            Label:
+                id: question_label
+                hint_text: 'question'
+                font_size: 40
+                font_name: app.current_font
+                valign: 'middle'
+                halign: 'center'
+                background_normal: ''
+                background_color: 0, 0, 0, 0.5  # Make transparent
+                text_size: self.width, None
+                size_hint: (0.7, 0.3)
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                color: app.color_scheme
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 0.5  # Button fill color
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [5]
+
+
+            TextInput:
+                id: answer_input
+                hint_text: '?'
+                font_size: 40
+                font_name: app.current_font
+                valign: 'middle'
+                halign: 'center'
+                background_normal: ''
+                foreground_color: app.color_scheme
+                background_color: 0, 0, 0, 0.2  # Make transparent
+                text_size: self.width, None
+                size_hint: (0.7, 0.3)
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                color: app.color_scheme
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 0.5  # Button fill color
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [5]
+                    Color:
+                        rgba: app.color_scheme # Border color
+
+            Label:
+                id: answer_label
+                hint_text: 'actual answer'
+                font_size: 40
+                font_name: app.current_font
+                valign: 'middle'
+                halign: 'center'
+                text_size: self.width, None
+                size_hint: (0.7, 0.3)
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                color: app.color_scheme
+                opacity: 0
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 0.5  # Button fill color
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [5]
+
+
+            BoxLayout:
+                size_hint: (0.8, 0.08)
+                spacing: 20
+                padding: [20, 20]
+                pos_hint: {'center_x': 0.5}
+                spacing: 20
+
+                Button:
+                    text: 'Answer'
+                    background_normal: ''
+                    font_size: 50
+                    font_name: 'zpix.ttf'
+                    background_color: 0, 0, 0, 0
+                    color: app.color_scheme
+                    on_press: root.toggle_answer()
+                    canvas.before:
+                        Color:
+                            rgba: 0, 0, 0, 0.5  # Button fill color
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [5]
+                        Color:
+                            rgba: app.color_scheme # Border color
+                        Line:
+                            width: 1
+                            rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+
+                Button:
+                    id: correct_button
+                    text: 'Correct'
+                    background_normal: ''
+                    font_size: 50
+                    font_name: 'zpix.ttf'
+                    background_color: 0, 0, 0, 0
+                    color: app.color_scheme
+                    on_press: root.mark_correct()
+                    opacity: 1
+                    canvas.before:
+                        Color:
+                            rgba: 0, 0, 0, 0.5  # Button fill color
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [5]
+                        Color:
+                            rgba: app.color_scheme # Border color
+                        Line:
+                            width: 1
+                            rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+
+                Button:
+                    text: 'Next'
+                    background_normal: ''
+                    font_size: 50
+                    font_name: 'zpix.ttf'
+                    background_color: 0, 0, 0, 0
+                    color: app.color_scheme
+                    on_press: root.next_question()
+                    canvas.before:
+                        Color:
+                            rgba: 0, 0, 0, 0.5  # Button fill color
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [5]
+                        Color:
+                            rgba: app.color_scheme # Border color
+                        Line:
+                            width: 1
+                            rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
