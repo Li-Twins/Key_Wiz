@@ -1123,7 +1123,7 @@
                         Button:
                             text: 'Both'
                             font_size: 40
-                            on_press: app.change_font(app.current_font)
+                            on_press: app.change_font('zpix.ttf')
                             font_name: app.current_font
                             background_normal: ''
                             background_color: 0, 0, 0, 0.5
@@ -1317,108 +1317,7 @@
                                 width: 1
                                 rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
 
-<QuizModeSelectionScreen>:
-    BoxLayout:
-        orientation: 'vertical'
-        padding: 50
-        spacing: 30
-        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-        size_hint: 0.8, 0.8
 
-        Label:
-            text: 'QUIZ MODE'
-            font_size: 20
-            font_name: 'zpix.ttf'
-            color: app.color_scheme
-            size_hint_y: 0.2
-
-        Button:
-            text: 'Single Minded'
-            font_size: 40
-            font_name: 'zpix.ttf'
-            size_hint_y: 0.2
-            background_normal: ''
-            background_color: 0, 0, 0, 0
-            color: app.color_scheme
-            on_press: root.select_quiz_mode('single')
-            canvas.before:
-                Color:
-                    rgba: 0, 0, 0, 0.5
-                RoundedRectangle:
-                    pos: self.pos
-                    size: self.size
-                    radius: [5]
-                Color:
-                    rgba: app.color_scheme
-                Line:
-                    width: 1
-                    rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
-
-        Button:
-            text: 'Golden Mean'
-            font_size: 40
-            font_name: 'zpix.ttf'
-            size_hint_y: 0.2
-            background_normal: ''
-            background_color: 0, 0, 0, 0
-            color: app.color_scheme
-            on_press: root.select_quiz_mode('golden')
-            canvas.before:
-                Color:
-                    rgba: 0, 0, 0, 0.5
-                RoundedRectangle:
-                    pos: self.pos
-                    size: self.size
-                    radius: [5]
-                Color:
-                    rgba: app.color_scheme
-                Line:
-                    width: 1
-                    rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
-
-        Button:
-            text: "Pandora's Box"
-            font_size: 40
-            font_name: 'zpix.ttf'
-            size_hint_y: 0.2
-            background_normal: ''
-            background_color: 0, 0, 0, 0
-            color: app.color_scheme
-            on_press: root.select_quiz_mode('pandora')
-            canvas.before:
-                Color:
-                    rgba: 0, 0, 0, 0.5
-                RoundedRectangle:
-                    pos: self.pos
-                    size: self.size
-                    radius: [5]
-                Color:
-                    rgba: app.color_scheme
-                Line:
-                    width: 1
-                    rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
-
-        Button:
-            text: 'BACK'
-            font_size: 30
-            font_name: 'zpix.ttf'
-            size_hint_y: 0.1
-            background_normal: ''
-            background_color: 0, 0, 0, 0
-            color: app.color_scheme
-            on_press: root.back_to_root()
-            canvas.before:
-                Color:
-                    rgba: 0, 0, 0, 0.5
-                RoundedRectangle:
-                    pos: self.pos
-                    size: self.size
-                    radius: [5]
-                Color:
-                    rgba: app.color_scheme
-                Line:
-                    width: 1
-                    rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
 
 <Popup>:
     canvas.before:
@@ -1540,7 +1439,7 @@
                 text: 'Topics'
                 font_size: 50
                 font_name: 'zpix.ttf'
-                size_hint: (0.7, 0.08)
+                size_hint: (0.8, 0.08)
                 valign: 'bottom'
                 halign: 'center'
                 pos_hint: {'center_x': 0.5}
@@ -1564,7 +1463,7 @@
                 text: 'Load Questions'
                 font_size: 50
                 font_name: 'zpix.ttf'
-                size_hint: (0.7, 0.08)
+                size_hint: (0.8, 0.08)
                 valign: 'top'
                 halign: 'center'
                 pos_hint: {'center_x': 0.5}
@@ -1595,7 +1494,7 @@
                 background_normal: ''
                 background_color: 0, 0, 0, 0.5  # Make transparent
                 text_size: self.width, None
-                size_hint: (0.7, 0.3)
+                size_hint: (0.8, 0.2)
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                 color: app.color_scheme  # initially invisible
                 opacity: 1
@@ -1618,7 +1517,7 @@
                 foreground_color: app.color_scheme
                 background_color: 0, 0, 0, 0.2  # Make transparent
                 text_size: self.width, None
-                size_hint: (0.7, 0.3)
+                size_hint: (0.8, 0.2)
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                 color: app.color_scheme
                 canvas.before:
@@ -1639,7 +1538,7 @@
                 valign: 'middle'
                 halign: 'center'
                 text_size: self.width, None
-                size_hint: (0.7, 0.3)
+                size_hint: (0.8, 0.2)
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                 color: app.color_scheme
                 opacity: 0
@@ -1819,7 +1718,7 @@
                 text: ''
                 font_size: 40
                 font_name: 'zpix.ttf'
-                size_hint: (0.7, 0.08)
+                size_hint: (0.8, 0.08)
                 valign: 'bottom'
                 halign: 'center'
                 pos_hint: {'center_x': 0.5}
@@ -1842,7 +1741,7 @@
                 text: 'Start'
                 font_size: 40
                 font_name: 'zpix.ttf'
-                size_hint: (0.7, 0.08)
+                size_hint: (0.8, 0.08)
                 valign: 'top'
                 halign: 'center'
                 pos_hint: {'center_x': 0.5}
@@ -1873,7 +1772,7 @@
                 background_normal: ''
                 background_color: 0, 0, 0, 0.5  # Make transparent
                 text_size: self.width, None
-                size_hint: (0.7, 0.3)
+                size_hint: (0.8, 0.2)
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                 color: app.color_scheme
                 canvas.before:
@@ -1896,7 +1795,7 @@
                 foreground_color: app.color_scheme
                 background_color: 0, 0, 0, 0.2  # Make transparent
                 text_size: self.width, None
-                size_hint: (0.7, 0.3)
+                size_hint: (0.8, 0.2)
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                 color: app.color_scheme
                 canvas.before:
@@ -1917,7 +1816,7 @@
                 valign: 'middle'
                 halign: 'center'
                 text_size: self.width, None
-                size_hint: (0.7, 0.3)
+                size_hint: (0.8, 0.2)
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                 color: app.color_scheme
                 opacity: 0

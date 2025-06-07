@@ -550,7 +550,7 @@ class MenuScreen(BaseScreen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.app = App.get_running_app()
-        
+
     def switch_to_dev_mode(self):
         sm = self.manager       # Access the screen manager
         sm.transition = SlideTransition(direction='left')       # Set transition direction
@@ -582,9 +582,9 @@ class MenuScreen(BaseScreen):
         
         # Add title label
         title_label = Label(
-            text='QUIZ MODE',
-            font_size=30,
-            font_name='zpix.ttf',
+            text='- QUIZ MODE -',
+            font_size=40,
+            font_name= self.app.current_font,
             color= self.app.color_scheme,
             size_hint_y=0.2
         )
@@ -593,15 +593,15 @@ class MenuScreen(BaseScreen):
         # Create buttons for each mode
         modes = [
             ('Single Minded', 'quiz_single'),
-            ('Golden Mean', 'golden_mean'),
+            ('Golden Mean', 'quiz_normal'),
             ("Pandora's Box", 'quiz_all')
         ]
         
         for mode_text, mode_id in modes:
             btn = Button(
                 text=mode_text,
-                font_size=40,
-                font_name='zpix.ttf',
+                font_size=50,
+                font_name= self.app.current_font,
                 size_hint_y=0.2,
                 background_normal='',
                 background_color=(0, 0, 0, 0),
