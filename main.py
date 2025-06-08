@@ -289,8 +289,6 @@ class DevModeScreen(BaseScreen):
             self.ids.question_label.text = question
             self.ids.answer_label.text = answer
             self.show_answer = False  # Reset visibility
-            # Update style immediately
-            #self.update_answer_style()
         else:
             self.ids.question_label.text = "No more questions!"
             self.ids.answer_label.text = ""
@@ -617,7 +615,9 @@ class MenuScreen(BaseScreen):
             size_hint=(0.8, 0.8),
             separator_height=0,
             background='',
-            background_color=(0, 0, 0, 0.8)
+            background_color=(0, 0, 0, 0.8),
+            title_color=[0.88, 0.47, 0.18, 1],
+            separator_color=[0.88, 0.47, 0.18, 1],
         )
         
         # Style the popup buttons 
@@ -629,9 +629,14 @@ class MenuScreen(BaseScreen):
         self.manager.transition = SlideTransition(direction='left')
         self.manager.current = mode
 
+    def switch_to_study_mode(self):
+        sm = self.manager
+        sm.transition = SlideTransition(direction='left')
+        sm.current = 'study'
+
     def quit(self):
         sys.exit()
-
+        
 class QuizScreen(BaseScreen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -743,7 +748,8 @@ class ToDoScreen(BaseScreen):
             msg['To'] = recipient
                     
             # Send email
-            with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+            with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
+                smtp.starttls()
                 smtp.login(sender, password)
                 smtp.send_message(msg)
                     
@@ -806,6 +812,8 @@ class QuizSingleScreen(BaseScreen):
         self.questions = []
         self.current_index = 0
         self.topics = []
+        self.removed = []
+        self.correct_questions = 0
         self.load_topics()
 
     def update_answer_visibility(self, instance, value):
@@ -849,6 +857,7 @@ class QuizSingleScreen(BaseScreen):
             with open(f'kw_{topic}.json', 'r', encoding='utf-8') as f:
                 self.questions = json.load(f)
                 random.shuffle(self.questions)
+                self.questions = [q for q in self.questions if q not in self.removed]
                 self.current_index = 0
                 self.show_question()
                 
@@ -860,23 +869,25 @@ class QuizSingleScreen(BaseScreen):
             question, answer = self.questions[self.current_index]
             self.ids.question_label.text = question
             self.ids.answer_label.text = answer
-            self.show_answer = False  # Reset visibility
-            # Update style immediately
-            #self.update_answer_style()
+        elif self.current_index >= len(self.questions) and [q for q in self.questions if q not in self.removed]:
+            self.load_questions()
         else:
-            if self.questions:
-                random.shuffle(self.questions)
-                self.current_index = 0
+            self.ids.question_label.text = f"Score: {self.correct_questions}"
+            self.ids.answer_label.text = ""
+            self.on_pre_enter()
 
     def toggle_answer(self):
-        if self.ids.answer_label.opacity == 0:
-            self.ids.answer_label.opacity = 1
-        else:
-            self.ids.answer_label.opacity = 0
+        if self.ids.question_label.text != f'Score: {self.correct_questions}':
+            if self.ids.answer_label.opacity == 0:
+                self.ids.answer_label.opacity = 1
+            else:
+                self.ids.answer_label.opacity = 0
 
     def next_question(self):
         self.current_index += 1
         self.ids.answer_label.opacity = 0
+        self.ids.correct_button.text = 'Correct'
+        self.ids.answer_input.text = ''
         self.show_question()
 
     def back_to_root(self):
@@ -885,7 +896,17 @@ class QuizSingleScreen(BaseScreen):
         sm.current = 'menu'         # Change screen
 
     def mark_correct(self):
-        del self.questions[self.current_index]
+        if self.ids.question_label.text != f'Score: {self.correct_questions}':
+            if self.ids.correct_button.text == 'Correct':
+                self.correct_questions += 1
+                self.removed.append(self.questions[self.current_index])
+                self.ids.correct_button.text = str(self.correct_questions)
+
+            else:
+                self.correct_questions -= 1
+                if self.questions[self.current_index] in self.removed:
+                    self.removed.remove(self.questions[self.current_index])
+                self.ids.correct_button.text = 'Correct'
 
 class QuizAllScreen(BaseScreen):
 
@@ -978,6 +999,192 @@ class QuizAllScreen(BaseScreen):
             self.correct_questions -= 1
             self.ids.correct_button.text = 'Correct'
         
+class QuizOGScreen(BaseScreen):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        App.get_running_app().bind(
+            color_scheme=self.update_answer_style,
+            current_font=self.update_answer_style
+        )         # Bind to app properties
+        self.questions = []
+        self.current_index = 0
+        self.topics = []
+        self.correct_questions = 0
+        self.load_topics()
+
+    
+    def update_answer_style(self, *args):
+        """Update answer label style dynamically"""
+        app = App.get_running_app()
+        answer_label = self.ids.answer_label
+        answer_label.color = app.color_scheme
+        answer_label.font_name = app.current_font
+        
+        # Force texture update
+        answer_label.texture_update()
+
+    def on_pre_enter(self, *args):
+        self.load_topics()
+
+    def load_topics(self):
+        try:
+            with open('kw_topics.json', 'r') as f:
+                self.topics = json.load(f)
+                self.ids.topic_label.text = random.choice(self.topics)
+        except Exception as e:
+            print(f"Error loading topics: {e}")
+            self.topics = []
+
+    def load_questions(self):
+        try:
+            topic = self.ids.topic_label.text.lower()
+            if not topic or topic == 'topics':
+                return
+                
+            if not os.path.exists(f'kw_{topic}.json'):
+                raise FileNotFoundError(f"kw_{topic}.json not found")
+                
+            with open(f'kw_{topic}.json', 'r', encoding='utf-8') as f:
+                self.all_questions = json.load(f)
+                self.questions = random.choices(self.all_questions, k=10)
+                self.current_index = 0
+                self.show_question()
+                
+        except:
+            pass
+
+    def show_question(self):
+        if self.current_index < len(self.questions):
+            question, answer = self.questions[self.current_index]
+            self.ids.question_label.text = question
+            self.ids.answer_label.text = answer
+        else:
+            self.ids.question_label.text = f"Score: {self.correct_questions}"
+            self.ids.answer_label.text = ""
+            self.on_pre_enter()
+
+    def toggle_answer(self):
+        if self.ids.answer_label.opacity == 0:
+            self.ids.answer_label.opacity = 1
+        else:
+            self.ids.answer_label.opacity = 0
+
+    def next_question(self):
+        self.current_index += 1
+        self.ids.answer_label.opacity = 0
+        self.ids.correct_button.text = 'Correct'
+        self.ids.answer_input.text = ''
+        self.show_question()
+
+    def back_to_root(self):
+        sm = self.manager       # Access the screen manager
+        sm.transition = SlideTransition(direction='left')       # Set transition direction
+        sm.current = 'menu'         # Change screen
+
+    def mark_correct(self):
+        if self.ids.correct_button.text == 'Correct':
+            self.correct_questions += 1
+            self.ids.correct_button.text = str(self.correct_questions)
+        else:
+            self.correct_questions -= 1
+            self.ids.correct_button.text = 'Correct'
+
+class StudyScreen(BaseScreen):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.data_dir = os.path.join(os.path.dirname(__file__), 'data')
+        os.makedirs(self.data_dir, exist_ok=True)  # Create data directory if it doesn't exist
+        files = [f[:-4] for f in os.listdir(self.data_dir) if f.endswith('.txt')]
+        self.ids.file_spinner.values = sorted(files) if files else ["No .txt files found"]         
+    
+    def update_spinner(self):
+        files = [f[:-4] for f in os.listdir(self.data_dir) if f.endswith('.txt')]
+        self.ids.file_spinner.values = sorted(files) if files else ["No .txt files found"] 
+        self.ids.file_spinner.text = ''
+        self.ids.filename_input.text = ''
+        self.ids.content_input.text = ''
+        self.ids.save_button.text = 'Save'
+
+    def load_file(self):
+        self.ids.content_input.text = '' # clear content from previous load
+        filename = self.ids.file_spinner.text.strip() # get file name from load first      
+        if not filename: # make sure there is a file name on screen
+            self.show_error("Please enter a filename")
+        else:               
+            if not filename.endswith('.txt'): # Ensure .txt extension
+                filename += '.txt'            
+            filepath = os.path.join(self.data_dir, filename)        
+            try:
+                if os.path.exists(filepath):
+                    with open(filepath, 'r', encoding='utf-8') as f:
+                        content = f.read()
+                    self.ids.content_input.text = content
+                    self.ids.save_button.text = f'Save [{filename[:-4]}]'  # removes .txt
+                else:
+                    self.ids.content_input.text = ""
+                self.show_message(f"File {'loaded' if os.path.exists(filepath) else 'ready for creation'}")
+            except Exception as e:
+                self.show_error(f"Error: {str(e)}")
+
+    def create_file(self):
+        self.ids.content_input.text = '' # clear content from previous load
+        filename = self.ids.filename_input.text.strip() # get file name from create first      
+        if not filename: # make sure there is a file name on screen
+            self.show_error("Please enter a filename")
+        else:               
+            if not filename.endswith('.txt'): # Ensure .txt extension
+                filename += '.txt'            
+            filepath = os.path.join(self.data_dir, filename)        
+            try:
+                if os.path.exists(filepath): # loads existing file if matches new file name
+                    with open(filepath, 'r', encoding='utf-8') as f:
+                        content = f.read()
+                    self.ids.content_input.text = content
+                    self.ids.save_button.text = f'Save [{filename[:-4]}]'  # removes .txt
+                else:
+                    self.ids.content_input.text = ""
+                    self.ids.save_button.text = f'Save [{filename[:-4]}]'  # removes .txt
+                self.show_message(f"File {'loaded' if os.path.exists(filepath) else 'ready for creation'}")
+            except Exception as e:
+                self.show_error(f"Error: {str(e)}")
+    
+
+    def save_file(self):
+        if self.ids.save_button.text == 'Save':
+            self.show_error("Please enter a filename") # cant save when no file loaded
+            return
+        else:
+            filename = self.ids.save_button.text[6:-1] # trim off the Save prefix to get file name
+        content = self.ids.content_input.text
+        if not filename.endswith('.txt'):
+            filename += '.txt'
+            
+        filepath = os.path.join(self.data_dir, filename)
+        
+        try:
+            with open(filepath, 'w', encoding='utf-8') as f:
+                f.write(content)
+            self.show_message("File saved successfully!")
+        except Exception as e:
+            self.show_error(f"Error saving file: {str(e)}")
+
+        self.update_spinner() # reload the spinner to reflect new file added
+
+    def show_message(self, message):
+        self.ids.status_label.text = message
+        self.ids.status_label.color = (0, 1, 0, 1)  # Green for success
+        Animation(opacity=1, duration=0.3).start(self.ids.status_label)
+        Clock.schedule_once(lambda dt: Animation(opacity=0, duration=1).start(self.ids.status_label), 3)
+
+    def show_error(self, message):
+        self.ids.status_label.text = message
+        self.ids.status_label.color = (1, 0, 0, 1)  # Red for error
+        Animation(opacity=1, duration=0.3).start(self.ids.status_label)
+        Clock.schedule_once(lambda dt: Animation(opacity=0, duration=1).start(self.ids.status_label), 3)
+
+    def back_to_root(self):
+        self.manager.transition = SlideTransition(direction='left')
+        self.manager.current = 'menu'
 
 class KeyWizApp(App):
     current_bg_music = StringProperty('music.mp3')
@@ -1011,7 +1218,9 @@ class KeyWizApp(App):
             SettingsScreen(name='settings'),
             EditTopicScreen(name='edit_topic'),
             QuizSingleScreen(name='quiz_single'),
-            QuizAllScreen(name='quiz_all') 
+            QuizAllScreen(name='quiz_all'), 
+            QuizOGScreen(name='quiz_normal'),
+            StudyScreen(name='study') 
         ]
         
         for screen in screens:
