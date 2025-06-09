@@ -21,6 +21,7 @@ from kivy.uix.modalview import ModalView
 from kivy.uix.floatlayout import FloatLayout
 from kivy.graphics import Color, Line, RoundedRectangle, Rectangle
 
+import pyclip
 import re
 import json
 import random
@@ -1008,12 +1009,20 @@ class QuizOGScreen(BaseScreen):
         )         # Bind to app properties
         self.questions = []
         self.current_index = 0
-        self.topics = []
+        self.all_topics = json.load(open('kw_topics.json', 'r'))
+        self.topics = self.all_topics[0:4]
         self.correct_questions = 0
-        self.load_topics()
+        self.codes2 = ['0-4', '4-8', '8-12', '12-16', '16-20', '20-24', '24-28', '28-32', '32-36', '36-40']
+        self.codes = [0, 98722, 45694, 44328, 67640, 55321, 35248, 83002, 11834, 58244, 59775]
+        self.code = 0
+        self.topic = ''
+        self.start = True
+        self.change_start = False
+        self.popup = None
+        self.load_questions()
 
     
-    def update_answer_style(self, *args):
+    def update_answer_style(self):
         """Update answer label style dynamically"""
         app = App.get_running_app()
         answer_label = self.ids.answer_label
@@ -1023,21 +1032,75 @@ class QuizOGScreen(BaseScreen):
         # Force texture update
         answer_label.texture_update()
 
-    def on_pre_enter(self, *args):
-        self.load_topics()
+    def on_pre_enter(self):
+        self.topic = random.choice(self.topics)
+        self.load_questions()
 
-    def load_topics(self):
-        try:
-            with open('kw_topics.json', 'r') as f:
-                self.topics = json.load(f)
-                self.ids.topic_label.text = random.choice(self.topics)
-        except Exception as e:
-            print(f"Error loading topics: {e}")
-            self.topics = []
+    def level_popup(self):
+        self.correct_questions -= 100
+        app = App.get_running_app()
+        self.code = self.codes[self.codes.index(self.code)+1]
+        code_label_text = f'You leveled up! Good job! Your code: {self.code}.'
+        code_label = Label(
+            text=code_label_text,
+            font_size=40,
+            font_name= app.current_font,
+            color= app.color_scheme,
+            size_hint_y=0.2
+        )
+        content = BoxLayout(orientation='vertical', spacing=20, padding=20)
+        content.add_widget(code_label)
+        btn = Button(
+            text='Copy code and continue',
+            font_size=50,
+            font_name= app.current_font,
+            size_hint_y=0.2,
+            background_normal='',
+            background_color=(0, 0, 0, 0),
+            color= app.color_scheme
+        )
+        content.add_widget(btn)
+        self.popup = Popup(
+            title='',
+            title_font='zpix.ttf',
+            title_size='1sp',
+            title_color=[0.88, 0.47, 0.18, 1],
+            content=content,
+            size_hint=(0.7, 0.4),
+            separator_color=[0.88, 0.47, 0.18, 1],
+            background='',
+            background_color=(0, 0, 0, 0.8)
+        )
+        btn.bind(on_press=self.copy_code)
+        self.popup.open()
+        
+
+    def copy_code(self, *args):
+        pyclip.copy(str(self.code))
+        topic_index = self.codes2[self.codes.index(self.code)]
+        if re.findall(r'(\d{2}-\d{2})', topic_index):
+            x, y = topic_index[0:2], topic_index[3:]
+        else:
+            x, y = topic_index[0], topic_index[2]
+        self.topics = self.all_topics[int(x):int(y)]
+        self.topic = random.choice(self.topics)
+        self.ids.topic_label.text = self.topic
+        self.ids.code_input.text = ''
+        self.ids.question_label.text = ''
+        self.ids.answer_label.text = ''
+        self.popup.dismiss()
+        
 
     def load_questions(self):
         try:
-            topic = self.ids.topic_label.text.lower()
+            if not self.start:
+                topic = random.choice(self.topics)
+                self.topic = topic
+            else:
+                topic = self.topic
+            if self.change_start:
+                self.start = False
+            self.ids.topic_label.text = topic
             if not topic or topic == 'topics':
                 return
                 
@@ -1048,17 +1111,43 @@ class QuizOGScreen(BaseScreen):
                 self.all_questions = json.load(f)
                 self.questions = random.choices(self.all_questions, k=10)
                 self.current_index = 0
-                self.show_question()
+                if not self.start:
+                    self.show_question()
+                self.change_start = True
                 
         except:
             pass
 
+    def verify(self):
+        if self.ids.code_input.text:
+            supplied_code = int(self.ids.code_input.text)
+        else:
+            supplied_code = 0
+        if supplied_code in self.codes:
+            topic_index = self.codes2[self.codes.index(supplied_code)]
+        else:
+            print(f'{supplied_code} does not exist.')
+            return
+        if re.findall(r'(\d{2}-\d{2})', topic_index):
+            x, y = topic_index[0:2], topic_index[3:]
+        else:
+            x, y = topic_index[0], topic_index[2]
+        self.topics = self.all_topics[int(x):int(y)]
+        self.code = supplied_code
+        self.topic = random.choice(self.topics)
+        self.ids.topic_label.text = self.topic
+        self.ids.code_input.text = ''
+        self.ids.question_label.text = ''
+        self.ids.answer_label.text = ''
+    
     def show_question(self):
         if self.current_index < len(self.questions):
             question, answer = self.questions[self.current_index]
             self.ids.question_label.text = question
             self.ids.answer_label.text = answer
         else:
+            self.start = True
+            self.change_start = False
             self.ids.question_label.text = f"Score: {self.correct_questions}"
             self.ids.answer_label.text = ""
             self.on_pre_enter()
@@ -1074,6 +1163,8 @@ class QuizOGScreen(BaseScreen):
         self.ids.answer_label.opacity = 0
         self.ids.correct_button.text = 'Correct'
         self.ids.answer_input.text = ''
+        if self.correct_questions >= 100:
+            self.level_popup()
         self.show_question()
 
     def back_to_root(self):
