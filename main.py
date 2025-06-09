@@ -21,7 +21,6 @@ from kivy.uix.modalview import ModalView
 from kivy.uix.floatlayout import FloatLayout
 from kivy.graphics import Color, Line, RoundedRectangle, Rectangle
 
-import pyclip
 import re
 import json
 import random
@@ -1076,7 +1075,6 @@ class QuizOGScreen(BaseScreen):
         
 
     def copy_code(self, *args):
-        pyclip.copy(str(self.code))
         topic_index = self.codes2[self.codes.index(self.code)]
         if re.findall(r'(\d{2}-\d{2})', topic_index):
             x, y = topic_index[0:2], topic_index[3:]
