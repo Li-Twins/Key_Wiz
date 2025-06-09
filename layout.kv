@@ -79,7 +79,7 @@
                     id: rolling_quote
                     text: "In Key-Wiz We Trust"
                     font_size: 40
-                    font_name: 'zpix.ttf'
+                    font_name: app.current_font
                     size_hint_x: 1
                     valign: 'center'
                     halign: 'right'
@@ -98,7 +98,7 @@
                     text: 'O.o'
                     on_press: root.quit()
                     font_size: 35
-                    font_name: 'zpix.ttf'
+                    font_name: app.current_font
                     size_hint: None, None
                     size: 60, 60
                     pos_hint: {'right': 1, 'center_y': 0.5}
@@ -1097,7 +1097,7 @@
                         Button:
                             text: 'Both'
                             font_size: 40
-                            on_press: app.change_font('zpix.ttf')
+                            on_press: app.change_font(app.current_font)
                             font_name: app.current_font
                             background_normal: ''
                             background_color: 0, 0, 0, 0.5
@@ -1337,7 +1337,7 @@
                     id: rolling_quote
                     text: "In Key-Wiz We Trust"
                     font_size: 40
-                    font_name: 'zpix.ttf'
+                    font_name: app.current_font
                     size_hint_x: 1
                     valign: 'center'
                     halign: 'right'
@@ -1356,7 +1356,7 @@
                     text: 'O.o'
                     on_press: root.back_to_root()
                     font_size: 35
-                    font_name: 'zpix.ttf'
+                    font_name: app.current_font
                     size_hint: None, None
                     size: 60, 60
                     pos_hint: {'right': 1, 'center_y': 0.5}
@@ -1412,7 +1412,7 @@
                 id: topic_spinner
                 text: 'Topics'
                 font_size: 50
-                font_name: 'zpix.ttf'
+                font_name: app.current_font
                 size_hint: (0.8, 0.08)
                 valign: 'bottom'
                 halign: 'center'
@@ -1436,7 +1436,7 @@
             Button:
                 text: 'Load Questions'
                 font_size: 50
-                font_name: 'zpix.ttf'
+                font_name: app.current_font
                 size_hint: (0.8, 0.08)
                 valign: 'top'
                 halign: 'center'
@@ -1535,7 +1535,7 @@
                     text: 'Answer'
                     background_normal: ''
                     font_size: 50
-                    font_name: 'zpix.ttf'
+                    font_name: app.current_font
                     background_color: 0, 0, 0, 0
                     color: app.color_scheme
                     on_press: root.toggle_answer()
@@ -1557,7 +1557,7 @@
                     id: correct_button
                     background_normal: ''
                     font_size: 50
-                    font_name: 'zpix.ttf'
+                    font_name: app.current_font
                     background_color: 0, 0, 0, 0
                     color: app.color_scheme
                     on_press: root.mark_correct()
@@ -1578,7 +1578,7 @@
                     text: 'Next'
                     background_normal: ''
                     font_size: 50
-                    font_name: 'zpix.ttf'
+                    font_name: app.current_font
                     background_color: 0, 0, 0, 0
                     color: app.color_scheme
                     on_press: root.next_question()
@@ -1617,7 +1617,7 @@
                     id: rolling_quote
                     text: "In Key-Wiz We Trust"
                     font_size: 40
-                    font_name: 'zpix.ttf'
+                    font_name: app.current_font
                     size_hint_x: 1
                     valign: 'center'
                     halign: 'right'
@@ -1636,7 +1636,7 @@
                     text: 'O.o'
                     on_press: root.back_to_root()
                     font_size: 35
-                    font_name: 'zpix.ttf'
+                    font_name: app.current_font
                     size_hint: None, None
                     size: 60, 60
                     pos_hint: {'right': 1, 'center_y': 0.5}
@@ -1659,13 +1659,13 @@
         # Rest of your content (takes remaining 90%)
         BoxLayout:
             orientation: 'horizontal'
-            size_hint_y: 0.08
+            size_hint_y: 0.06
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 
             Label:
                 id: quiz_all_title
                 text: "- Golden Mean -"
-                font_size: 50
+                font_size: 40
                 font_name: app.current_font
                 valign: 'middle'
                 halign: 'center'
@@ -1730,7 +1730,7 @@
 
         BoxLayout:
             orientation: 'vertical'
-            size_hint: (0.8, 0.6)
+            size_hint_x: 0.8
             padding: [20, 20]
             spacing: 10
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
@@ -1738,7 +1738,7 @@
                 id: topic_label
                 text: ''
                 font_size: 40
-                font_name: 'zpix.ttf'
+                font_name: app.current_font
                 size_hint: (1, 0.08)
                 valign: 'bottom'
                 halign: 'center'
@@ -1761,7 +1761,7 @@
             Button:
                 text: 'Start'
                 font_size: 40
-                font_name: 'zpix.ttf'
+                font_name: app.current_font
                 size_hint: (1, 0.08)
                 valign: 'top'
                 halign: 'center'
@@ -1851,7 +1851,7 @@
 
 
         BoxLayout:
-            size_hint: (0.8, 0.1)
+            size_hint: (0.8, 0.08)
             spacing: 20
             padding: [20, 20]
             pos_hint: {'center_x': 0.5}
@@ -1860,7 +1860,7 @@
                 text: 'Answer'
                 background_normal: ''
                 font_size: 40
-                font_name: 'zpix.ttf'
+                font_name: app.current_font
                 background_color: 0, 0, 0, 0
                 color: app.color_scheme
                 on_press: root.toggle_answer()
@@ -1884,7 +1884,7 @@
                 background_normal: ''
                 size_hint: (0.3, 1)
                 font_size: 40
-                font_name: 'zpix.ttf'
+                font_name: app.current_font
                 background_color: 0, 0, 0, 0
                 color: app.color_scheme
                 on_press: root.mark_correct()
@@ -1906,7 +1906,7 @@
                 text: 'Next'
                 background_normal: ''
                 font_size: 40
-                font_name: 'zpix.ttf'
+                font_name: app.current_font
                 background_color: 0, 0, 0, 0
                 color: app.color_scheme
                 on_press: root.next_question()
@@ -1946,7 +1946,7 @@
                     id: rolling_quote
                     text: "In Key-Wiz We Trust"
                     font_size: 40
-                    font_name: 'zpix.ttf'
+                    font_name: app.current_font
                     size_hint_x: 1
                     valign: 'center'
                     halign: 'right'
@@ -1965,7 +1965,7 @@
                     text: 'O.o'
                     on_press: root.back_to_root()
                     font_size: 35
-                    font_name: 'zpix.ttf'
+                    font_name: app.current_font
                     size_hint: None, None
                     size: 60, 60
                     pos_hint: {'right': 1, 'center_y': 0.5}
@@ -2021,7 +2021,7 @@
                 id: topic_label
                 text: ''
                 font_size: 40
-                font_name: 'zpix.ttf'
+                font_name: app.current_font
                 size_hint: (0.8, 0.08)
                 valign: 'bottom'
                 halign: 'center'
@@ -2044,7 +2044,7 @@
             Button:
                 text: 'Start'
                 font_size: 40
-                font_name: 'zpix.ttf'
+                font_name: app.current_font
                 size_hint: (0.8, 0.08)
                 valign: 'top'
                 halign: 'center'
@@ -2144,7 +2144,7 @@
                     text: 'Answer'
                     background_normal: ''
                     font_size: 50
-                    font_name: 'zpix.ttf'
+                    font_name: app.current_font
                     background_color: 0, 0, 0, 0
                     color: app.color_scheme
                     on_press: root.toggle_answer()
@@ -2166,7 +2166,7 @@
                     text: 'Correct'
                     background_normal: ''
                     font_size: 50
-                    font_name: 'zpix.ttf'
+                    font_name: app.current_font
                     background_color: 0, 0, 0, 0
                     color: app.color_scheme
                     on_press: root.mark_correct()
@@ -2188,7 +2188,7 @@
                     text: 'Next'
                     background_normal: ''
                     font_size: 50
-                    font_name: 'zpix.ttf'
+                    font_name: app.current_font
                     background_color: 0, 0, 0, 0
                     color: app.color_scheme
                     on_press: root.next_question()
@@ -2227,7 +2227,7 @@
                     id: rolling_quote
                     text: "In Key-Wiz We Trust"
                     font_size: 40
-                    font_name: 'zpix.ttf'
+                    font_name: app.current_font
                     size_hint_x: 1
                     valign: 'center'
                     halign: 'right'
@@ -2246,7 +2246,7 @@
                     text: 'O.o'
                     on_press: root.back_to_root()
                     font_size: 35
-                    font_name: 'zpix.ttf'
+                    font_name: app.current_font
                     size_hint: None, None
                     size: 60, 60
                     pos_hint: {'right': 1, 'center_y': 0.5}

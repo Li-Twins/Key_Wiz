@@ -1021,7 +1021,7 @@ class QuizOGScreen(BaseScreen):
         self.load_questions()
 
     
-    def update_answer_style(self):
+    def update_answer_style(self, *args):
         """Update answer label style dynamically"""
         app = App.get_running_app()
         answer_label = self.ids.answer_label
@@ -1031,7 +1031,7 @@ class QuizOGScreen(BaseScreen):
         # Force texture update
         answer_label.texture_update()
 
-    def on_pre_enter(self):
+    def on_pre_enter(self, *args):
         self.topic = random.choice(self.topics)
         self.load_questions()
 
