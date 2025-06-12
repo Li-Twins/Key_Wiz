@@ -182,7 +182,7 @@ class NotesScreen(BaseScreen):
             text=message,
             font_name='zpix.ttf',
             font_size=20,
-            color=(0.88, 0.47, 0.18, 1)
+            color=self.app.color_scheme
         ))
         
         btn = Button(
@@ -192,7 +192,7 @@ class NotesScreen(BaseScreen):
             font_size=20,
             background_normal='',
             background_color=(0, 0, 0, 0),
-            color=(0.88, 0.47, 0.18, 1)
+            color=self.app.color_scheme
         )
         
         popup = Popup(
@@ -428,8 +428,8 @@ class InsightPopup(Popup):
         # Set popup background to dark theme
         self.background = ''
         self.background_color = (0.1, 0.1, 0.1, 1)  # Dark background
-        self.separator_color = (0.88, 0.47, 0.18, 1)  # Orange-brown separator
-        self.title_color = (0.88, 0.47, 0.18, 1)  # Orange-brown title
+        self.separator_color = self.app.color_scheme  # Orange-brown separator
+        self.title_color = self.app.color_scheme  # Orange-brown title
         self.title_size = '30sp'
         self.title_font = 'zpix.ttf'
         
@@ -446,8 +446,8 @@ class InsightPopup(Popup):
             font_name='zpix.ttf',
             font_size=30,
             background_color=(0, 0, 0, 0.5),
-            foreground_color=(0.88, 0.47, 0.18, 1),
-            cursor_color=(0.88, 0.47, 0.18, 1),
+            foreground_color=self.app.color_scheme,
+            cursor_color=self.app.color_scheme,
             selection_color=(0.82, 0.41, 0.12, 0.5)
         )
         
@@ -461,7 +461,7 @@ class InsightPopup(Popup):
             font_size=30,
             background_normal='',
             background_color=(0, 0, 0, 0),
-            color=(0.88, 0.47, 0.18, 1)
+            color=self.app.color_scheme
         )
         
         # Cancel button
@@ -471,7 +471,7 @@ class InsightPopup(Popup):
             font_size=30,
             background_normal='',
             background_color=(0, 0, 0, 0),
-            color=(0.88, 0.47, 0.18, 1)
+            color=self.app.color_scheme
         )
         
         # Add buttons to layout
@@ -636,74 +636,7 @@ class MenuScreen(BaseScreen):
 
     def quit(self):
         sys.exit()
-        
-class QuizScreen(BaseScreen):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.codes = {'5-8':'73113'}  # Example: code '73113' will access topics index 5-8
-        self.topics = json.load(open('kw_topics.json', 'r'))  # Will be populated from DevModeScreen's topics
 
-    def verify_code(self):
-        code = self.ids.code_input.text.strip()
-        if code in self.codes.values():
-            # Find which key matches this code
-            key = [k for k, v in self.codes.items() if v == code][0]
-            
-            # Use regex to extract indices from key (like '0-4')
-            match = re.match(r'(\d+)-(\d+)', key)
-            if match:
-                start_idx = int(match.group(1))
-                end_idx = int(match.group(2))
-                
-                # Get topics from DevModeScreen
-                self.topics = self.topics[start_idx:end_idx+1]  # +1 because slice is exclusive
-        else:
-            # If code not found, silently use first four topics
-            dev_screen = self.manager.get_screen('dev_mode')
-            self.topics = dev_screen.topics[:4] if len(dev_screen.topics) >= 4 else dev_screen.topics.copy()
-        
-        # Show available topics
-        topic_list = "\n".join([t.title() for t in self.topics])
-        self.show_popup("Available topics", f"\n{topic_list}")
-
-    def show_popup(self, title, message):
-        content = BoxLayout(orientation='vertical', padding=10, spacing=10)
-        content.add_widget(Label(
-            text=message,
-            font_name='zpix.ttf',
-            font_size=30,
-            color=(0.88, 0.47, 0.18, 1)
-        ))
-        
-        btn = Button(
-            text='OK',
-            size_hint=(1, 0.3),
-            font_name='zpix.ttf',
-            font_size=30,
-            background_normal='',
-            background_color=(0, 0, 0, 0),
-            color=(0.88, 0.47, 0.18, 1)
-        )
-        
-        popup = Popup(
-            title=title,
-            title_font='zpix.ttf',
-            title_size='30sp',
-            title_color=[0.88, 0.47, 0.18, 1],
-            content=content,
-            size_hint=(0.7, 0.4),
-            separator_color=[0.88, 0.47, 0.18, 1],
-            background='',
-            background_color=(0, 0, 0, 0.8)
-        )
-        
-        btn.bind(on_press=popup.dismiss)
-        content.add_widget(btn)
-        popup.open()
-    
-    def back_to_root(self):
-        self.manager.transition = SlideTransition(direction='left')
-        self.manager.current = 'menu'
 
 class ToDoScreen(BaseScreen):
     insight_text = StringProperty("")  # To store the insight text
@@ -765,7 +698,7 @@ class ToDoScreen(BaseScreen):
             text=message,
             font_name='zpix.ttf',
             font_size=30,
-            color=(0.88, 0.47, 0.18, 1)
+            color=self.app.color_scheme
         ))
         
         btn = Button(
@@ -775,7 +708,7 @@ class ToDoScreen(BaseScreen):
             font_size=30,
             background_normal='',
             background_color=(0, 0, 0, 0),
-            color=(0.88, 0.47, 0.18, 1)
+            color=self.app.color_scheme
         )
         
         popup = Popup(
@@ -888,6 +821,7 @@ class QuizSingleScreen(BaseScreen):
         self.ids.answer_label.opacity = 0
         self.ids.correct_button.text = 'Correct'
         self.ids.answer_input.text = ''
+        self.ids.answer_input.hint_text = f'Score: {self.correct_questions}'
         self.show_question()
 
     def back_to_root(self):
@@ -920,6 +854,7 @@ class QuizAllScreen(BaseScreen):
         self.current_index = 0
         self.topics = []
         self.correct_questions = 0
+        self.removed = []
         self.load_topics()
 
     
@@ -956,9 +891,11 @@ class QuizAllScreen(BaseScreen):
                 
             with open(f'kw_{topic}.json', 'r', encoding='utf-8') as f:
                 self.all_questions = json.load(f)
-                self.questions = random.choices(self.all_questions, k=10)
-                self.current_index = 0
-                self.show_question()
+                self.questions = [x for x in self.all_questions if x not in self.removed]
+                if self.questions:
+                    self.questions = random.choices(self.all_questions, k=10)
+                    self.current_index = 0
+                    self.show_question()
                 
         except:
             pass
@@ -984,6 +921,7 @@ class QuizAllScreen(BaseScreen):
         self.ids.answer_label.opacity = 0
         self.ids.correct_button.text = 'Correct'
         self.ids.answer_input.text = ''
+        self.ids.answer_input.hint_text = f'Score: {self.correct_questions}'
         self.show_question()
 
     def back_to_root(self):
@@ -992,12 +930,15 @@ class QuizAllScreen(BaseScreen):
         sm.current = 'menu'         # Change screen
 
     def mark_correct(self):
+        question = str(self.ids.question_label.text)
         if self.ids.correct_button.text == 'Correct':
             self.correct_questions += 1
             self.ids.correct_button.text = str(self.correct_questions)
+            self.removed.append(question)
         else:
             self.correct_questions -= 1
             self.ids.correct_button.text = 'Correct'
+            self.removed.remove(question)
         
 class QuizOGScreen(BaseScreen):
     def __init__(self, **kwargs):
@@ -1014,6 +955,7 @@ class QuizOGScreen(BaseScreen):
         self.codes2 = ['0-4', '4-8', '8-12', '12-16', '16-20', '20-24', '24-28', '28-32', '32-36', '36-40']
         self.codes = [0, 98722, 45694, 44328, 67640, 55321, 35248, 83002, 11834, 58244, 59775]
         self.code = 0
+        self.removed_list = []
         self.topic = ''
         self.start = True
         self.change_start = False
@@ -1032,7 +974,6 @@ class QuizOGScreen(BaseScreen):
         answer_label.texture_update()
 
     def on_pre_enter(self, *args):
-        self.topic = random.choice(self.topics)
         self.load_questions()
 
     def level_popup(self):
@@ -1078,8 +1019,12 @@ class QuizOGScreen(BaseScreen):
         topic_index = self.codes2[self.codes.index(self.code)]
         if re.findall(r'(\d{2}-\d{2})', topic_index):
             x, y = topic_index[0:2], topic_index[3:]
-        else:
+        elif re.findall(r'(\d{1}-\d{2})', topic_index):
+            x, y = topic_index[0], topic_index[2:]
+        elif re.findall(r'(\d{1}-\d{1})', topic_index):
             x, y = topic_index[0], topic_index[2]
+        else:
+            print('Invalid numbers...\n\n\n\n...for now')
         self.topics = self.all_topics[int(x):int(y)]
         self.topic = random.choice(self.topics)
         self.ids.topic_label.text = self.topic
@@ -1091,34 +1036,35 @@ class QuizOGScreen(BaseScreen):
 
     def load_questions(self):
         try:
-            if not self.start:
-                topic = random.choice(self.topics)
-                self.topic = topic
-            else:
-                topic = self.topic
-            if self.change_start:
-                self.start = False
+            topic = random.choice(self.topics)  # choose one of the four available topics randomly
             self.ids.topic_label.text = topic
-            if not topic or topic == 'topics':
-                return
-                
-            if not os.path.exists(f'kw_{topic}.json'):
+
+            if not os.path.exists(f'kw_{topic}.json'):  # makes sure the topic json exists
                 raise FileNotFoundError(f"kw_{topic}.json not found")
-                
-            with open(f'kw_{topic}.json', 'r', encoding='utf-8') as f:
+                    
+            with open(f'kw_{topic}.json', 'r', encoding='utf-8') as f:  # load everything from topic json
                 self.all_questions = json.load(f)
-                self.questions = random.choices(self.all_questions, k=10)
+                self.questions = [x for x in self.all_questions if x not in self.removed_list]  # filter out removed questions
+                if len(self.questions) >= 10:
+                    self.questions = random.sample(self.questions, k=10)    # randomly pick 10 uncompleted questions if there are 10 or more
+                else:
+                    if not self.questions:
+                        self.load_questions()
+                    else:    
+                        random.shuffle(self.questions)     # shuffle all the uncompleted questions if less than 10
                 self.current_index = 0
-                if not self.start:
-                    self.show_question()
-                self.change_start = True
-                
+                self.show_question()
         except:
             pass
 
+
     def verify(self):
         if self.ids.code_input.text:
-            supplied_code = int(self.ids.code_input.text)
+            try:
+                supplied_code = int(self.ids.code_input.text)
+            except:
+                print('Number only.')
+                return
         else:
             supplied_code = 0
         if supplied_code in self.codes:
@@ -1131,6 +1077,7 @@ class QuizOGScreen(BaseScreen):
         else:
             x, y = topic_index[0], topic_index[2]
         self.topics = self.all_topics[int(x):int(y)]
+        self.ids.answer_label.opacity = 0
         self.code = supplied_code
         self.topic = random.choice(self.topics)
         self.ids.topic_label.text = self.topic
@@ -1146,8 +1093,7 @@ class QuizOGScreen(BaseScreen):
         else:
             self.start = True
             self.change_start = False
-            self.ids.question_label.text = f"Score: {self.correct_questions}"
-            self.ids.answer_label.text = ""
+            self.ids.answer_input.hint_text = f"Score: {self.correct_questions}"
             self.on_pre_enter()
 
     def toggle_answer(self):
@@ -1161,6 +1107,7 @@ class QuizOGScreen(BaseScreen):
         self.ids.answer_label.opacity = 0
         self.ids.correct_button.text = 'Correct'
         self.ids.answer_input.text = ''
+        self.ids.answer_input.hint_text = f'Score: {self.correct_questions}'
         if self.correct_questions >= 100:
             self.level_popup()
         self.show_question()
@@ -1171,11 +1118,14 @@ class QuizOGScreen(BaseScreen):
         sm.current = 'menu'         # Change screen
 
     def mark_correct(self):
+        question = str(self.ids.question_label.text)
         if self.ids.correct_button.text == 'Correct':
             self.correct_questions += 1
+            self.removed_list.append(question)
             self.ids.correct_button.text = str(self.correct_questions)
         else:
             self.correct_questions -= 1
+            self.removed_list.remove(question)
             self.ids.correct_button.text = 'Correct'
 
 class StudyScreen(BaseScreen):
@@ -1301,7 +1251,6 @@ class KeyWizApp(App):
             PasscodeScreen(name='passcode'),
             MenuScreen(name='menu'),
             DevModeScreen(name='dev_mode'),
-            QuizScreen(name='quiz_mode'),
             ToDoScreen(name='todo'),
             NotesScreen(name='notes'),
             SettingsScreen(name='settings'),

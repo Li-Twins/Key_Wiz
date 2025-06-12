@@ -55,7 +55,6 @@
                 Line:
                     width: 1
                     rounded_rectangle: (self.x, self.y, self.width, self.height, 5)                    
-
                     
 <MenuScreen>:
 
@@ -121,9 +120,9 @@
         GridLayout:
             cols: 2  # Two columns
             rows: 3  # Three rows (will create 2x3 grid)
-            padding: [20, 20]
+            padding: [20, 50]
             spacing: 0
-            size_hint: 0.8, 0.7
+            size_hint: 0.8, 0.6
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
             
             # First row
@@ -1097,7 +1096,7 @@
                         Button:
                             text: 'Both'
                             font_size: 40
-                            on_press: app.change_font(app.current_font)
+                            on_press: app.change_font('zpix.ttf')
                             font_name: app.current_font
                             background_normal: ''
                             background_color: 0, 0, 0, 0.5
@@ -1313,13 +1312,10 @@
             rounded_rectangle: (self.x + 20, self.y + 20, self.width - 40, self.height - 40, 10)
 
 
-
 <QuizSingleScreen>:
 
     BoxLayout:
         orientation: 'vertical'
-        padding: 0
-        spacing: 0
         
         # Top 10pc container
         BoxLayout:
@@ -1379,39 +1375,44 @@
         # Rest of your content (takes remaining 90%)
         BoxLayout:
             orientation: 'vertical'
-            size_hint_y: 0.9
-            padding: [20, 20]
-            spacing: 10
+            size_hint_y: 0.8
+            spacing: 5
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 
-            Label:
-                id: quiz_single_title
-                text: '- Single Minded -'
-                font_size: 50
-                font_name: app.current_font
-                valign: 'middle'
-                halign: 'center'
-                text_size: self.width, None
-                size_hint: (0.8, 0.05)
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: 0.07
+                size_hint_x: 0.8
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                color: app.color_scheme 
-
-            Label:
-                id: quiz_single_intro
-                text: '| choose topic | answer all |'
-                font_size: 30
-                font_name: app.current_font
-                valign: 'middle'
-                halign: 'center'
-                text_size: self.width, None
-                size_hint: (0.8, 0.03)
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                color: app.color_scheme 
+                spacing: 3
+                Label:
+                    id: quiz_single_title
+                    text: 'Single Minded -'
+                    font_size: 40
+                    font_name: app.current_font
+                    valign: 'middle'
+                    halign: 'left'
+                    text_size: self.width, None
+                    size_hint_x: 0.5
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                    color: app.color_scheme 
+                    
+                Label:
+                    id: quiz_single_intro
+                    text: '| choose topic | answer all |'
+                    font_size: 30
+                    font_name: app.current_font
+                    valign: 'middle'
+                    halign: 'right'
+                    text_size: self.width, None
+                    size_hint_x: 0.5
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                    color: app.color_scheme 
 
             Spinner:
                 id: topic_spinner
                 text: 'Topics'
-                font_size: 50
+                font_size: 40
                 font_name: app.current_font
                 size_hint: (0.8, 0.08)
                 valign: 'bottom'
@@ -1434,8 +1435,8 @@
                         rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
 
             Button:
-                text: 'Load Questions'
-                font_size: 50
+                text: 'Start'
+                font_size: 40
                 font_name: app.current_font
                 size_hint: (0.8, 0.08)
                 valign: 'top'
@@ -1525,20 +1526,20 @@
                         radius: [5]
 
             BoxLayout:
-                size_hint: (0.8, 0.08)
-                spacing: 20
-                padding: [20, 20]
-                pos_hint: {'center_x': 0.5}
-                spacing: 20
+                size_hint: (0.8, 0.1)
+                spacing: 10
+                padding: [20, 0]
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 
                 Button:
                     text: 'Answer'
                     background_normal: ''
-                    font_size: 50
+                    font_size: 40
                     font_name: app.current_font
                     background_color: 0, 0, 0, 0
                     color: app.color_scheme
                     on_press: root.toggle_answer()
+                    size_hint_y: 1
                     canvas.before:
                         Color:
                             rgba: 0, 0, 0, 0.5  # Button fill color
@@ -1556,11 +1557,12 @@
                     text: 'Correct'
                     id: correct_button
                     background_normal: ''
-                    font_size: 50
+                    font_size: 40
                     font_name: app.current_font
                     background_color: 0, 0, 0, 0
                     color: app.color_scheme
                     on_press: root.mark_correct()
+                    size_hint_y: 1
                     canvas.before:
                         Color:
                             rgba: 0, 0, 0, 0.5  # Button fill color
@@ -1577,11 +1579,12 @@
                 Button:
                     text: 'Next'
                     background_normal: ''
-                    font_size: 50
+                    font_size: 40
                     font_name: app.current_font
                     background_color: 0, 0, 0, 0
                     color: app.color_scheme
                     on_press: root.next_question()
+                    size_hint_y: 1
                     canvas.before:
                         Color:
                             rgba: 0, 0, 0, 0.5  # Button fill color
@@ -1606,11 +1609,12 @@
             orientation: 'horizontal'
             size_hint_y: 0.1  # Takes exactly 10pc of screen height
             padding: [10, 0, 10, 0]  # Left/right padding only
-
+            pos_hint: {'center_x':0.5, 'center_y':0.5}
             # Main content area (90% width)
             BoxLayout:
                 size_hint_x: 0.9
                 orientation: 'horizontal'
+                pos_hint: {'center_x':0.5, 'center_y':0.5}
                 
                 # Rolling quote (takes available space)
                 RollingQuoteLabel:
@@ -1630,7 +1634,7 @@
             BoxLayout:
                 size_hint_x: 0.1
                 padding: [0, 10, 0, 10]  # Removed right padding from here
-                
+                pos_hint: {'center_x':0.5, 'center_y':0.5}
                 Button:
                     id: back_button
                     text: 'O.o'
@@ -1655,69 +1659,46 @@
                         Line:
                             width: 1.5
                             rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
-                    
-        # Rest of your content (takes remaining 90%)
-        BoxLayout:
-            orientation: 'horizontal'
-            size_hint_y: 0.06
-            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 
-            Label:
-                id: quiz_all_title
-                text: "- Golden Mean -"
-                font_size: 40
-                font_name: app.current_font
-                valign: 'middle'
-                halign: 'center'
-                text_size: self.width, None
-                size_hint_x: 0.8
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: 0.8
+            spacing: 5
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}                    
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: (0.8, 0.07)
+                spacing: 10
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                color: app.color_scheme 
 
-        BoxLayout:
-            orientation: 'horizontal'
-            size_hint: (0.5, 0.05)
-            spacing: 10
-            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                Label:
+                    id: quiz_all_title
+                    text: "Golden Mean -"
+                    font_size: 40
+                    font_name: app.current_font
+                    valign: 'middle'
+                    halign: 'left'
+                    text_size: self.width, None
+                    size_hint_x: 0.6
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                    color: app.color_scheme 
 
-            TextInput:
-                id: code_input
-                hint_text: 'code'
-                font_size: 30
-                font_name: app.current_font
-                size_hint_x: 0.3
-                pos_hint: {'center_x' : 0.5, 'center_y' : 0.5}
-                background_color: (0, 0, 0, 0.5)
-                foreground_color: app.color_scheme
-                cursor_color: app.color_scheme
-                color: app.color_scheme
-                canvas.before:
-                    Color:
-                        rgba: 0, 0, 0, 0.5 # Button fill color
-                    RoundedRectangle:
-                        pos: self.pos
-                        size: self.size
-                        radius: [5]
-                    Color:
-                        rgba: app.color_scheme # Border color
-                    Line:
-                        width: 1
-                        rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
-
-            Button:
-                id: verify_code 
-                text: 'Verify'
-                font_size: 30
-                font_name: app.current_font
-                size_hint_x: 0.2
-                pos_hint: {'center_x' : 0.5, 'center_y' : 0.5}
-                background_normal: ''
-                background_color: (0, 0, 0, 0.5)
-                color: app.color_scheme
-                on_press: root.verify()
-                canvas.before:
-                    Color:
-                        rgba: 0, 0, 0, 0.5 # Button fill color
+                TextInput:
+                    id: code_input
+                    hint_text: 'code'
+                    font_size: 30
+                    font_name: app.current_font
+                    size_hint: (0.2, 0.7)
+                    valign: 'middle'
+                    halign: 'center'
+                    pos_hint: {'center_x' : 0.5, 'center_y' : 0.5}
+                    background_color: (0, 0, 0, 0.5)
+                    foreground_color: app.color_scheme
+                    cursor_color: app.color_scheme
+                    color: app.color_scheme
+                    canvas.before:
+                        Color:
+                            rgba: 0, 0, 0, 0.5 # Button fill color
                         RoundedRectangle:
                             pos: self.pos
                             size: self.size
@@ -1728,18 +1709,38 @@
                             width: 1
                             rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
 
-        BoxLayout:
-            orientation: 'vertical'
-            size_hint_x: 0.8
-            padding: [20, 20]
-            spacing: 10
-            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                Button:
+                    id: verify_code 
+                    text: 'Verify'
+                    font_size: 30
+                    font_name: app.current_font
+                    size_hint_x: 0.2
+                    pos_hint: {'center_x' : 0.5, 'center_y' : 0.5}
+                    background_normal: ''
+                    background_color: (0, 0, 0, 0.5)
+                    valign: 'center'
+                    halign: 'center'
+                    color: app.color_scheme
+                    on_press: root.verify()
+                    canvas.before:
+                        Color:
+                            rgba: 0, 0, 0, 0.5 # Button fill color
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [5]
+                            Color:
+                                rgba: app.color_scheme # Border color
+                            Line:
+                                width: 1
+                                rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+
             Label:
                 id: topic_label
                 text: ''
                 font_size: 40
                 font_name: app.current_font
-                size_hint: (1, 0.08)
+                size_hint: (0.8, 0.08)
                 valign: 'bottom'
                 halign: 'center'
                 pos_hint: {'center_x': 0.5}
@@ -1748,31 +1749,6 @@
                 canvas.before:
                     Color:
                         rgba: 0, 0, 0, 0.5 # Button fill color
-                    RoundedRectangle:
-                        pos: self.pos
-                        size: self.size
-                        radius: [5]
-                    Color:
-                        rgba: app.color_scheme # Border color
-                    Line:
-                        width: 1
-                        rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
-
-            Button:
-                text: 'Start'
-                font_size: 40
-                font_name: app.current_font
-                size_hint: (1, 0.08)
-                valign: 'top'
-                halign: 'center'
-                pos_hint: {'center_x': 0.5}
-                background_normal: ''
-                background_color: 0, 0, 0, 0  # Make transparent
-                color: app.color_scheme
-                on_press: root.load_questions()
-                canvas.before:
-                    Color:
-                        rgba: 0, 0, 0, 0.5  # Button fill color
                     RoundedRectangle:
                         pos: self.pos
                         size: self.size
@@ -1793,7 +1769,7 @@
                 background_normal: ''
                 background_color: 0, 0, 0, 0.5  # Make transparent
                 text_size: self.width, None
-                size_hint: (1, 0.3)
+                size_hint: (0.8, 0.2)
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                 color: app.color_scheme
                 canvas.before:
@@ -1816,7 +1792,7 @@
                 foreground_color: app.color_scheme
                 background_color: 0, 0, 0, 0.2  # Make transparent
                 text_size: self.width, None
-                size_hint: (1, 0.3)
+                size_hint: (0.8, 0.2)
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                 color: app.color_scheme
                 canvas.before:
@@ -1837,7 +1813,7 @@
                 valign: 'middle'
                 halign: 'center'
                 text_size: self.width, None
-                size_hint: (1, 0.3)
+                size_hint: (0.8, 0.2)
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                 color: app.color_scheme
                 opacity: 0
@@ -1850,79 +1826,79 @@
                         radius: [5]
 
 
-        BoxLayout:
-            size_hint: (0.8, 0.08)
-            spacing: 20
-            padding: [20, 20]
-            pos_hint: {'center_x': 0.5}
+            BoxLayout:
+                size_hint: (0.8, 0.1)
+                spacing: 10
+                padding: [20, 0]
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 
-            Button:
-                text: 'Answer'
-                background_normal: ''
-                font_size: 40
-                font_name: app.current_font
-                background_color: 0, 0, 0, 0
-                color: app.color_scheme
-                on_press: root.toggle_answer()
-                size_hint: (0.3, 1)
-                canvas.before:
-                    Color:
-                        rgba: 0, 0, 0, 0.5  # Button fill color
-                    RoundedRectangle:
-                        pos: self.pos
-                        size: self.size
-                        radius: [5]
-                    Color:
-                        rgba: app.color_scheme # Border color
-                    Line:
-                        width: 1
-                        rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+                Button:
+                    text: 'Answer'
+                    background_normal: ''
+                    font_size: 40
+                    font_name: app.current_font
+                    background_color: 0, 0, 0, 0
+                    color: app.color_scheme
+                    on_press: root.toggle_answer()
+                    size_hint: (0.3, 1)
+                    canvas.before:
+                        Color:
+                            rgba: 0, 0, 0, 0.5  # Button fill color
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [5]
+                        Color:
+                            rgba: app.color_scheme # Border color
+                        Line:
+                            width: 1
+                            rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
 
-            Button:
-                id: correct_button
-                text: 'Correct'
-                background_normal: ''
-                size_hint: (0.3, 1)
-                font_size: 40
-                font_name: app.current_font
-                background_color: 0, 0, 0, 0
-                color: app.color_scheme
-                on_press: root.mark_correct()
-                opacity: 1
-                canvas.before:
-                    Color:
-                        rgba: 0, 0, 0, 0.5  # Button fill color
-                    RoundedRectangle:
-                        pos: self.pos
-                        size: self.size
-                        radius: [5]
-                    Color:
-                        rgba: app.color_scheme # Border color
-                    Line:
-                        width: 1
-                        rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+                Button:
+                    id: correct_button
+                    text: 'Correct'
+                    background_normal: ''
+                    size_hint: (0.3, 1)
+                    font_size: 40
+                    font_name: app.current_font
+                    background_color: 0, 0, 0, 0
+                    color: app.color_scheme
+                    on_press: root.mark_correct()
+                    opacity: 1
+                    canvas.before:
+                        Color:
+                            rgba: 0, 0, 0, 0.5  # Button fill color
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [5]
+                        Color:
+                            rgba: app.color_scheme # Border color
+                        Line:
+                            width: 1
+                            rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
 
-            Button:
-                text: 'Next'
-                background_normal: ''
-                font_size: 40
-                font_name: app.current_font
-                background_color: 0, 0, 0, 0
-                color: app.color_scheme
-                on_press: root.next_question()
-                size_hint: (0.3, 1)
-                canvas.before:
-                    Color:
-                        rgba: 0, 0, 0, 0.5  # Button fill color
-                    RoundedRectangle:
-                        pos: self.pos
-                        size: self.size
-                        radius: [5]
-                    Color:
-                        rgba: app.color_scheme # Border color
-                    Line:
-                        width: 1
-                        rounded_rectangle: (self.x, self.y, self.width, self.height, 5) 
+                Button:
+                    text: 'Next'
+                    background_normal: ''
+                    font_size: 40
+                    font_name: app.current_font
+                    background_color: 0, 0, 0, 0
+                    color: app.color_scheme
+                    on_press: root.next_question()
+                    size_hint: (0.3, 1)
+                    canvas.before:
+                        Color:
+                            rgba: 0, 0, 0, 0.5  # Button fill color
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [5]
+                        Color:
+                            rgba: app.color_scheme # Border color
+                        Line:
+                            width: 1
+                            rounded_rectangle: (self.x, self.y, self.width, self.height, 5) 
 
 <QuizAllScreen>:
     BoxLayout:
@@ -1988,34 +1964,38 @@
         # Rest of your content (takes remaining 90%)
         BoxLayout:
             orientation: 'vertical'
-            size_hint_y: 0.9
-            padding: [20, 20]
-            spacing: 10
+            size_hint_y: 0.8
+            spacing: 5
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+            BoxLayout:
+                spacing: 3
+                orientation: 'horizontal'
+                size_hint_y: 0.07
+                size_hint_x: 0.8
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5} 
+                Label:
+                    id: quiz_all_title
+                    text: "Pandora's box -"
+                    font_size: 40
+                    font_name: app.current_font
+                    valign: 'middle'
+                    halign: 'left'
+                    text_size: self.width, None
+                    size_hint_x: 0.5
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                    color: app.color_scheme 
 
-            Label:
-                id: quiz_all_title
-                text: "- Pandora's box -"
-                font_size: 50
-                font_name: app.current_font
-                valign: 'middle'
-                halign: 'center'
-                text_size: self.width, None
-                size_hint: (0.8, 0.05)
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                color: app.color_scheme 
-
-            Label:
-                id: quiz_all_intro
-                text: '| random topic | ten questions |'
-                font_size: 30
-                font_name: app.current_font
-                valign: 'middle'
-                halign: 'center'
-                text_size: self.width, None
-                size_hint: (0.8, 0.03)
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                color: app.color_scheme 
+                Label:
+                    id: quiz_all_intro
+                    text: '| random topic | ten questions |'
+                    font_size: 30
+                    font_name: app.current_font
+                    valign: 'middle'
+                    halign: 'right'
+                    text_size: self.width, None
+                    size_hint_x: 0.5
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                    color: app.color_scheme 
 
             Label:
                 id: topic_label
@@ -2134,16 +2114,15 @@
 
 
             BoxLayout:
-                size_hint: (0.8, 0.08)
-                spacing: 20
-                padding: [20, 20]
-                pos_hint: {'center_x': 0.5}
-                spacing: 20
+                size_hint: (0.8, 0.1)
+                spacing: 10
+                padding: [20, 0]
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 
                 Button:
                     text: 'Answer'
                     background_normal: ''
-                    font_size: 50
+                    font_size: 40
                     font_name: app.current_font
                     background_color: 0, 0, 0, 0
                     color: app.color_scheme
@@ -2165,7 +2144,7 @@
                     id: correct_button
                     text: 'Correct'
                     background_normal: ''
-                    font_size: 50
+                    font_size: 40
                     font_name: app.current_font
                     background_color: 0, 0, 0, 0
                     color: app.color_scheme
@@ -2187,7 +2166,7 @@
                 Button:
                     text: 'Next'
                     background_normal: ''
-                    font_size: 50
+                    font_size: 40
                     font_name: app.current_font
                     background_color: 0, 0, 0, 0
                     color: app.color_scheme
@@ -2269,7 +2248,7 @@
         # load file row, 10%
         BoxLayout:
             orientation: 'horizontal'
-            size_hint: (0.8, 0.08)
+            size_hint: (0.8, 0.1)
             padding: [20, 20]
             spacing: 10
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
@@ -2310,7 +2289,7 @@
                 
         BoxLayout:
             orientation: 'horizontal'
-            size_hint: (0.8, 0.08)
+            size_hint: (0.8, 0.1)
             padding: [20, 20]
             spacing: 10
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
@@ -2354,7 +2333,7 @@
         BoxLayout:
             orientation: 'vertical'
             size_hint_y: 0.7
-            padding: [20, 20]
+            padding: [20, 10]
             spacing: 10
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 
