@@ -203,7 +203,7 @@ class LoginScreen(BaseScreen):
             
         if nameinput in full_player_data.keys():
             if pwinput.strip().lower() != full_player_data[nameinput]["passcode"]:
-                self.ids.status_label.text = "Password invalid"
+                self.ids.password_input.text = "passcode invalid"
                 return
                 
             # Login successful
@@ -213,8 +213,8 @@ class LoginScreen(BaseScreen):
             self.ids.username_input.text = f"{current_player_name}"
             self.ids.password_input.text = f"Pts: {current_player_data['points']}"
             self.ids.login_button.text = '[ Welcome ]'
-        else:    
-            self.ids.status_label.text = 'Username not valid.'
+        else:  
+            self.ids.username_input.text = "username invalid"
             return
         
     def handle_login_button(self):
@@ -223,12 +223,6 @@ class LoginScreen(BaseScreen):
         else:
             self.go_to_menu()
 
-    def show_message(self, message):
-        """Show status message with animation"""
-        self.ids.status_label.text = message
-        self.ids.status_label.color = APP.color_scheme
-        Animation(opacity=1, duration=0.3).start(self.ids.status_label)
-        Clock.schedule_once(lambda dt: Animation(opacity=0, duration=2).start(self.ids.status_label), 3)
 
 class NoteItem(BoxLayout):
     note_text = StringProperty('')

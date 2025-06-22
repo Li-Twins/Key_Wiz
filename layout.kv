@@ -1,48 +1,14 @@
-<PasscodeScreen>:
+<LoginScreen>:
     BoxLayout:
-        orientation: 'vertical'
-        padding: 50
-        spacing: 30
+        orientation:'vertical'
+        spacing: 0
+        size_hint: (0.5, 0.3)
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-        size_hint: 0.8, 0.6
 
-        Label:
-            text: 'ENTER PASSCODE'
-            font_size: 40
-            font_name: app.current_font
-            color: app.color_scheme
-            size_hint_y: 0.3
-
-        TextInput:
-            id: passcode_input
-            password: True  # Hides input with dots
-            multiline: False
-            font_size: 40
-            font_name: app.current_font
-            size_hint_y: 0.2
-            background_color: 0, 0, 0, 0.5
-            foreground_color: 0.88, 0.47, 0.18, 1
-            cursor_color: 0.88, 0.47, 0.18, 1
-            padding: [20, (self.height - self.line_height)/2]
-            focus: True
-
-        Label:
-            id: error_label
-            text: ''
-            font_size: 30
-            font_name: app.current_font
-            color: app.color_scheme # Starts invisible (alpha=0)
-            size_hint_y: 0.2
-
-        Button:
-            text: 'SUBMIT'
-            font_size: 40
-            font_name: app.current_font
-            size_hint_y: 0.2
-            background_normal: ''
-            background_color: 0, 0, 0, 0
-            color: app.color_scheme
-            on_press: root.verify_passcode()
+        BoxLayout:
+            orientation:'vertical'
+            spacing: 0
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
             canvas.before:
                 Color:
                     rgba: 0, 0, 0, 0.5
@@ -54,8 +20,51 @@
                     rgba: app.color_scheme
                 Line:
                     width: 1
-                    rounded_rectangle: (self.x, self.y, self.width, self.height, 5)                    
-                    
+                    rounded_rectangle: (self.x, self.y, self.width, self.height, 8)
+
+            TextInput:
+                id: username_input
+                hint_text: 'username' 
+                font_name: app.current_font
+                font_size: 70
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                valign: 'middle'
+                halign: 'center'
+                background_color: 0, 0, 0, 0.5
+                foreground_color: app.color_scheme
+                cursor_color: app.color_scheme
+                multiline: False
+
+            TextInput:
+                id: password_input
+                hint_text: 'password' 
+                font_name: app.current_font
+                font_size: 70
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                valign: 'middle'
+                halign: 'center'
+                background_color: 0, 0, 0, 0.5
+                foreground_color: app.color_scheme
+                cursor_color: app.color_scheme
+                multiline: False
+
+            Button:
+                text: '[ Lo.Gin ]'
+                id: login_button
+                on_press: root.handle_login_button()
+                font_size: 70
+                font_name: app.current_font
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                valign: 'middle'
+                halign: 'center'
+                background_normal: ''
+                background_color: 0, 0, 0, 0.7
+                foreground_color: app.color_scheme
+                cursor_color: app.color_scheme
+                color: app.color_scheme       
+                 
+
+                  
 <MenuScreen>:
 
     BoxLayout:
@@ -96,7 +105,7 @@
                     id: back_button
                     text: 'O.o'
                     on_press: root.quit()
-                    font_size: 35
+                    font_size: 40
                     font_name: app.current_font
                     size_hint: None, None
                     size: 60, 60
@@ -117,19 +126,23 @@
                             width: 1.5
                             rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
 
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: 0.05  # Takes exactly 10pc of screen height
+
         GridLayout:
             cols: 2  # Two columns
             rows: 3  # Three rows (will create 2x3 grid)
-            padding: [20, 50]
+            padding: [20, 0]
             spacing: 0
-            size_hint: 0.8, 0.6
+            size_hint: 0.8, 0.75
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
             
             # First row
             Button:
-                text: 'Dev Mode'
+                text: 'Dev~'
                 on_press: root.switch_to_dev_mode()
-                font_size: 50
+                font_size: 60
                 font_name: app.current_font
                 size_hint: (0.5, 0.1)
                 valign: 'middle'
@@ -151,9 +164,9 @@
                         rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
 
             Button:
-                text: 'Quiz Run'
+                text: 'QuiZzz'
                 on_press: root.switch_to_quiz_mode()
-                font_size: 50
+                font_size: 60
                 font_name: app.current_font
                 size_hint: (0.5, 0.1)
                 valign: 'middle'
@@ -176,9 +189,9 @@
 
             # Second row
             Button:
-                text: '2(0.d.0)'
+                text: '20d0'
                 on_press: root.switch_to_todo_mode()
-                font_size: 50
+                font_size: 60
                 font_name: app.current_font
                 size_hint: (0.5, 0.1)
                 valign: 'middle'
@@ -202,7 +215,7 @@
             Button:
                 text: 'n0t3'
                 on_press: root.switch_to_notes_mode()
-                font_size: 50
+                font_size: 60
                 font_name: app.current_font
                 size_hint: (0.5, 0.1)
                 valign: 'middle'
@@ -225,9 +238,9 @@
 
             # Third row
             Button:
-                text: 'Set`In'
-                on_press: root.switch_to_settings()
-                font_size: 50
+                text: 'Le-Arn'
+                on_press: root.switch_to_study_mode()
+                font_size: 60
                 font_name: app.current_font
                 size_hint: (0.5, 0.1)
                 valign: 'middle'
@@ -249,9 +262,9 @@
                         rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
 
             Button:
-                text: 'Le-Arn'
-                on_press: root.switch_to_study_mode()
-                font_size: 50
+                text: 'Set`In'
+                on_press: root.switch_to_settings()
+                font_size: 60
                 font_name: app.current_font
                 size_hint: (0.5, 0.1)
                 valign: 'middle'
@@ -273,8 +286,9 @@
                         rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
 
         BoxLayout:
-            size_hint_y: 0.08  # Takes exactly 8pc of screen height
-            padding: [10, 0, 10, 0]  # Left/right padding only
+            orientation: 'horizontal'
+            size_hint_y: 0.1  # Takes exactly 10pc of screen height
+
                     
 <CustomSpinnerOption>:
     background_normal: ''
@@ -337,7 +351,7 @@
                     id: back_button
                     text: 'O.o'
                     on_press: root.back_to_root()
-                    font_size: 35
+                    font_size: 40
                     font_name: app.current_font
                     size_hint: None, None
                     size: 60, 60
@@ -550,7 +564,7 @@
                     id: back_button
                     text: 'O.o'
                     on_press: root.back_to_root()
-                    font_size: 35
+                    font_size: 40
                     font_name: app.current_font
                     size_hint: None, None
                     size: 60, 60
@@ -669,16 +683,16 @@
 <NoteItem>:
     orientation: 'horizontal'
     size_hint_y: None
-    height: '50dp'
+    #height: '50dp'
     spacing: '10dp'
-
+    pos_hint: {'top': 1}
 
     Button:
         text: '[x]'
         font_size: 20
         size_hint_x: 0.02
         size: 25, 25
-        pos_hint: {'left': 1, 'center_y': 0.6}
+        pos_hint: {'left': 1, 'top': 1}
         on_press: root.delete_note()
         background_normal: ''
         background_color: (0, 0, 0, 0)
@@ -689,51 +703,56 @@
     Label:
         id: note_text
         text: root.note_text
-        size_hint_x: 0.9
+        size_hint_x: 0.98
         font_size: 40
         font_name: app.current_font
         color: app.color_scheme
         halign: 'left'
-        valign: 'bottom'
+        valign: 'top'
         text_size: self.width, None
         size_hint_y: None
-        height: self.texture_size[1] + dp(20)
+        #height: self.texture_size[1] + dp(20)
 
 <NotesScreen>:
-
     BoxLayout:
         orientation: 'vertical'
         padding: 0
         spacing: 0
-        
-        # Top 10pc container
+
         BoxLayout:
             orientation: 'horizontal'
-            size_hint_y: 0.1
-            padding: [10, 0, 10, 0]
+            size_hint_y: 0.1  # Takes exactly 10pc of screen height
+            padding: [10, 0, 10, 0]  # Left/right padding only
 
-            # Rolling quote
-            RollingQuoteLabel:
-                id: rolling_quote
-                text: "In Key-Wiz We Trust"
-                font_size: 40
-                font_name: app.current_font
+            # Main content area (90% width)
+            BoxLayout:
                 size_hint_x: 0.9
-                valign: 'center'
-                halign: 'right'
-                color: app.color_scheme
-                text_size: self.width, None
-            
-            # Back button container
+                orientation: 'horizontal'
+                
+                # Rolling quote (takes available space)
+                RollingQuoteLabel:
+                    id: rolling_quote
+                    text: "In Key-Wiz We Trust"
+                    font_size: 40
+                    font_name: app.current_font
+                    size_hint_x: 1
+                    valign: 'center'
+                    halign: 'right'
+                    color: app.color_scheme
+                    text_size: self.width, None
+                    shorten: True
+                    shorten_from: 'right'
+                
+            # Back button container (10% width)
             BoxLayout:
                 size_hint_x: 0.1
-                padding: [0, 10, 0, 10]
-                
+                padding: [0, 10, 0, 10]  # Removed right padding from here
+                    
                 Button:
                     id: back_button
                     text: 'O.o'
                     on_press: root.back_to_root()
-                    font_size: 35
+                    font_size: 40
                     font_name: app.current_font
                     size_hint: None, None
                     size: 60, 60
@@ -850,13 +869,13 @@
             # Back button container (10% width)
             BoxLayout:
                 size_hint_x: 0.1
-                padding: [0, 10, 0, 10]  # Removed right padding from here
+                padding: [2, 10, 0, 10]  # Removed right padding from here
                 
                 Button:
                     id: back_button
                     text: 'O.o'
                     on_press: root.back_to_root()
-                    font_size: 35
+                    font_size: 40
                     font_name: app.current_font
                     size_hint: None, None
                     size: 60, 60
@@ -876,20 +895,22 @@
                         Line:
                             width: 1.5
                             rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: 0.1  # Takes exactly 10pc of screen height
         
         ScrollView:
             BoxLayout:
                 orientation: 'vertical'
                 size_hint_y: 0.8
-                height: self.minimum_height
-                spacing: 80
-                padding: [20, 20]
+                spacing: 50
+                padding: [20, 0]
                 pos_hint: {'center_x': 0.5}  # Center horizontally
                                     
                 # Sound Section
                 BoxLayout:
                     orientation: 'vertical'
-                    size_hint_y: 0.2
                     size_hint_x: 0.8  # Take 80% width
                     pos_hint: {'center_x': 0.5}  # Center horizontally
 
@@ -916,7 +937,7 @@
                         size_hint_y: 0.5
                         spacing: 20
                         Button:
-                            text: 'Jazz'
+                            text: 'Jazzy'
                             font_size: 40
                             on_press: app.change_music('music1.mp3')
                             font_name: app.current_font
@@ -924,7 +945,7 @@
                             background_color: 0, 0, 0, 0.5
                             color: app.color_scheme
                         Button:
-                            text: 'Trip'
+                            text: 'Trippy'
                             font_size: 40
                             on_press: app.change_music('music2.mp3')
                             font_name: app.current_font
@@ -932,7 +953,7 @@
                             background_color: 0, 0, 0, 0.5
                             color: app.color_scheme
                         Button:
-                            text: 'Silly'
+                            text: 'Happy'
                             font_size: 40
                             on_press: app.change_music('music3.mp3')
                             font_name: app.current_font
@@ -943,7 +964,6 @@
                 # Look Section
                 BoxLayout:
                     orientation: 'vertical'
-                    size_hint_y: 0.2
                     size_hint_x: 0.8  # Take 80% width
                     pos_hint: {'center_x': 0.5}  # Center horizontally
 
@@ -997,7 +1017,6 @@
                 # Image Section
                 BoxLayout:
                     orientation: 'vertical'
-                    size_hint_y: 0.2
                     size_hint_x: 0.8  # Take 80% width
                     pos_hint: {'center_x': 0.5}  # Center horizontally
 
@@ -1051,7 +1070,6 @@
                 # Font Section
                 BoxLayout:
                     orientation: 'vertical'
-                    size_hint_y: 0.2
                     size_hint_x: 0.8  # Take 80% width
                     pos_hint: {'center_x': 0.5}  # Center horizontally
 
@@ -1078,15 +1096,15 @@
                         size_hint_y: 0.5
                         spacing: 20
                         Button:
-                            text: 'New'
+                            text: 'Chi'
                             font_size: 40
-                            on_press: app.change_font('RomanAntique.ttf')
+                            on_press: app.change_font('Hanyi.ttf')
                             font_name: app.current_font
                             background_normal: ''
                             background_color: 0, 0, 0, 0.5
                             color: app.color_scheme
                         Button:
-                            text: 'Old'
+                            text: 'Eng'
                             font_size: 40
                             on_press: app.change_font('Tox.ttf')
                             font_name: app.current_font
@@ -1102,38 +1120,101 @@
                             background_color: 0, 0, 0, 0.5
                             color: app.color_scheme                    
 
+                # Quote Section
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_x: 0.8  # Take 80% width
+                    pos_hint: {'center_x': 0.5}  # Center horizontally
+
+                    Label:
+                        text: 'Quote'
+                        font_size: 60
+                        font_name: app.current_font
+                        size_hint_y: 0.5
+                        color: app.color_scheme
+                        canvas.before:
+                            Color:
+                                rgba: 0, 0, 0, 0.5
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [5]
+                            Color:
+                                rgba: app.color_scheme
+                            Line:
+                                width: 1
+                                rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+                    
+                    BoxLayout:
+                        size_hint_y: 0.5
+                        spacing: 20
+                        Button:
+                            text: 'Clap'
+                            font_size: 40
+                            on_press: app.change_quotes('clap')
+                            font_name: app.current_font
+                            background_normal: ''
+                            background_color: 0, 0, 0, 0.5
+                            color: app.color_scheme
+                        Button:
+                            text: 'Slap'
+                            font_size: 40
+                            on_press: app.change_quotes('slap')
+                            font_name: app.current_font
+                            background_normal: ''
+                            background_color: 0, 0, 0, 0.5
+                            color: app.color_scheme
+                        Button:
+                            text: 'Flap'
+                            font_size: 40
+                            on_press: app.change_quotes('flap')
+                            font_name: app.current_font
+                            background_normal: ''
+                            background_color: 0, 0, 0, 0.5
+                            color: app.color_scheme          
+
+
 <EditTopicScreen>:
     BoxLayout:
         orientation: 'vertical'
-        padding: 0
+        padding: [0, 0, 0, 20] 
         spacing: 0
-
-        # Header - fixed at top (10% height)
+        
+        # Top 10pc container
         BoxLayout:
             orientation: 'horizontal'
-            size_hint_y: 0.1
-            padding: [10, 0, 10, 0]
+            size_hint_y: 0.1  # Takes exactly 10pc of screen height
+            padding: [10, 0, 10, 0]  # Left/right padding only
 
-            RollingQuoteLabel:
-                id: rolling_quote
-                text: "In Key-Wiz We Trust"
-                font_size: 40
-                font_name: app.current_font
+            # Main content area (90% width)
+            BoxLayout:
                 size_hint_x: 0.9
-                valign: 'center'
-                halign: 'right'
-                color: app.color_scheme
-                text_size: self.width, None
+                orientation: 'horizontal'
+                
+                # Rolling quote (takes available space)
+                RollingQuoteLabel:
+                    id: rolling_quote
+                    text: "In Key-Wiz We Trust"
+                    font_size: 40
+                    font_name: app.current_font
+                    size_hint_x: 1
+                    valign: 'center'
+                    halign: 'right'
+                    color: app.color_scheme
+                    text_size: self.width, None
+                    shorten: True
+                    shorten_from: 'right'
             
+            # Back button container (10% width)
             BoxLayout:
                 size_hint_x: 0.1
-                padding: [0, 10, 0, 10]
+                padding: [2, 10, 0, 0]  # Removed right padding from here
                 
                 Button:
                     id: back_button
                     text: 'O.o'
                     on_press: root.back_to_dev_mode()
-                    font_size: 35
+                    font_size: 40
                     font_name: app.current_font
                     size_hint: None, None
                     size: 60, 60
@@ -1153,142 +1234,133 @@
                         Line:
                             width: 1.5
                             rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
-
-        # Main content area - properly centered
-        AnchorLayout:
-            size_hint: 1, 0.9
-            anchor_x: 'center'
+                    
+        # Rest of your content (takes remaining 90%)
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: (0.8, 0.9)
+            padding: [20, 0]
+            spacing: 10
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
             
-            ScrollView:
-                size_hint: (0.8, 1)
-                do_scroll_x: False  # Only vertical scrolling
+            # Topic input section
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: 0.08
+                spacing: 10
+
+                TextInput:
+                    id: topic_input
+                    hint_text: 'enter topic name..'
+                    font_size: 40
+                    font_name: app.current_font
+                    size_hint: (0.5, 0.6)
+                    background_color: 0, 0, 0, 0.5
+                    foreground_color: app.color_scheme
+                    cursor_color: app.color_scheme
+                    multiline: False
+
+                Button:
+                    text: 'GET'
+                    font_size: 40
+                    font_name: app.current_font
+                    size_hint: (0.25, 0.6)
+                    background_normal: ''
+                    background_color: 0, 0, 0, 0
+                    color: app.color_scheme
+                    on_press: root.check_topic()
+                    canvas.before:
+                        Color:
+                            rgba: 0, 0, 0, 0.5
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [5]
+                        Color:
+                            rgba: app.color_scheme
+                        Line:
+                            width: 1
+                            rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
                 
-                BoxLayout:
-                    orientation: 'vertical'
-                    size_hint_y: None
-                    height: self.minimum_height
-                    spacing: 60
-                    padding: [0, 20]  # Only vertical padding
-                    width: self.parent.width  # Match ScrollView width
+                Button:
+                    text: 'DEL'
+                    font_size: 40
+                    font_name: app.current_font
+                    size_hint: (0.25, 0.6)
+                    background_normal: ''
+                    background_color: 0, 0, 0, 0
+                    color: app.color_scheme
+                    on_press: root.delete_topic()
+                    canvas.before:
+                        Color:
+                            rgba: 0, 0, 0, 0.5
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [5]
+                        Color:
+                            rgba: app.color_scheme
+                        Line:
+                            width: 1
+                            rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
                     
-                    # Topic input section
-                    BoxLayout:
-                        orientation: 'horizontal'
-                        size_hint_y: None
-                        height: 80
-                        spacing: 10
+            
+            # Status label
+            Label:
+                id: status_label
+                text: ''
+                font_size: 40
+                font_name: app.current_font
+                size_hint_y: 0.05
+                color: app.color_scheme
+                halign: 'center'
 
-                        TextInput:
-                            id: topic_input
-                            hint_text: 'Enter topic name'
-                            font_size: 40
-                            font_name: app.current_font
-                            size_hint_x: 0.7
-                            background_color: 0, 0, 0, 0.5
-                            foreground_color: app.color_scheme
-                            cursor_color: app.color_scheme
-                            multiline: False
 
-                        Button:
-                            text: 'Select'
-                            font_size: 40
-                            font_name: app.current_font
-                            size_hint_x: 0.3
-                            background_normal: ''
-                            background_color: 0, 0, 0, 0
-                            color: app.color_scheme
-                            on_press: root.check_topic()
-                            canvas.before:
-                                Color:
-                                    rgba: 0, 0, 0, 0.5
-                                RoundedRectangle:
-                                    pos: self.pos
-                                    size: self.size
-                                    radius: [5]
-                                Color:
-                                    rgba: app.color_scheme
-                                Line:
-                                    width: 1
-                                    rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
-                    
-                    # Status label
-                    Label:
-                        id: status_label
-                        text: ''
-                        font_size: 40
-                        font_name: app.current_font
-                        size_hint_y: None
-                        height: 50
-                        color: app.color_scheme
-                        halign: 'center'
+            TextInput:
+                id: question_input
+                hint_text: 'question here'
+                font_size: 40
+                font_name: app.current_font
+                size_hint_y: 0.35
+                background_color: 0, 0, 0, 0.5
+                foreground_color: app.color_scheme
+                cursor_color: app.color_scheme
+                multiline: True
 
-                    # Question input
-                    Label:
-                        text: 'Question:'
-                        font_size: 40
-                        font_name: app.current_font
-                        size_hint_y: None
-                        height: 50
-                        color: app.color_scheme
-                        halign: 'center'
 
-                    TextInput:
-                        id: question_input
-                        font_size: 40
-                        font_name: app.current_font
-                        size_hint_y: None
-                        height: 150
-                        background_color: 0, 0, 0, 0.5
-                        foreground_color: app.color_scheme
-                        cursor_color: app.color_scheme
-                        multiline: True
-                        padding: [10, 10]
+            TextInput:
+                id: answer_input
+                hint_text: 'answer here'
+                font_size: 40
+                font_name: app.current_font
+                size_hint_y: 0.35
+                background_color: 0, 0, 0, 0.5
+                foreground_color: app.color_scheme
+                cursor_color: app.color_scheme
+                multiline: True
 
-                    # Answer input
-                    Label:
-                        text: 'Answer:'
-                        font_size: 40
-                        font_name: app.current_font
-                        size_hint_y: None
-                        height: 50
-                        color: app.color_scheme
-                        halign: 'center'
-
-                    TextInput:
-                        id: answer_input
-                        font_size: 40
-                        font_name: app.current_font
-                        size_hint_y: None
-                        height: 150
-                        background_color: 0, 0, 0, 0.5
-                        foreground_color: app.color_scheme
-                        cursor_color: app.color_scheme
-                        multiline: True
-                        padding: [10, 10]
-
-                    # Add button
-                    Button:
-                        text: 'Add Question'
-                        font_size: 50
-                        font_name: app.current_font
-                        size_hint_y: None
-                        height: 80
-                        background_normal: ''
-                        background_color: 0, 0, 0, 0
-                        color: app.color_scheme
-                        on_press: root.add_question()
-                        canvas.before:
-                            Color:
-                                rgba: 0, 0, 0, 0.5
-                            RoundedRectangle:
-                                pos: self.pos
-                                size: self.size
-                                radius: [5]
-                            Color:
-                                rgba: app.color_scheme
-                            Line:
-                                width: 1
-                                rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+            # Add button
+            Button:
+                text: 'Add Question'
+                font_size: 40
+                font_name: app.current_font
+                size_hint_y: 0.08
+                background_normal: ''
+                background_color: 0, 0, 0, 0
+                color: app.color_scheme
+                on_press: root.add_question()
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 0.5
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [5]
+                    Color:
+                        rgba: app.color_scheme
+                    Line:
+                        width: 1
+                        rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
 
 
 
@@ -1345,13 +1417,13 @@
             # Back button container (10% width)
             BoxLayout:
                 size_hint_x: 0.1
-                padding: [0, 10, 0, 10]  # Removed right padding from here
+                padding: [2, 10, 0, 10]  # Removed right padding from here
                 
                 Button:
                     id: back_button
                     text: 'O.o'
                     on_press: root.back_to_root()
-                    font_size: 35
+                    font_size: 40
                     font_name: app.current_font
                     size_hint: None, None
                     size: 60, 60
@@ -1376,7 +1448,8 @@
         BoxLayout:
             orientation: 'vertical'
             size_hint_y: 0.8
-            spacing: 5
+            padding: [20, 0]
+            spacing: 10
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 
             BoxLayout:
@@ -1387,7 +1460,7 @@
                 spacing: 3
                 Label:
                     id: quiz_single_title
-                    text: 'Single Minded -'
+                    text: 'Single Minded'
                     font_size: 40
                     font_name: app.current_font
                     valign: 'middle'
@@ -1399,7 +1472,7 @@
                     
                 Label:
                     id: quiz_single_intro
-                    text: '| choose topic | answer all |'
+                    text: '- choose topic\n- answer all'
                     font_size: 30
                     font_name: app.current_font
                     valign: 'middle'
@@ -1414,7 +1487,7 @@
                 text: 'Topics'
                 font_size: 40
                 font_name: app.current_font
-                size_hint: (0.8, 0.08)
+                size_hint: (0.8, 0.06)
                 valign: 'bottom'
                 halign: 'center'
                 pos_hint: {'center_x': 0.5}
@@ -1438,7 +1511,7 @@
                 text: 'Start'
                 font_size: 40
                 font_name: app.current_font
-                size_hint: (0.8, 0.08)
+                size_hint: (0.8, 0.06)
                 valign: 'top'
                 halign: 'center'
                 pos_hint: {'center_x': 0.5}
@@ -1526,9 +1599,9 @@
                         radius: [5]
 
             BoxLayout:
-                size_hint: (0.8, 0.1)
+                size_hint: (0.8, 0.08)
                 spacing: 10
-                padding: [20, 0]
+                padding: [0, 20]
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 
                 Button:
@@ -1633,13 +1706,13 @@
             # Back button container (10% width)
             BoxLayout:
                 size_hint_x: 0.1
-                padding: [0, 10, 0, 10]  # Removed right padding from here
+                padding: [2, 10, 0, 0]  # Removed right padding from here
                 pos_hint: {'center_x':0.5, 'center_y':0.5}
                 Button:
                     id: back_button
                     text: 'O.o'
                     on_press: root.back_to_root()
-                    font_size: 35
+                    font_size: 40
                     font_name: app.current_font
                     size_hint: None, None
                     size: 60, 60
@@ -1663,39 +1736,57 @@
         BoxLayout:
             orientation: 'vertical'
             size_hint_y: 0.8
-            spacing: 5
+            spacing: 10
+            padding: [20, 0]
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}                    
             BoxLayout:
                 orientation: 'horizontal'
-                size_hint: (0.8, 0.07)
+                size_hint: (0.8, 0.08)
                 spacing: 10
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 
                 Label:
                     id: quiz_all_title
-                    text: "Golden Mean -"
+                    text: "Golden Mean"
                     font_size: 40
                     font_name: app.current_font
                     valign: 'middle'
                     halign: 'left'
                     text_size: self.width, None
-                    size_hint_x: 0.6
+                    size_hint: (0.5, 0.6)
                     pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                     color: app.color_scheme 
 
                 TextInput:
                     id: code_input
                     hint_text: 'code'
-                    font_size: 30
+                    font_size: 40
                     font_name: app.current_font
-                    size_hint: (0.2, 0.7)
+                    size_hint: (0.3, 0.6)
                     valign: 'middle'
                     halign: 'center'
                     pos_hint: {'center_x' : 0.5, 'center_y' : 0.5}
                     background_color: (0, 0, 0, 0.5)
                     foreground_color: app.color_scheme
                     cursor_color: app.color_scheme
+                    valign: 'center'
+                    halign: 'center'
+                    multiline: False
                     color: app.color_scheme
+
+                Button:
+                    id: verify_code 
+                    on_press: root.verify()
+                    text: 'verify'
+                    font_size: 40
+                    font_name: app.current_font
+                    size_hint: (0.2, 0.6)
+                    pos_hint: {'center_x' : 0.5, 'center_y' : 0.5}
+                    background_color: (0, 0, 0, 0)
+                    foreground_color: app.color_scheme
+                    valign: 'center'
+                    halign: 'center'
+                    color: app.color_scheme # canvas.before must follow color:
                     canvas.before:
                         Color:
                             rgba: 0, 0, 0, 0.5 # Button fill color
@@ -1709,38 +1800,12 @@
                             width: 1
                             rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
 
-                Button:
-                    id: verify_code 
-                    text: 'Verify'
-                    font_size: 30
-                    font_name: app.current_font
-                    size_hint_x: 0.2
-                    pos_hint: {'center_x' : 0.5, 'center_y' : 0.5}
-                    background_normal: ''
-                    background_color: (0, 0, 0, 0.5)
-                    valign: 'center'
-                    halign: 'center'
-                    color: app.color_scheme
-                    on_press: root.verify()
-                    canvas.before:
-                        Color:
-                            rgba: 0, 0, 0, 0.5 # Button fill color
-                            RoundedRectangle:
-                                pos: self.pos
-                                size: self.size
-                                radius: [5]
-                            Color:
-                                rgba: app.color_scheme # Border color
-                            Line:
-                                width: 1
-                                rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
-
             Label:
                 id: topic_label
                 text: ''
                 font_size: 40
                 font_name: app.current_font
-                size_hint: (0.8, 0.08)
+                size_hint: (0.8, 0.06)
                 valign: 'bottom'
                 halign: 'center'
                 pos_hint: {'center_x': 0.5}
@@ -1815,8 +1880,8 @@
                 text_size: self.width, None
                 size_hint: (0.8, 0.2)
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                color: app.color_scheme
                 opacity: 0
+                color: app.color_scheme
                 canvas.before:
                     Color:
                         rgba: 0, 0, 0, 0.5  # Button fill color
@@ -1827,9 +1892,9 @@
 
 
             BoxLayout:
-                size_hint: (0.8, 0.1)
+                size_hint: (0.8, 0.08)
                 spacing: 10
-                padding: [20, 0]
+                padding: [0, 20]
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 
                 Button:
@@ -1838,9 +1903,9 @@
                     font_size: 40
                     font_name: app.current_font
                     background_color: 0, 0, 0, 0
-                    color: app.color_scheme
                     on_press: root.toggle_answer()
                     size_hint: (0.3, 1)
+                    color: app.color_scheme
                     canvas.before:
                         Color:
                             rgba: 0, 0, 0, 0.5  # Button fill color
@@ -1862,9 +1927,9 @@
                     font_size: 40
                     font_name: app.current_font
                     background_color: 0, 0, 0, 0
-                    color: app.color_scheme
                     on_press: root.mark_correct()
                     opacity: 1
+                    color: app.color_scheme
                     canvas.before:
                         Color:
                             rgba: 0, 0, 0, 0.5  # Button fill color
@@ -1934,13 +1999,13 @@
             # Back button container (10% width)
             BoxLayout:
                 size_hint_x: 0.1
-                padding: [0, 10, 0, 10]  # Removed right padding from here
+                padding: [2, 10, 0, 10]  # Removed right padding from here
                 
                 Button:
                     id: back_button
                     text: 'O.o'
                     on_press: root.back_to_root()
-                    font_size: 35
+                    font_size: 40
                     font_name: app.current_font
                     size_hint: None, None
                     size: 60, 60
@@ -1965,17 +2030,17 @@
         BoxLayout:
             orientation: 'vertical'
             size_hint_y: 0.8
-            spacing: 5
+            spacing: 10
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
             BoxLayout:
-                spacing: 3
+                spacing: 10
                 orientation: 'horizontal'
                 size_hint_y: 0.07
                 size_hint_x: 0.8
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5} 
                 Label:
                     id: quiz_all_title
-                    text: "Pandora's box -"
+                    text: "Pandora's Box"
                     font_size: 40
                     font_name: app.current_font
                     valign: 'middle'
@@ -1987,7 +2052,7 @@
 
                 Label:
                     id: quiz_all_intro
-                    text: '| random topic | ten questions |'
+                    text: '- random topic\n- ten questions'
                     font_size: 30
                     font_name: app.current_font
                     valign: 'middle'
@@ -2002,7 +2067,7 @@
                 text: ''
                 font_size: 40
                 font_name: app.current_font
-                size_hint: (0.8, 0.08)
+                size_hint: (0.8, 0.06)
                 valign: 'bottom'
                 halign: 'center'
                 pos_hint: {'center_x': 0.5}
@@ -2025,7 +2090,7 @@
                 text: 'Start'
                 font_size: 40
                 font_name: app.current_font
-                size_hint: (0.8, 0.08)
+                size_hint: (0.8, 0.06)
                 valign: 'top'
                 halign: 'center'
                 pos_hint: {'center_x': 0.5}
@@ -2114,9 +2179,9 @@
 
 
             BoxLayout:
-                size_hint: (0.8, 0.1)
+                size_hint: (0.8, 0.08)
                 spacing: 10
-                padding: [20, 0]
+                padding: [0, 20]
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 
                 Button:
@@ -2218,13 +2283,13 @@
             # Back button container (10% width)
             BoxLayout:
                 size_hint_x: 0.1
-                padding: [0, 10, 0, 10]  # Removed right padding from here
+                padding: [2, 10, 0, 10]  # Removed right padding from here
                 
                 Button:
                     id: back_button
                     text: 'O.o'
                     on_press: root.back_to_root()
-                    font_size: 35
+                    font_size: 40
                     font_name: app.current_font
                     size_hint: None, None
                     size: 60, 60
@@ -2244,12 +2309,132 @@
                         Line:
                             width: 1.5
                             rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+
+        #folder buttons
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: (0.8, 0.07)
+            spacing: 10
+            padding: [10, 10]
+            pos_hint: {'center_x': 0.5}
+
+            Button:
+                text: 'R.'
+                background_normal: ''
+                font_size: 40
+                font_name: app.current_font
+                background_color: 0, 0, 0, 0
+                color: app.color_scheme
+                on_press: root.change_dir('ray')
+                size_hint_y: 1
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 0.5  # Button fill color
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [5]
+                    Color:
+                        rgba: app.color_scheme # Border color
+                    Line:
+                        width: 1
+                        rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+
+            Button:
+                text: 'L.'
+                id: correct_button
+                background_normal: ''
+                font_size: 40
+                font_name: app.current_font
+                background_color: 0, 0, 0, 0
+                color: app.color_scheme
+                on_press: root.change_dir('lela')
+                size_hint_y: 1
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 0.5  # Button fill color
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [5]
+                    Color:
+                        rgba: app.color_scheme # Border color
+                    Line:
+                        width: 1
+                        rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+
+            Button:
+                text: 'K.'
+                background_normal: ''
+                font_size: 40
+                font_name: app.current_font
+                background_color: 0, 0, 0, 0
+                color: app.color_scheme
+                on_press: root.change_dir('khole')
+                size_hint_y: 1
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 0.5  # Button fill color
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [5]
+                    Color:
+                        rgba: app.color_scheme # Border color
+                    Line:
+                        width: 1
+                        rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+
+            Button:
+                text: 'M.'
+                id: correct_button
+                background_normal: ''
+                font_size: 40
+                font_name: app.current_font
+                background_color: 0, 0, 0, 0
+                color: app.color_scheme
+                on_press: root.change_dir('misc')
+                size_hint_y: 1
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 0.5  # Button fill color
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [5]
+                    Color:
+                        rgba: app.color_scheme # Border color
+                    Line:
+                        width: 1
+                        rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+
+            Button:
+                text: 'Q.'
+                background_normal: ''
+                font_size: 40
+                font_name: app.current_font
+                background_color: 0, 0, 0, 0
+                color: app.color_scheme
+                on_press: root.change_dir('quote')
+                size_hint_y: 1
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 0.5  # Button fill color
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [5]
+                    Color:
+                        rgba: app.color_scheme # Border color
+                    Line:
+                        width: 1
+                        rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
                     
         # load file row, 10%
         BoxLayout:
             orientation: 'horizontal'
-            size_hint: (0.8, 0.1)
-            padding: [20, 20]
+            size_hint: (0.8, 0.07)
+            padding: [10, 10]
             spacing: 10
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         
@@ -2260,7 +2445,7 @@
                 font_name: app.current_font
                 size_hint: (0.5, 1)
                 pos_hint: {'center_x': 0.5}
-                background_color: 0, 0, 0, 0
+                background_color: (0, 0, 0, 0)
                 color: app.color_scheme
                 option_cls: 'CustomSpinnerOption'
                 canvas.before:
@@ -2289,8 +2474,8 @@
                 
         BoxLayout:
             orientation: 'horizontal'
-            size_hint: (0.8, 0.1)
-            padding: [20, 20]
+            size_hint: (0.8, 0.07)
+            padding: [10, 10]
             spacing: 10
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 
@@ -2332,18 +2517,17 @@
 
         BoxLayout:
             orientation: 'vertical'
-            size_hint_y: 0.7
-            padding: [20, 10]
+            padding: [10, 10]
             spacing: 10
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 
             TextInput:
                 id: content_input
                 multiline: True
-                size_hint: (0.8, 0.7)
+                size_hint: (0.8, 1)
                 font_name: app.current_font
                 font_size: 40
-                pos_hint: {'center_x': 0.5}                    
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}                    
                 background_color: (0, 0, 0, 0.5)
                 foreground_color: app.color_scheme
                 cursor_color: app.color_scheme  
@@ -2365,7 +2549,7 @@
                 text: 'Save'
                 font_name: app.current_font
                 font_size: 40
-                size_hint: (0.8, 0.1)
+                size_hint: (0.8, 0.07)
                 pos_hint: {'center_x': 0.5}                
                 background_normal: ''
                 background_color: (0, 0, 0, 0.5)
@@ -2376,7 +2560,7 @@
                 id: status_label
                 text: ''
                 pos_hint: {'center_x': 0.5}                
-                size_hint: (0.8, 0.1)
+                size_hint: (0.8, 0.05)
                 font_name: app.current_font
                 font_size: 30
                 opacity: 0
