@@ -29,10 +29,108 @@ import smtplib
 import os
 from email.mime.text import MIMEText
 from datetime import datetime
-from quotes import QUOTES
+from pathlib import Path
 
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+global current_player_data, full_player_data, current_player_name 
+global APP
+APP = None
+current_player_data = {
+        "removed": [],
+        "removed_topics": [],
+        "points": 0,
+        "latest_code": 0,
+        "color": "dark", 
+        "background": "bg2.jpg",
+        "music": "music.mp3",
+        "font": "zpix.ttf",
+        "quotes": "clap"
+}
+
+# Android-specific imports with fallback
+try:
+    from android.storage import app_storage_path
+    from android.permissions import request_permissions, Permission
+    request_permissions([
+        Permission.READ_EXTERNAL_STORAGE, 
+        Permission.WRITE_EXTERNAL_STORAGE,
+        Permission.INTERNET
+    ])
+    ANDROID = True
+except ImportError:
+    ANDROID = False
+
+# Storage handling functions
+def get_app_storage():
+    """Returns the correct storage path, checking both possible locations"""
+    if ANDROID:
+        from android.storage import app_storage_path
+        base_path = app_storage_path()  # /data/user/0/org.test.kwdev/files/
+        app_path = os.path.join(base_path, 'app')  # /data/user/0/org.test.kwdev/files/app/
+        
+        # Check if our files are in the app/ subdirectory
+        if os.path.exists(os.path.join(app_path, 'kw_gui_players.json')):
+            return app_path
+        return base_path
+    else:
+        return os.path.abspath(".")
+
+def get_data_path():
+    """Gets path to data directory, creates if needed"""
+    base_path = get_app_storage()
+    data_path = os.path.join(base_path, 'data')
+    os.makedirs(data_path, exist_ok=True)
+    return data_path
+
+def get_quote_path():
+    """Gets path to quote files"""
+    data_path = get_data_path()
+    quote_path = os.path.join(data_path, 'quote')
+    os.makedirs(quote_path, exist_ok=True)
+    return quote_path
+
+def get_json_path(filename):
+    """Gets path for JSON files with Android path workaround"""
+    storage = get_app_storage()
+    # First check in app/ subdirectory
+    app_path = os.path.join(storage, 'app', filename)
+    if os.path.exists(app_path):
+        return app_path
+    # Fall back to regular path
+    return os.path.join(storage, filename)
+
+def load_quote_file(filename):
+    """Loads quote files with fallback"""
+    quote_path = get_quote_path()
+    filepath = os.path.join(quote_path, filename)
+    
+    if not os.path.exists(filepath):
+        # Provide default content if file doesn't exist
+        default_content = ["Where is everybody?"]
+        with open(filepath, 'w') as f:
+            f.writelines(default_content)
+    
+    with open(filepath, 'r') as f:
+        return f.readlines()
+
+# Load quote files with error handling
+try:
+    CLAP = load_quote_file('clap.txt')
+    SLAP = load_quote_file('slap.txt')
+    FLAP = load_quote_file('flap.txt')
+    QUOTES = CLAP[:]
+except Exception as e:
+    print(f"Error loading quotes: {e}")
+    CLAP = SLAP = FLAP = QUOTES = ["Woot! It DOESNT WORK!"]
+
+# Load player data with error handling
+try:
+    player_file = get_json_path('kw_gui_players.json')
+    full_player_data = json.load(open(player_file, 'r'))
+except Exception as e:
+    print(f"Error loading player data: {e}")
+    full_player_data = {}
+    # current_player_data already has default values
+
 
 class BaseScreen(Screen):
     current_date = StringProperty() 
@@ -42,11 +140,8 @@ class BaseScreen(Screen):
         self.bind(on_pre_enter=self.update_style)
         self.bind(size=self._update_rect, pos=self._update_rect)
         
-        # Initialize canvas elements
         with self.canvas.before:
-            # Background image (drawn first)
             self.bg_image = Rectangle(source='', pos=self.pos, size=self.size)
-            # Semi-transparent overlay (drawn on top of image)
             Color(0, 0, 0, 0.5)
             self.bg_overlay = Rectangle(pos=self.pos, size=self.size)
     
@@ -74,43 +169,66 @@ class BaseScreen(Screen):
     def update_style(self, *args):
         """Update visual elements when screen becomes active"""
         app = App.get_running_app()
-        # Update background image
-        self.bg_image.source = app.current_bg_image
-        # Force reload of the image
-        self.bg_image.source = ''
         self.bg_image.source = app.current_bg_image
 
 class SettingsScreen(BaseScreen):
     def back_to_root(self):
-        self.manager.transition = SlideTransition(direction='left')
+        if self.ids.back_button.text == 'o.O':
+            self.ids.back_button.text = 'O.o'
+        elif self.ids.back_button.text == 'O.o':
+            self.ids.back_button.text = 'x.O'
+        elif self.ids.back_button.text == 'x.O':
+            self.ids.back_button.text = 'O.x'
+        elif self.ids.back_button.text == 'O.x':
+            self.ids.back_button.text = '>.<'
+        elif self.ids.back_button.text == '>.<':
+            self.ids.back_button.text = 'o.O'
+        self.manager.transition = SlideTransition(direction='right')
         self.manager.current = 'menu'
     
-class PasscodeScreen(BaseScreen):
+class LoginScreen(BaseScreen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.correct_passcode = "6969"  # Default passcode, you can change this
-        self.attempts = 0
-        self.max_attempts = 3
+    
+    def go_to_menu(self, *args):
+        """Transition to menu screen"""
+        sm = self.manager
+        sm.transition = SlideTransition(direction='left')
+        sm.current = 'menu'
 
-    def verify_passcode(self):
-        entered_passcode = self.ids.passcode_input.text
-        if entered_passcode == self.correct_passcode:
-            self.manager.current = 'menu'
-            self.ids.passcode_input.text = ''
-            self.attempts = 0
+    def login(self):
+        global full_player_data, current_player_data, current_player_name
+        nameinput = self.ids.username_input.text.strip()
+        pwinput = self.ids.password_input.text.strip()
+            
+        if nameinput in full_player_data.keys():
+            if pwinput.strip().lower() != full_player_data[nameinput]["passcode"]:
+                self.ids.status_label.text = "Password invalid"
+                return
+                
+            # Login successful
+            current_player_name = nameinput[:]
+            current_player_data = full_player_data[current_player_name]
+            APP.load_player_settings()
+            self.ids.username_input.text = f"{current_player_name}"
+            self.ids.password_input.text = f"Pts: {current_player_data['points']}"
+            self.ids.login_button.text = '[ Welcome ]'
+        else:    
+            self.ids.status_label.text = 'Username not valid.'
+            return
+        
+    def handle_login_button(self):
+        if self.ids.login_button.text == '[ Lo.Gin ]':
+            self.login()
         else:
-            self.attempts += 1
-            if self.attempts >= self.max_attempts:
-                self.show_error("Max attempts reached! Exiting...")
-                Clock.schedule_once(lambda dt: App.get_running_app().stop(), 2)
-            else:
-                self.show_error(f"Wrong passcode! {self.max_attempts - self.attempts} attempts left")
-            self.ids.passcode_input.text = ''
+            self.go_to_menu()
 
-    def show_error(self, message):
-        self.ids.error_label.text = message
-        Animation(opacity=1, duration=0.3).start(self.ids.error_label)
-        Clock.schedule_once(lambda dt: Animation(opacity=0, duration=1).start(self.ids.error_label), 3)
+    def show_message(self, message):
+        """Show status message with animation"""
+        self.ids.status_label.text = message
+        self.ids.status_label.color = APP.color_scheme
+        Animation(opacity=1, duration=0.3).start(self.ids.status_label)
+        Clock.schedule_once(lambda dt: Animation(opacity=0, duration=2).start(self.ids.status_label), 3)
 
 class NoteItem(BoxLayout):
     note_text = StringProperty('')
@@ -126,9 +244,9 @@ class NotesScreen(BaseScreen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.bind(notes=self.update_note_display)
-        self.notes_file = os.path.join(App.get_running_app().user_data_dir, 'notes.txt')
+        self.notes_file = get_json_path('notes.txt')
         self.current_date = datetime.now().strftime("%Y-%m-%d")
-        self.load_notes()
+        #self.load_notes()
     
     def delete_note(self, note_text):
         # Remove the note from the list
@@ -159,10 +277,15 @@ class NotesScreen(BaseScreen):
     def load_notes(self):
         try:
             with open(self.notes_file, 'r') as f:
-                self.notes = [line.strip() for line in f.readlines() if line.strip()]
+                content = f.read()
+                
+                # Split by lines starting with date pattern "YYYY-MM-DD"
+                notes = re.split(r'(?m)^(\d{4}-\d{2}-\d{2}:)', content) # list with date followed by content
+                for i in range(1, len(notes), 2): # merge the notes back, two items at a time
+                    note = notes[i] + notes[i+1]
+                    self.notes.append(note.strip())                    
         except Exception as e:
-            print(f"Error loading notes: {e}")
-            self.notes = []
+            pass
                 
     def save_note(self):
         note_text = self.ids.note_input.text.strip()
@@ -174,7 +297,7 @@ class NotesScreen(BaseScreen):
                 self.ids.note_input.text = ''
                 self.notes.append(note_text)  # Update the notes property
             except Exception as e:
-                print(f"Error saving note: {e}")
+                pass
                 
     def show_error_popup(self, message):
         content = BoxLayout(orientation='vertical', padding=10)
@@ -212,8 +335,19 @@ class NotesScreen(BaseScreen):
         popup.open()
                 
     def back_to_root(self):
-        self.manager.transition = SlideTransition(direction='left')
+        if self.ids.back_button.text == 'o.O':
+            self.ids.back_button.text = 'O.o'
+        elif self.ids.back_button.text == 'O.o':
+            self.ids.back_button.text = 'x.O'
+        elif self.ids.back_button.text == 'x.O':
+            self.ids.back_button.text = 'O.x'
+        elif self.ids.back_button.text == 'O.x':
+            self.ids.back_button.text = '>.<'
+        elif self.ids.back_button.text == '>.<':
+            self.ids.back_button.text = 'o.O'
+        self.manager.transition = SlideTransition(direction='right')
         self.manager.current = 'menu'
+        self.notes=[] # reset notes so no duplicates
 
 class DevModeScreen(BaseScreen):
     show_answer = BooleanProperty(False)
@@ -257,7 +391,8 @@ class DevModeScreen(BaseScreen):
 
     def load_topics(self):
         try:
-            with open('kw_topics.json', 'r') as f:
+            topics_file = get_json_path('kw_topics.json')
+            with open(topics_file, 'r') as f:
                 self.topics = json.load(f)
                 self.ids.topic_spinner.values = sorted([x.title() for x in self.topics]) # display topics as title
         except Exception as e:
@@ -271,14 +406,18 @@ class DevModeScreen(BaseScreen):
             if not topic or topic == 'topics':
                 return
                 
-            if not os.path.exists(f'kw_{topic}.json'):
+            topic_file = get_json_path(f'kw_{topic}.json')
+            if not os.path.exists(topic_file):
                 raise FileNotFoundError(f"kw_{topic}.json not found")
                 
-            with open(f'kw_{topic}.json', 'r', encoding='utf-8') as f:
+            with open(topic_file, 'r', encoding='utf-8') as f:
                 self.questions = json.load(f)
                 random.shuffle(self.questions)
                 self.current_index = 0
                 self.show_question()
+        except Exception as e:
+            print(f"Error loading questions: {e}")
+            self.show_error_popup(f"Failed to load questions: {e}")
                 
         except:
             pass
@@ -306,8 +445,18 @@ class DevModeScreen(BaseScreen):
         self.show_question()
 
     def back_to_root(self):
+        if self.ids.back_button.text == 'o.O':
+            self.ids.back_button.text = 'O.o'
+        elif self.ids.back_button.text == 'O.o':
+            self.ids.back_button.text = 'x.O'
+        elif self.ids.back_button.text == 'x.O':
+            self.ids.back_button.text = 'O.x'
+        elif self.ids.back_button.text == 'O.x':
+            self.ids.back_button.text = '>.<'
+        elif self.ids.back_button.text == '>.<':
+            self.ids.back_button.text = 'o.O'
         sm = self.manager       # Access the screen manager
-        sm.transition = SlideTransition(direction='left')       # Set transition direction
+        sm.transition = SlideTransition(direction='right')       # Set transition direction
         sm.current = 'menu'         # Change screen
 
 class EditTopicScreen(BaseScreen):
@@ -317,15 +466,27 @@ class EditTopicScreen(BaseScreen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.topic_file = ''
-        
+        self.current_topic = ''
+        self.topic_exists = ''
+
+    def delete_topic(self):
+        topic_name = self.ids.topic_input.text.strip().lower()
+        topic_exist = os.path.exists(f'kw_{topic_name}.json')
+        if topic_name != '' and topic_exist == True:
+            os.remove(f'kw_{topic_name}.json')
+            self.ids.topic_input.text = ''
+            self.ids.status_label.text = f'{topic_name.title()} deleted.'
+        else:
+            self.ids.status_label.text = "Topic doesn't exist yet."
+            
     def check_topic(self):
         topic_name = self.ids.topic_input.text.strip().lower()
-        if not topic_name:
+        if not topic_name: 
             self.ids.status_label.text = "enter topic name"
             return
             
         self.current_topic = topic_name
-        self.topic_file = f'kw_{self.current_topic}.json'
+        self.topic_file = get_json_path(f'kw_{self.current_topic}.json')
         self.topic_exists = os.path.exists(self.topic_file)
         
         if self.topic_exists:
@@ -351,39 +512,43 @@ class EditTopicScreen(BaseScreen):
             return
             
         try:
-            # Load existing questions or create new list
             questions = []
             if os.path.exists(self.topic_file):
                 with open(self.topic_file, 'r', encoding='utf-8') as f:
                     questions = json.load(f)
             
-            # Add new question
             questions.append([question, answer])
             
-            # Save back to file
             with open(self.topic_file, 'w', encoding='utf-8') as f:
                 json.dump(questions, f, ensure_ascii=False, indent=2)
                 
-            # Update topics list if this was a new topic
             if not self.topic_exists:
                 dev_screen = self.manager.get_screen('dev_mode')
                 if self.current_topic not in dev_screen.topics:
                     dev_screen.topics.append(self.current_topic)
                     dev_screen.ids.topic_spinner.values = sorted([x.title() for x in dev_screen.topics])
-                    # Update topics.json
-                    with open('kw_topics.json', 'w') as f:
+                    topics_file = get_json_path('kw_topics.json')
+                    with open(topics_file, 'w') as f:
                         json.dump(dev_screen.topics, f)
                 self.topic_exists = True
                 
-            # Update UI
             self.ids.status_label.text = f"Added to '{self.current_topic}' ({len(questions)})"
             self.ids.question_input.text = ''
             self.ids.answer_input.text = ''
-            
         except Exception as e:
             self.ids.status_label.text = f"Error: {str(e)}"
     
     def back_to_dev_mode(self):
+        if self.ids.back_button.text == 'o.O':
+            self.ids.back_button.text = 'O.o'
+        elif self.ids.back_button.text == 'O.o':
+            self.ids.back_button.text = 'x.O'
+        elif self.ids.back_button.text == 'x.O':
+            self.ids.back_button.text = 'O.x'
+        elif self.ids.back_button.text == 'O.x':
+            self.ids.back_button.text = '>.<'
+        elif self.ids.back_button.text == '>.<':
+            self.ids.back_button.text = 'o.O'         
         self.manager.transition = SlideTransition(direction='right')
         self.manager.current = 'dev_mode'
 
@@ -422,6 +587,7 @@ class InsightPopup(Popup):
     def __init__(self, todo_screen, **kwargs):
         super().__init__(**kwargs)
         self.todo_screen = todo_screen
+        self.app = App.get_running_app()
         self.title = 'Enter Your Insight'
         self.size_hint = (0.8, 0.4)
         
@@ -495,7 +661,7 @@ class InsightPopup(Popup):
         for btn in buttons:
             with btn.canvas.before:
                 # Border
-                Color(0.88, 0.47, 0.18, 1)
+                Color(self.app.color_scheme)
                 RoundedRectangle(pos=btn.pos, size=btn.size, radius=[5])
                 # Inner fill
                 Color(0, 0, 0, 0.5)
@@ -510,7 +676,7 @@ class InsightPopup(Popup):
         instance.canvas.before.clear()
         with instance.canvas.before:
             # Border
-            Color(0.88, 0.47, 0.18, 1)
+            Color(self.app.color_scheme)
             RoundedRectangle(pos=instance.pos, size=instance.size, radius=[5])
             # Inner fill
             Color(0, 0, 0, 0.5)
@@ -548,6 +714,22 @@ class MenuScreen(BaseScreen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.app = App.get_running_app()
+        self.reinit()   # triggered everytime the screen is accessed, animation change   
+    
+    def reinit(self):
+        if self.ids.back_button.text == 'o.O':
+            self.ids.back_button.text = 'O.o'
+        elif self.ids.back_button.text == 'O.o':
+            self.ids.back_button.text = 'x.O'
+        elif self.ids.back_button.text == 'x.O':
+            self.ids.back_button.text = 'O.x'
+        elif self.ids.back_button.text == 'O.x':
+            self.ids.back_button.text = '>.<'
+        elif self.ids.back_button.text == '>.<':
+            self.ids.back_button.text = 'o.O'        
+
+    def on_pre_enter(self, *args): # reload with reinit()
+        self.reinit()   
 
     def switch_to_dev_mode(self):
         sm = self.manager       # Access the screen manager
@@ -580,7 +762,7 @@ class MenuScreen(BaseScreen):
         
         # Add title label
         title_label = Label(
-            text='- QUIZ MODE -',
+            text='- SELECT QUIZ MODE -',
             font_size=40,
             font_name= self.app.current_font,
             color= self.app.color_scheme,
@@ -598,7 +780,7 @@ class MenuScreen(BaseScreen):
         for mode_text, mode_id in modes:
             btn = Button(
                 text=mode_text,
-                font_size=50,
+                font_size=60,
                 font_name= self.app.current_font,
                 size_hint_y=0.2,
                 background_normal='',
@@ -612,10 +794,10 @@ class MenuScreen(BaseScreen):
         self.quiz_mode_popup = Popup(
             title='',
             content=content,
-            size_hint=(0.8, 0.8),
+            size_hint=(0.8, 0.6),
             separator_height=0,
             background='',
-            background_color=(0, 0, 0, 0.8),
+            background_color=(0, 0, 0, 0.5),
             title_color=[0.88, 0.47, 0.18, 1],
             separator_color=[0.88, 0.47, 0.18, 1],
         )
@@ -635,14 +817,17 @@ class MenuScreen(BaseScreen):
         sm.current = 'study'
 
     def quit(self):
+        global current_player_data, full_player_data, current_player_name
+        full_player_data[current_player_name] = current_player_data
+        json.dump(full_player_data, open(get_json_path('kw_gui_players.json'), 'w'))
         sys.exit()
-
 
 class ToDoScreen(BaseScreen):
     insight_text = StringProperty("")  # To store the insight text
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.app = App.get_running_app()
         self.current_date = datetime.now().strftime("%Y-%m-%d")
         self.completed_tasks = []
         self.insight_text = ""
@@ -668,7 +853,7 @@ class ToDoScreen(BaseScreen):
             recipient = "ellisereli@gmail.com"
             
             # Create message
-            subject = f"ToDo List Update - {self.current_date}"
+            subject = f"{current_player_name} - ToDo List - {self.current_date}"
             body = f"Completed tasks on {self.current_date}:\n\n"
             body += "\n".join(self.completed_tasks) if self.completed_tasks else "No tasks completed today"
             
@@ -686,50 +871,24 @@ class ToDoScreen(BaseScreen):
                 smtp.login(sender, password)
                 smtp.send_message(msg)
                     
-            # Show confirmation
-            self.show_popup("Success", "Email sent successfully!")
             
         except Exception as e:
-            self.show_popup("Error", f"Failed to send email: {str(e)}")
+            pass
 
-    def show_popup(self, title, message):
-        content = BoxLayout(orientation='vertical', padding=10, spacing=10)
-        content.add_widget(Label(
-            text=message,
-            font_name='zpix.ttf',
-            font_size=30,
-            color=self.app.color_scheme
-        ))
-        
-        btn = Button(
-            text='OK',
-            size_hint=(1, 0.3),
-            font_name='zpix.ttf',
-            font_size=30,
-            background_normal='',
-            background_color=(0, 0, 0, 0),
-            color=self.app.color_scheme
-        )
-        
-        popup = Popup(
-            title=title,
-            title_font='zpix.ttf',
-            title_size='30sp',
-            title_color=[0.88, 0.47, 0.18, 1],
-            content=content,
-            size_hint=(0.7, 0.4),
-            separator_color=[0.88, 0.47, 0.18, 1],
-            background='',
-            background_color=(0, 0, 0, 0.8) # 0.8 transparency of pop up, 0 is transparent
-        )
-        
-        btn.bind(on_press=popup.dismiss)
-        content.add_widget(btn)
-        
-        popup.open()
+        self.back_to_root()
     
     def back_to_root(self): # exit to root button action
-        self.manager.transition = SlideTransition(direction='left')
+        if self.ids.back_button.text == 'o.O':
+            self.ids.back_button.text = 'O.o'
+        elif self.ids.back_button.text == 'O.o':
+            self.ids.back_button.text = 'x.O'
+        elif self.ids.back_button.text == 'x.O':
+            self.ids.back_button.text = 'O.x'
+        elif self.ids.back_button.text == 'O.x':
+            self.ids.back_button.text = '>.<'
+        elif self.ids.back_button.text == '>.<':
+            self.ids.back_button.text = 'o.O'
+        self.manager.transition = SlideTransition(direction='right')
         self.manager.current = 'menu'
 
 class QuizSingleScreen(BaseScreen):
@@ -770,13 +929,15 @@ class QuizSingleScreen(BaseScreen):
 
     def load_topics(self):
         try:
-            with open('kw_topics.json', 'r') as f:
+            topics_file = get_json_path('kw_topics.json')
+            with open(topics_file, 'r') as f:
                 self.topics = json.load(f)
-                self.ids.topic_spinner.values = sorted([x.title() for x in self.topics]) # display topics as title
+                self.ids.topic_spinner.values = sorted([x.title() for x in self.topics])
         except Exception as e:
             print(f"Error loading topics: {e}")
             self.topics = []
             self.ids.topic_spinner.values = []
+            self.show_error_popup(f"Failed to load topics: {e}")
 
     def load_questions(self):
         try:
@@ -784,18 +945,19 @@ class QuizSingleScreen(BaseScreen):
             if not topic or topic == 'topics':
                 return
                 
-            if not os.path.exists(f'kw_{topic}.json'):
+            topic_file = get_json_path(f'kw_{topic}.json')
+            if not os.path.exists(topic_file):
                 raise FileNotFoundError(f"kw_{topic}.json not found")
                 
-            with open(f'kw_{topic}.json', 'r', encoding='utf-8') as f:
+            with open(topic_file, 'r', encoding='utf-8') as f:
                 self.questions = json.load(f)
                 random.shuffle(self.questions)
                 self.questions = [q for q in self.questions if q not in self.removed]
                 self.current_index = 0
                 self.show_question()
-                
-        except:
-            pass
+        except Exception as e:
+            print(f"Error loading questions: {e}")
+            self.show_error_popup(f"Failed to load questions: {e}")
 
     def show_question(self):
         if self.current_index < len(self.questions):
@@ -825,9 +987,19 @@ class QuizSingleScreen(BaseScreen):
         self.show_question()
 
     def back_to_root(self):
-        sm = self.manager       # Access the screen manager
-        sm.transition = SlideTransition(direction='left')       # Set transition direction
-        sm.current = 'menu'         # Change screen
+        if self.ids.back_button.text == 'o.O':
+            self.ids.back_button.text = 'O.o'
+        elif self.ids.back_button.text == 'O.o':
+            self.ids.back_button.text = 'x.O'
+        elif self.ids.back_button.text == 'x.O':
+            self.ids.back_button.text = 'O.x'
+        elif self.ids.back_button.text == 'O.x':
+            self.ids.back_button.text = '>.<'
+        elif self.ids.back_button.text == '>.<':
+            self.ids.back_button.text = 'o.O'
+        sm = self.manager
+        sm.transition = SlideTransition(direction='right')
+        sm.current = 'menu'
 
     def mark_correct(self):
         if self.ids.question_label.text != f'Score: {self.correct_questions}':
@@ -850,6 +1022,7 @@ class QuizAllScreen(BaseScreen):
             color_scheme=self.update_answer_style,
             current_font=self.update_answer_style
         )         # Bind to app properties
+        global player_data
         self.questions = []
         self.current_index = 0
         self.topics = []
@@ -873,12 +1046,15 @@ class QuizAllScreen(BaseScreen):
 
     def load_topics(self):
         try:
-            with open('kw_topics.json', 'r') as f:
+            topics_file = get_json_path('kw_topics.json')
+            with open(topics_file, 'r') as f:
                 self.topics = json.load(f)
                 self.ids.topic_label.text = random.choice(self.topics)
         except Exception as e:
             print(f"Error loading topics: {e}")
             self.topics = []
+            self.ids.topic_label.text = "No topics available"
+            self.show_error_popup(f"Failed to load topics: {e}")
 
     def load_questions(self):
         try:
@@ -886,19 +1062,20 @@ class QuizAllScreen(BaseScreen):
             if not topic or topic == 'topics':
                 return
                 
-            if not os.path.exists(f'kw_{topic}.json'):
+            topic_file = get_json_path(f'kw_{topic}.json')
+            if not os.path.exists(topic_file):
                 raise FileNotFoundError(f"kw_{topic}.json not found")
                 
-            with open(f'kw_{topic}.json', 'r', encoding='utf-8') as f:
+            with open(topic_file, 'r', encoding='utf-8') as f:
                 self.all_questions = json.load(f)
                 self.questions = [x for x in self.all_questions if x not in self.removed]
                 if self.questions:
                     self.questions = random.choices(self.all_questions, k=10)
                     self.current_index = 0
                     self.show_question()
-                
-        except:
-            pass
+        except Exception as e:
+            print(f"Error loading questions: {e}")
+            self.show_error_popup(f"Failed to load questions: {e}")
 
     def show_question(self):
         if self.current_index < len(self.questions):
@@ -925,9 +1102,19 @@ class QuizAllScreen(BaseScreen):
         self.show_question()
 
     def back_to_root(self):
-        sm = self.manager       # Access the screen manager
-        sm.transition = SlideTransition(direction='left')       # Set transition direction
-        sm.current = 'menu'         # Change screen
+        if self.ids.back_button.text == 'o.O':
+            self.ids.back_button.text = 'O.o'
+        elif self.ids.back_button.text == 'O.o':
+            self.ids.back_button.text = 'x.O'
+        elif self.ids.back_button.text == 'x.O':
+            self.ids.back_button.text = 'O.x'
+        elif self.ids.back_button.text == 'O.x':
+            self.ids.back_button.text = '>.<'
+        elif self.ids.back_button.text == '>.<':
+            self.ids.back_button.text = 'o.O'
+        sm = self.manager
+        sm.transition = SlideTransition(direction='right')
+        sm.current = 'menu'
 
     def mark_correct(self):
         question = str(self.ids.question_label.text)
@@ -941,28 +1128,47 @@ class QuizAllScreen(BaseScreen):
             self.removed.remove(question)
         
 class QuizOGScreen(BaseScreen):
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        global current_player_data
         App.get_running_app().bind(
             color_scheme=self.update_answer_style,
             current_font=self.update_answer_style
         )         # Bind to app properties
         self.questions = []
         self.current_index = 0
-        self.all_topics = json.load(open('kw_topics.json', 'r'))
-        self.topics = self.all_topics[0:4]
-        self.correct_questions = 0
+        self.all_topics = json.load(open(get_json_path('kw_topics.json'), 'r'))    
         self.codes2 = ['0-4', '4-8', '8-12', '12-16', '16-20', '20-24', '24-28', '28-32', '32-36', '36-40']
-        self.codes = [0, 98722, 45694, 44328, 67640, 55321, 35248, 83002, 11834, 58244, 59775]
-        self.code = 0
-        self.removed_list = []
+        self.codes = [0, 98722, 45694, 44328, 67640, 55321, 35248, 83002, 11834, 58244]
         self.topic = ''
         self.start = True
         self.change_start = False
         self.popup = None
+        # Ensure defaults exist
+        if not hasattr(current_player_data, 'removed'):
+            current_player_data = {
+                "removed": [],
+                "removed_topics": [],
+                "points": 0,
+                "latest_code": 0
+            }
+        self.code = current_player_data.get("latest_code", 0)        
+        self.removed_topics = current_player_data.get('removed_topics', [])
+        self.removed_list = current_player_data.get('removed', [])
+        self.correct_questions = current_player_data.get('points', 0)
+        topic_index = self.codes2[self.codes.index(self.code)]
+        if re.findall(r'(\d{2}-\d{2})', topic_index):
+            x, y = topic_index[0:2], topic_index[3:]
+        else:
+            x, y = topic_index[0], topic_index[2]
+        try:
+            self.topics = self.all_topics[int(x):int(y)]
+        except:
+            self.topics = self.all_topics[int(x):]
+        self.topics = [topic for topic in self.topics if topic not in self.removed_topics]
         self.load_questions()
 
-    
     def update_answer_style(self, *args):
         """Update answer label style dynamically"""
         app = App.get_running_app()
@@ -974,12 +1180,28 @@ class QuizOGScreen(BaseScreen):
         answer_label.texture_update()
 
     def on_pre_enter(self, *args):
+        self.code = current_player_data.get("latest_code", 0)        
+        self.removed_topics = current_player_data.get('removed_topics', [])
+        self.removed_list = current_player_data.get('removed', [])
+        self.correct_questions = current_player_data.get('points', 0)
+        topic_index = self.codes2[self.codes.index(self.code)]
+        if re.findall(r'(\d{2}-\d{2})', topic_index):
+            x, y = topic_index[0:2], topic_index[3:]
+        else:
+            x, y = topic_index[0], topic_index[2]
+        try:
+            self.topics = self.all_topics[int(x):int(y)]
+        except:
+            self.topics = self.all_topics[int(x):]
+        self.topics = [topic for topic in self.topics if topic not in self.removed_topics]
         self.load_questions()
 
     def level_popup(self):
         self.correct_questions -= 100
         app = App.get_running_app()
         self.code = self.codes[self.codes.index(self.code)+1]
+        global current_player_data
+        current_player_data['latest_code'] = self.code
         code_label_text = f'You leveled up! Good job! Your code: {self.code}.'
         code_label = Label(
             text=code_label_text,
@@ -991,7 +1213,7 @@ class QuizOGScreen(BaseScreen):
         content = BoxLayout(orientation='vertical', spacing=20, padding=20)
         content.add_widget(code_label)
         btn = Button(
-            text='Copy code and continue',
+            text='ok',
             font_size=50,
             font_name= app.current_font,
             size_hint_y=0.2,
@@ -1018,14 +1240,17 @@ class QuizOGScreen(BaseScreen):
     def copy_code(self, *args):
         topic_index = self.codes2[self.codes.index(self.code)]
         if re.findall(r'(\d{2}-\d{2})', topic_index):
-            x, y = topic_index[0:2], topic_index[3:]
+            x, y = topic_index[0:2], (topic_index[3:] if topic_index[3:] != '40' else 'e')
         elif re.findall(r'(\d{1}-\d{2})', topic_index):
             x, y = topic_index[0], topic_index[2:]
         elif re.findall(r'(\d{1}-\d{1})', topic_index):
             x, y = topic_index[0], topic_index[2]
         else:
             print('Invalid numbers...\n\n\n\n...for now')
-        self.topics = self.all_topics[int(x):int(y)]
+        try:
+            self.topics = self.all_topics[int(x):int(y)]
+        except:
+            self.topics = self.all_topics[int(x):]
         self.topic = random.choice(self.topics)
         self.ids.topic_label.text = self.topic
         self.ids.code_input.text = ''
@@ -1036,29 +1261,30 @@ class QuizOGScreen(BaseScreen):
 
     def load_questions(self):
         try:
-            topic = random.choice(self.topics)  # choose one of the four available topics randomly
+            topic = random.choice(self.topics)
             self.ids.topic_label.text = topic
-
-            if not os.path.exists(f'kw_{topic}.json'):  # makes sure the topic json exists
+            
+            topic_file = get_json_path(f'kw_{topic}.json')
+            if not os.path.exists(topic_file):
                 raise FileNotFoundError(f"kw_{topic}.json not found")
                     
-            with open(f'kw_{topic}.json', 'r', encoding='utf-8') as f:  # load everything from topic json
+            with open(topic_file, 'r', encoding='utf-8') as f:
                 self.all_questions = json.load(f)
-                self.questions = [x for x in self.all_questions if x not in self.removed_list]  # filter out removed questions
+                self.questions = [x for x in self.all_questions if x[0] not in self.removed_list]
                 if len(self.questions) >= 10:
-                    self.questions = random.sample(self.questions, k=10)    # randomly pick 10 uncompleted questions if there are 10 or more
+                    self.questions = random.sample(self.questions, k=10)
                 else:
                     if not self.questions:
                         self.load_questions()
                     else:    
-                        random.shuffle(self.questions)     # shuffle all the uncompleted questions if less than 10
+                        random.shuffle(self.questions)
                 self.current_index = 0
                 self.show_question()
-        except:
+        except Exception as e:
             pass
 
-
     def verify(self):
+        global current_player_data
         if self.ids.code_input.text:
             try:
                 supplied_code = int(self.ids.code_input.text)
@@ -1067,10 +1293,12 @@ class QuizOGScreen(BaseScreen):
                 return
         else:
             supplied_code = 0
-        if supplied_code in self.codes:
+        if supplied_code in self.codes: # if input code exists, update player code
+            current_player_data['latest_code'] = supplied_code
             topic_index = self.codes2[self.codes.index(supplied_code)]
+            self.ids.code_input.text='accepted' # show loaded if no such code
         else:
-            print(f'{supplied_code} does not exist.')
+            self.ids.code_input.text='invalid' # show invalid if no such code
             return
         if re.findall(r'(\d{2}-\d{2})', topic_index):
             x, y = topic_index[0:2], topic_index[3:]
@@ -1078,12 +1306,13 @@ class QuizOGScreen(BaseScreen):
             x, y = topic_index[0], topic_index[2]
         self.topics = self.all_topics[int(x):int(y)]
         self.ids.answer_label.opacity = 0
-        self.code = supplied_code
+        self.correct_questions = 0
         self.topic = random.choice(self.topics)
         self.ids.topic_label.text = self.topic
         self.ids.code_input.text = ''
         self.ids.question_label.text = ''
         self.ids.answer_label.text = ''
+        self.load_questions()
     
     def show_question(self):
         if self.current_index < len(self.questions):
@@ -1113,8 +1342,35 @@ class QuizOGScreen(BaseScreen):
         self.show_question()
 
     def back_to_root(self):
+        global current_player_data, full_player_data, current_player_name
+        
+        if current_player_name:  # Only save if logged in
+            current_player_data.update({
+                'points': self.correct_questions,
+                'removed': self.removed_list,
+                'removed_topics': self.removed_topics
+            })
+            full_player_data[current_player_name] = current_player_data
+            
+            try:
+                player_file = get_json_path('kw_gui_players.json')
+                json.dump(full_player_data, open(player_file, 'w'))
+            except Exception as e:
+                print(f"Error saving player data: {e}")
+
+        if self.ids.back_button.text == 'o.O':
+            self.ids.back_button.text = 'O.o'
+        elif self.ids.back_button.text == 'O.o':
+            self.ids.back_button.text = 'x.O'
+        elif self.ids.back_button.text == 'x.O':
+            self.ids.back_button.text = 'O.x'
+        elif self.ids.back_button.text == 'O.x':
+            self.ids.back_button.text = '>.<'
+        elif self.ids.back_button.text == '>.<':
+            self.ids.back_button.text = 'o.O'
+
         sm = self.manager       # Access the screen manager
-        sm.transition = SlideTransition(direction='left')       # Set transition direction
+        sm.transition = SlideTransition(direction='right')       # Set transition direction
         sm.current = 'menu'         # Change screen
 
     def mark_correct(self):
@@ -1131,8 +1387,9 @@ class QuizOGScreen(BaseScreen):
 class StudyScreen(BaseScreen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.data_dir = os.path.join(os.path.dirname(__file__), 'data')
-        os.makedirs(self.data_dir, exist_ok=True)  # Create data directory if it doesn't exist
+        self.data_dir = get_data_path()  # Modified to use our data path function
+        self.new_dir = ""
+        os.makedirs(self.data_dir, exist_ok=True)
         files = [f[:-4] for f in os.listdir(self.data_dir) if f.endswith('.txt')]
         self.ids.file_spinner.values = sorted(files) if files else ["No .txt files found"]         
     
@@ -1144,24 +1401,32 @@ class StudyScreen(BaseScreen):
         self.ids.content_input.text = ''
         self.ids.save_button.text = 'Save'
 
+    def change_dir(self, dir_name):
+        self.ids.file_spinner.text = ''
+        self.new_dir = os.path.join(self.data_dir, dir_name)
+        os.makedirs(self.new_dir, exist_ok=True)
+        self.show_message(f".{str(self.new_dir)[33:]} selected")
+        files = [f[:-4] for f in os.listdir(self.new_dir) if f.endswith('.txt')]
+        self.ids.file_spinner.values = sorted(files) if files else ["No .txt files found"] 
+        
     def load_file(self):
-        self.ids.content_input.text = '' # clear content from previous load
-        filename = self.ids.file_spinner.text.strip() # get file name from load first      
-        if not filename: # make sure there is a file name on screen
+        self.ids.content_input.text = ''
+        filename = self.ids.file_spinner.text.strip()   
+        if not filename:
             self.show_error("Please enter a filename")
         else:               
-            if not filename.endswith('.txt'): # Ensure .txt extension
+            if not filename.endswith('.txt'):
                 filename += '.txt'            
-            filepath = os.path.join(self.data_dir, filename)        
+            filepath = os.path.join(self.new_dir if self.new_dir else self.data_dir, filename)       
             try:
                 if os.path.exists(filepath):
                     with open(filepath, 'r', encoding='utf-8') as f:
                         content = f.read()
                     self.ids.content_input.text = content
-                    self.ids.save_button.text = f'Save [{filename[:-4]}]'  # removes .txt
+                    self.ids.save_button.text = f'Save [{filename[:-4]}]'
                 else:
                     self.ids.content_input.text = ""
-                self.show_message(f"File {'loaded' if os.path.exists(filepath) else 'ready for creation'}")
+                self.show_message(f"{'Loaded' if os.path.exists(filepath) else 'Created'} @{str(filepath)[33:]}")
             except Exception as e:
                 self.show_error(f"Error: {str(e)}")
 
@@ -1172,8 +1437,11 @@ class StudyScreen(BaseScreen):
             self.show_error("Please enter a filename")
         else:               
             if not filename.endswith('.txt'): # Ensure .txt extension
-                filename += '.txt'            
-            filepath = os.path.join(self.data_dir, filename)        
+                filename += '.txt'
+            if not self.new_dir:     # ensure the new file is created in the correct directory
+                filepath = os.path.join(self.data_dir, filename) 
+            else:
+                filepath = os.path.join(self.new_dir, filename)         
             try:
                 if os.path.exists(filepath): # loads existing file if matches new file name
                     with open(filepath, 'r', encoding='utf-8') as f:
@@ -1183,72 +1451,95 @@ class StudyScreen(BaseScreen):
                 else:
                     self.ids.content_input.text = ""
                     self.ids.save_button.text = f'Save [{filename[:-4]}]'  # removes .txt
-                self.show_message(f"File {'loaded' if os.path.exists(filepath) else 'ready for creation'}")
+                self.show_message(f"{'Loaded' if os.path.exists(filepath) else 'Created'} @{str(filepath)[33:]}") # show which folder selected
             except Exception as e:
                 self.show_error(f"Error: {str(e)}")
     
 
     def save_file(self):
         if self.ids.save_button.text == 'Save':
-            self.show_error("Please enter a filename") # cant save when no file loaded
+            self.show_error("Please enter a filename")
             return
         else:
-            filename = self.ids.save_button.text[6:-1] # trim off the Save prefix to get file name
+            filename = self.ids.save_button.text[6:-1]
         content = self.ids.content_input.text
         if not filename.endswith('.txt'):
             filename += '.txt'
-            
-        filepath = os.path.join(self.data_dir, filename)
+        filepath = os.path.join(self.new_dir if self.new_dir else self.data_dir, filename)
         
         try:
             with open(filepath, 'w', encoding='utf-8') as f:
                 f.write(content)
-            self.show_message("File saved successfully!")
+            self.show_message(f"Saved @{str(filepath)[33:]}")
         except Exception as e:
             self.show_error(f"Error saving file: {str(e)}")
 
-        self.update_spinner() # reload the spinner to reflect new file added
+        self.update_spinner()
 
     def show_message(self, message):
         self.ids.status_label.text = message
         self.ids.status_label.color = (0, 1, 0, 1)  # Green for success
         Animation(opacity=1, duration=0.3).start(self.ids.status_label)
-        Clock.schedule_once(lambda dt: Animation(opacity=0, duration=1).start(self.ids.status_label), 3)
+        Clock.schedule_once(lambda dt: Animation(opacity=0, duration=3).start(self.ids.status_label), 3)
 
     def show_error(self, message):
         self.ids.status_label.text = message
         self.ids.status_label.color = (1, 0, 0, 1)  # Red for error
         Animation(opacity=1, duration=0.3).start(self.ids.status_label)
-        Clock.schedule_once(lambda dt: Animation(opacity=0, duration=1).start(self.ids.status_label), 3)
+        Clock.schedule_once(lambda dt: Animation(opacity=0, duration=3).start(self.ids.status_label), 3)
 
     def back_to_root(self):
-        self.manager.transition = SlideTransition(direction='left')
+        if self.ids.back_button.text == 'o.O':
+            self.ids.back_button.text = 'O.o'
+        elif self.ids.back_button.text == 'O.o':
+            self.ids.back_button.text = 'x.O'
+        elif self.ids.back_button.text == 'x.O':
+            self.ids.back_button.text = 'O.x'
+        elif self.ids.back_button.text == 'O.x':
+            self.ids.back_button.text = '>.<'
+        elif self.ids.back_button.text == '>.<':
+            self.ids.back_button.text = 'o.O'
+        self.manager.transition = SlideTransition(direction='right')
         self.manager.current = 'menu'
 
 class KeyWizApp(App):
-    current_bg_music = StringProperty('music.mp3')
+    global current_player_data
+    current_bg_music = StringProperty('music1.mp3')
     current_bg_image = StringProperty('bg2.jpg')
     current_font = StringProperty('zpix.ttf')
-    color_scheme = ListProperty([0.88, 0.47, 0.18, 1])  # Default orange-brown
-    
-    # Color schemes
     COLOR_SCHEMES = {
-        'Dark': [0.88, 0.47, 0.18, 1],  # Original orange-brown
-        'Techno': [0.2, 0.6, 1, 1],      # Blue
-        'Dull': [0.5, 0.5, 0.5, 1]       # Gray
+        'Dark': [0.88, 0.47, 0.18, 1],
+        'Techno': [0.2, 0.6, 1, 1],
+        'Dull': [0.5, 0.5, 0.5, 1]
     }
+    color_scheme = ListProperty(COLOR_SCHEMES['Dark'])  # Default orange-brown
+
     def build(self):
-        kv_file = os.path.join(os.path.dirname(__file__), 'layout.kv')
-        Builder.load_file(kv_file)
+
+        # Initialize storage and copy bundled files (if needed)
+        self.setup_app_storage()
+
+        # Load KV file with error handling
+        try:
+            kv_file = os.path.join(os.path.dirname(__file__), 'layout.kv')
+            Builder.load_file(kv_file)
+        except Exception as e:
+            print(f"Error loading KV file: {e}")
+
         Window.clearcolor = (0.05, 0.05, 0.05, 1) 
-        self.background_music = SoundLoader.load(self.current_bg_music)
-        if self.background_music:
-            self.background_music.loop = True
-            self.background_music.play()
         
+        # Load music with error handling
+        try:
+            self.background_music = SoundLoader.load(self.current_bg_music)
+            if self.background_music:
+                self.background_music.loop = True
+                self.background_music.play()
+        except Exception as e:
+            print(f"Error loading music: {e}")
+
         sm = ScreenManager()
         screens = [
-            PasscodeScreen(name='passcode'),
+            LoginScreen(name='login'),
             MenuScreen(name='menu'),
             DevModeScreen(name='dev_mode'),
             ToDoScreen(name='todo'),
@@ -1264,8 +1555,41 @@ class KeyWizApp(App):
         for screen in screens:
             sm.add_widget(screen)
         
-        sm.current = 'passcode'
+        sm.current = 'login'
         return sm
+    
+    def setup_app_storage(self):
+        """Ensure storage exists and copy bundled files."""
+        storage = get_app_storage()  # Your existing function
+        os.makedirs(storage, exist_ok=True)
+        
+        if ANDROID:
+            self.copy_bundled_files()
+
+    def copy_bundled_files(self):
+        """Copy files from APK's read-only 'app/' dir to writable storage."""
+        from android.storage import app_storage_path
+        src_dir = os.path.join(app_storage_path(), "app")  # APK files
+        dst_dir = app_storage_path()  # Writable dir
+        
+        files_to_copy = [
+            "kw_gui_players.json",
+            "kw_topics.json",
+            "notes.txt",
+        ]
+        
+        for filename in files_to_copy:
+            src_path = os.path.join(src_dir, filename)
+            dst_path = os.path.join(dst_dir, filename)
+            
+            # Copy only if source exists and destination doesn't
+            if os.path.exists(src_path) and not os.path.exists(dst_path):
+                try:
+                    import shutil
+                    shutil.copy(src_path, dst_path)
+                    print(f"[DEBUG] Copied {filename} to writable storage.")
+                except Exception as e:
+                    print(f"[ERROR] Failed to copy {filename}: {str(e)}")
     
     def update_all_screens(self):
         """Update all screens with current settings"""
@@ -1300,6 +1624,8 @@ class KeyWizApp(App):
         pass
 
     def change_music(self, music_file):
+        global current_player_data
+        current_player_data['music'] = music_file
         if self.background_music:
             self.background_music.stop()
         self.current_bg_music = music_file
@@ -1307,8 +1633,20 @@ class KeyWizApp(App):
         if self.background_music:
             self.background_music.loop = True
             self.background_music.play()
+
+    def change_quotes(self, quote_file):
+        global QUOTES, current_player_data
+        if quote_file == "clap":
+            QUOTES = CLAP[:]
+        elif quote_file == "slap":
+            QUOTES = SLAP[:]
+        elif quote_file == "flap":
+            QUOTES = FLAP[:]
+        current_player_data['quotes'] = quote_file
     
     def change_color_scheme(self, scheme_name):
+        global current_player_data
+        current_player_data['color'] = scheme_name
         self.color_scheme = self.COLOR_SCHEMES.get(scheme_name, [0.88, 0.47, 0.18, 1])
         for screen in self.root.screens:
             if hasattr(screen, 'update_child_colors'):
@@ -1317,6 +1655,8 @@ class KeyWizApp(App):
     def change_bg_image(self, image_file):
         """Change background image for all screens"""
         # Verify the file exists first
+        global current_player_data
+        current_player_data['background'] = image_file
         if not os.path.exists(image_file):
             print(f"Error: Background image {image_file} not found!")
             return
@@ -1325,12 +1665,37 @@ class KeyWizApp(App):
         self.update_all_screens()
 
     def change_font(self, font_file):
+        global current_player_data
+        current_player_data['font'] = font_file
         self.current_font = font_file
         # Force refresh all screens
         for screen in self.root.screens:
             for child in screen.walk():
                 if hasattr(child, 'font_name'):
                     child.font_name = font_file
+    
+    def load_player_settings(self):
+        global current_player_data
+        self.current_bg_image = current_player_data['background']
+        self.current_bg_music = current_player_data['music']
+        self.current_font = current_player_data['font']
+        self.color_scheme = self.COLOR_SCHEMES[current_player_data['color']]
+        self.change_quotes(current_player_data['quotes'])
+        self.change_music(self.current_bg_music)
+        self.change_bg_image(self.current_bg_image)
+        self.change_font(self.current_font)
+                    
 
 if __name__ == '__main__':
-    KeyWizApp().run()
+    try:
+        APP = KeyWizApp()
+        APP.run()
+    except Exception as e:
+        print(f"Fatal error: {e}")
+        # Attempt to save crash log
+        try:
+            crash_log = get_json_path('crash_log.txt')
+            with open(crash_log, 'a') as f:
+                f.write(f"{datetime.now()}: {str(e)}\n")
+        except:
+            pass
